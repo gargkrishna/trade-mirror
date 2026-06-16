@@ -1,486 +1,628 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Trade Mirror — F&O session ledger</title>
-<meta name="description" content="A free, searchable ledger of an Indian intraday F&O trader's daily sessions — setups, entry reasoning, win rates, and next-day plans, extracted from YouTube recaps.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>Trade Mirror — Intraday Hunter ka verified record</title>
+<meta name="description" content="Intraday Hunter ki har trade, verified. Aaj ka result, plan vs actual, aur best setups — sab ek jagah." />
+
+<!-- Fonts: Anek Devanagari covers Hindi+Latin in one family (no FOIT for Hindi labels); Archivo for the stamp/heavy display -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;500;600;700&family=Archivo:wght@600;700;800;900&family=Archivo+Black&display=swap" rel="stylesheet" />
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
-  theme: { extend: {
-    colors: {
-      ink:'#0A0E15', card:'#101622', well:'#0C111B', line:'rgba(154,170,196,0.13)',
-      hi:'#E8EDF6', lo:'#8A96AB', amber:'#F0A63C', profit:'#33C98E', loss:'#F0565C', violet:'#8B7CF6',
-    },
-    fontFamily: {
-      disp:['Archivo','sans-serif'], body:['"IBM Plex Sans"','sans-serif'], mono:['"IBM Plex Mono"','monospace'],
-    },
-  }},
-};
+  theme: {
+    extend: {
+      colors: {
+        ink:    '#14110F',   // near-black warm, page text
+        paper:  '#FBF7F0',   // warm off-white "newsprint" bg
+        card:   '#FFFFFF',
+        win:    '#0B7A3B',   // deep NSE-green (profit) — not neon
+        winbg:  '#E7F5EC',
+        loss:   '#C42026',   // BSE-red (loss)
+        lossbg: '#FBE9E9',
+        gold:   '#E0A100',   // accent / streak fire / highlights
+        slate:  '#6B6258',   // muted captions
+        line:   '#E9E2D6'    // hairline borders
+      },
+      fontFamily: {
+        body: ['"Anek Devanagari"','system-ui','sans-serif'],
+        stamp:['"Archivo Black"','"Archivo"','system-ui','sans-serif'],
+        num:  ['"Archivo"','system-ui','sans-serif']
+      }
+    }
+  }
+}
 </script>
+<style>
+  html,body{background:#FBF7F0; overflow-x:hidden;}
+  *{ -webkit-tap-highlight-color: transparent; }
+  /* the rotated stamp must never create a horizontal scrollbar */
+  .stamp{ max-width:100%; }
+  /* The signature: result stamp. A rotated, double-ruled "verdict" like an ink stamp on a broker statement. */
+  .stamp{
+    border:3px solid currentColor; border-radius:10px;
+    padding:.05em .42em; display:inline-flex; align-items:center; gap:.12em;
+    transform:rotate(-7deg); position:relative; letter-spacing:.04em;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.6);
+  }
+  .stamp::after{ content:""; position:absolute; inset:5px; border:1.5px solid currentColor; border-radius:6px; opacity:.55;}
+  @keyframes stampIn{0%{transform:rotate(-7deg) scale(2.2);opacity:0}55%{transform:rotate(-7deg) scale(.92);opacity:1}100%{transform:rotate(-7deg) scale(1)}}
+  .stamp-anim{ animation: stampIn .42s cubic-bezier(.2,.8,.3,1.2) both;}
+  @keyframes barGrow{from{width:0}to{width:var(--w)}}
+  .bar-anim{ animation: barGrow .7s cubic-bezier(.3,1,.4,1) both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .fadeup{ animation: fadeUp .35s ease both;}
+  .tabnum{ font-variant-numeric: tabular-nums;}
+  @media (prefers-reduced-motion: reduce){
+    .stamp-anim,.bar-anim,.fadeup{animation:none !important;}
+  }
+  /* hide scrollbar on the horizontal pill row */
+  .noscroll::-webkit-scrollbar{display:none;}
+  .noscroll{ -ms-overflow-style:none; scrollbar-width:none;}
+</style>
+</head>
+<body class="font-body text-ink">
+<div id="root"></div>
+
 <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone@7.26.0/babel.min.js"></script>
-<style>
-  html { color-scheme: dark; }
-  .font-mono { font-variant-numeric: tabular-nums; }
-  body { background: radial-gradient(1100px 480px at 50% -200px,rgba(240,166,60,0.07),transparent 62%), #0A0E15; }
-  ::-webkit-scrollbar { width:9px; height:9px; }
-  ::-webkit-scrollbar-thumb { background:rgba(154,170,196,0.18); border-radius:6px; }
-  :focus-visible { outline:2px solid #F0A63C; outline-offset:2px; border-radius:4px; }
-  .glow-amber { text-shadow:0 0 16px rgba(240,166,60,0.40); }
-  @media (prefers-reduced-motion:reduce) { * { transition-duration:0.01ms !important; } }
-</style>
-</head>
-<body class="bg-ink text-hi font-body min-h-screen antialiased">
-<div id="root"></div>
-<script type="text/babel">
-const { useState, useEffect, useMemo, useCallback } = React;
 
-/* ----------------------------------------------------------------- helpers */
-const fmtPts  = v => v == null ? '—' : (v > 0 ? `+${Math.round(v*100)/100}` : `${Math.round(v*100)/100}`);
-const pnlClass = v => v == null ? 'text-lo' : v >= 0 ? 'text-profit' : 'text-loss';
-const fmtDate = s => {
-  if (!s) return '—';
-  const d = new Date(s);
-  return isNaN(d) ? s : d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useRef } = React;
+
+/* ---------- tiny helpers ---------- */
+const fmt = (n)=> (n>=0?'+':'') + n.toFixed(2);
+const dayName = (iso)=>{
+  const d = new Date(iso+'T00:00:00');
+  const days=['Ravi','Som','Mangal','Budh','Guru','Shukra','Shani'];
+  const mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return {dow:days[d.getDay()], d:d.getDate(), m:mon[d.getMonth()], full:`${d.getDate()} ${mon[d.getMonth()]} ${d.getFullYear()}`};
 };
-const resultTone = r =>
-  r==='PROFIT' ? 'text-profit border-profit/40 bg-profit/10' :
-  r==='LOSS'   ? 'text-loss border-loss/40 bg-loss/10' :
-  r==='MIXED'  ? 'text-amber border-amber/40 bg-amber/10' : 'text-lo border-line bg-well';
-const biasTone = b =>
-  b==='bullish' ? 'text-profit border-profit/40 bg-profit/10' :
-  b==='bearish' ? 'text-loss border-loss/40 bg-loss/10' :
-  b==='range'   ? 'text-amber border-amber/40 bg-amber/10' : 'text-lo border-line bg-well';
+const sessionPts = (s)=> s.legs.reduce((a,l)=>a+l.pnl_points,0);
+const isWin = (s)=> s.result==='PROFIT';
+const ytId = (url)=>{ try{ const u=new URL(url); return u.searchParams.get('v') || u.pathname.split('/').pop(); }catch(e){return '';} };
 
-/* ----------------------------------------------------------------- routing */
-function useHash() {
-  const [h,setH] = useState(window.location.hash||'#/');
-  useEffect(()=>{
-    const fn=()=>setH(window.location.hash||'#/');
-    window.addEventListener('hashchange',fn);
-    return ()=>window.removeEventListener('hashchange',fn);
-  },[]);
-  return h;
-}
-const go = p => { window.location.hash = p; };
+/* shareable WhatsApp message */
+function shareSession(s){
+  const d = dayName(s.date);
+  const verdict = isWin(s) ? '✅ PROFIT' : '❌ LOSS';
+  const pts = fmt(sessionPts(s));
+  const legs = s.legs.map(l=>`• ${l.instrument} ${l.direction} → ${fmt(l.pnl_points)} pts`).join('\n');
+  const txt =
+`📊 Intraday Hunter — ${d.full}
+Result: ${verdict}  (${pts} pts)
 
-/* ----------------------------------------------------------------- atoms */
-function Chip({tone,children,title}){
-  return <span title={title} className={`px-1.5 py-0.5 rounded border text-[10px] font-mono uppercase tracking-[0.12em] ${tone}`}>{children}</span>;
-}
-function ResultChip({r}){
-  return <Chip tone={resultTone(r)}>{r==='PROFIT'?'profit':r==='LOSS'?'loss':r==='MIXED'?'mixed':'flat'}</Chip>;
-}
-function DirChip({d}){
-  if(!d) return null;
-  return <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border ${d==='LONG'?'text-profit border-profit/40 bg-profit/10':'text-loss border-loss/40 bg-loss/10'}`}>{d}</span>;
+${legs}
+
+Poora verified record dekho 👇
+${location.origin}${location.pathname}#/session/${s.date}
+
+— Trade Mirror`;
+  const url = `https://wa.me/?text=${encodeURIComponent(txt)}`;
+  window.open(url,'_blank');
 }
 
-/* ----------------------------------------------------------------- nav */
-function Nav(){
-  const hash = useHash();
-  const tabs = [['#/','Overview'],['#/sessions','Sessions'],['#/setups','Setups'],['#/plans','Plans']];
-  const active = h => hash===h||(h!=='#/'&&hash.startsWith(h));
+/* ---------- result stamp (THE signature element) ---------- */
+function Stamp({win, size='text-4xl', animate=false}){
   return (
-    <nav className="sticky top-0 z-30 bg-ink/90 backdrop-blur border-b border-line">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-5">
-        <a href="#/" className="font-disp font-900 text-lg tracking-[0.06em] uppercase shrink-0">
-          Trade<span className="text-amber glow-amber">/</span>Mirror
-        </a>
-        <div className="flex gap-1 overflow-x-auto">
-          {tabs.map(([h,label])=>(
-            <a key={h} href={h}
-               className={`px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition ${active(h)?'bg-card text-amber':'text-lo hover:text-hi'}`}>
-              {label}
-            </a>
-          ))}
-        </div>
-      </div>
-    </nav>
+    <span className={`stamp font-stamp ${size} ${animate?'stamp-anim':''} ${win?'text-win':'text-loss'}`}>
+      {win? 'PROFIT':'LOSS'}
+    </span>
   );
 }
 
-/* ----------------------------------------------------------------- stat cell */
-function StatCell({label,children,sub}){
-  return (
-    <div className="px-5 py-4">
-      <div className="text-[10px] uppercase tracking-[0.2em] text-lo font-medium mb-1.5">{label}</div>
-      <div className="font-mono text-2xl leading-none">{children}</div>
-      {sub && <div className="text-[11px] text-lo mt-1.5">{sub}</div>}
-    </div>
-  );
-}
-
-/* ----------------------------------------------------------------- overview */
-function Overview({d}){
-  const m = d.meta;
-  return (
-    <div className="space-y-8">
-      <header className="pt-10">
-        <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-amber mb-3">
-          free · open · updated {fmtDate(m.last_updated)}
-        </div>
-        <h1 className="font-disp font-900 text-3xl sm:text-4xl leading-tight max-w-3xl">
-          {m.total_sessions} sessions. {m.win_rate}% win rate.<br/>No subscription. No login.
-        </h1>
-        <p className="text-lo text-sm sm:text-base leading-relaxed max-w-2xl mt-4">
-          Every recap from one Indian intraday F&amp;O trader, turned into a searchable ledger —
-          instruments, setups, entry reasoning and outcomes. Extracted from YouTube so you can
-          study the method without scrubbing through hours of video.
-        </p>
-        <div className="flex items-center gap-2 mt-5 flex-wrap font-mono text-[11px]">
-          <span className="px-2 py-1 rounded border border-profit/40 bg-profit/10 text-profit">● live</span>
-          <span className="text-lo">{fmtDate(m.date_from)} → {fmtDate(m.date_to)}</span>
-          <span className="text-lo">· latest {fmtDate(m.date_to)}</span>
-        </div>
-      </header>
-
-      {/* stats bar */}
-      <section className="bg-card border border-line rounded-xl overflow-hidden shadow-xl shadow-black/30">
-        <div className="flex flex-wrap divide-x divide-line">
-          <StatCell label="Win rate" sub={`${m.decided_legs} decided trades`}>
-            <span className="text-profit">{m.win_rate}<span className="text-lo text-base">%</span></span>
-          </StatCell>
-          <StatCell label="Sessions" sub="live trading days">
-            <span className="text-hi">{m.total_sessions}</span>
-          </StatCell>
-          <StatCell label="Total legs" sub="individual option trades">
-            <span className="text-hi">{m.total_legs}</span>
-          </StatCell>
-          <StatCell label="Plans" sub="next-day predictions">
-            <span className="text-violet">{m.plans_count}</span>
-          </StatCell>
-        </div>
-      </section>
-
-      {/* setup leaderboard preview */}
-      <section>
-        <div className="flex items-baseline justify-between mb-3">
-          <h2 className="font-disp font-800 text-sm uppercase tracking-[0.16em] text-hi">Top setups by win rate</h2>
-          <a href="#/setups" className="font-mono text-[11px] text-lo hover:text-amber">see all →</a>
-        </div>
-        <div className="bg-card border border-line rounded-xl divide-y divide-line">
-          {d.setup_stats.slice(0,5).map((s,i)=>(
-            <div key={i} className="flex items-center gap-3 px-4 py-3">
-              <span className="font-mono text-[11px] text-lo w-5">{i+1}</span>
-              <span className="text-sm text-hi grow">{s.setup}</span>
-              <span className="font-mono text-[11px] text-lo">{s.wins}/{s.total}</span>
-              <div className="w-24 h-1.5 bg-well rounded-full overflow-hidden hidden sm:block">
-                <div className={`h-full ${s.win_rate>=60?'bg-profit':s.win_rate>=45?'bg-amber':'bg-loss'}`} style={{width:s.win_rate+'%'}}></div>
-              </div>
-              <span className={`font-mono text-sm font-semibold w-14 text-right ${s.win_rate>=60?'text-profit':s.win_rate>=45?'text-amber':'text-loss'}`}>{s.win_rate}%</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* recent sessions */}
-      <section>
-        <div className="flex items-baseline justify-between mb-3">
-          <h2 className="font-disp font-800 text-sm uppercase tracking-[0.16em] text-hi">Recent sessions</h2>
-          <a href="#/sessions" className="font-mono text-[11px] text-lo hover:text-amber">see all →</a>
-        </div>
-        <div className="space-y-2">
-          {d.sessions.slice(0,5).map(s=><SessionRow key={s.id} s={s}/>)}
-        </div>
-      </section>
-
-      <Disclaimer/>
-    </div>
-  );
-}
-
-/* ----------------------------------------------------------------- sessions */
-function SessionsPage({d}){
-  const [q,setQ]=useState('');
-  const [res,setRes]=useState('ALL');
-
-  const sessions = useMemo(()=>d.sessions.filter(s=>{
-    if(res!=='ALL'&&s.result!==res) return false;
-    if(q){
-      const hay=[s.title,...(s.instruments||[]),...(s.setups||[]),s.market_view,s.summary]
-        .filter(Boolean).join(' ').toLowerCase();
-      if(!hay.includes(q.toLowerCase())) return false;
-    }
-    return true;
-  }),[d.sessions,q,res]);
-
-  return (
-    <div className="pt-8 space-y-5">
-      <div>
-        <h1 className="font-disp font-900 text-2xl text-hi">Sessions</h1>
-        <p className="text-sm text-lo mt-1">{d.sessions.length} live sessions · newest first · all free</p>
-      </div>
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="inline-flex rounded-lg border border-line bg-well p-0.5">
-          {['ALL','PROFIT','LOSS','MIXED'].map(o=>(
-            <button key={o} onClick={()=>setRes(o)}
-              className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase tracking-wider transition ${res===o?'bg-card text-amber':'text-lo hover:text-hi'}`}>{o}</button>
-          ))}
-        </div>
-        <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search instrument, setup, view…"
-          className="grow min-w-[200px] bg-well border border-line rounded-lg px-3 py-1.5 text-sm placeholder:text-lo/60"/>
-        <span className="font-mono text-[11px] text-lo">{sessions.length} shown</span>
-      </div>
-      <div className="space-y-2">
-        {sessions.map(s=><SessionRow key={s.id} s={s}/>)}
-        {sessions.length===0&&<div className="bg-card border border-line rounded-xl px-4 py-12 text-center text-lo text-sm">No sessions match.</div>}
-      </div>
-    </div>
-  );
-}
-
-function SessionRow({s}){
-  return (
-    <a href={`#/session/${s.id}`} className="block bg-card border border-line rounded-lg px-4 py-3 hover:border-lo/40 transition">
-      <div className="flex items-center gap-3 flex-wrap">
-        <span className="font-mono text-[11px] text-lo w-24 shrink-0">{fmtDate(s.date)}</span>
-        <ResultChip r={s.result}/>
-        <span className="text-sm text-hi">{s.instruments.join(' · ')||'—'}</span>
-        <span className="font-mono text-[11px] text-lo">{s.leg_count} leg{s.leg_count>1?'s':''}</span>
-        {s.setups.slice(0,2).map((x,i)=><Chip key={i} tone="text-lo border-line bg-well">{x}</Chip>)}
-        {s.net_points!=null&&<span className={`ml-auto font-mono text-sm font-semibold ${pnlClass(s.net_points)}`}>{fmtPts(s.net_points)} pts</span>}
-      </div>
-    </a>
-  );
-}
-
-/* ----------------------------------------------------------------- detail */
-function SessionDetail({id,d}){
-  const s = d.sessions.find(x=>x.id===id);
-  if(!s) return <div className="pt-8 text-lo text-sm">Not found. <a href="#/sessions" className="text-amber">Back →</a></div>;
-  return (
-    <div className="pt-8 space-y-5 max-w-3xl">
-      <a href="#/sessions" className="font-mono text-[11px] text-lo hover:text-hi">← all sessions</a>
-      <div className="flex items-center gap-3 flex-wrap">
-        <h1 className="font-disp font-900 text-xl text-hi">{fmtDate(s.date)}</h1>
-        <ResultChip r={s.result}/>
-        {s.net_points!=null&&<span className={`font-mono text-lg font-bold ${pnlClass(s.net_points)}`}>{fmtPts(s.net_points)} pts</span>}
-      </div>
-
-      {s.market_view&&(
-        <div className="bg-card border border-line rounded-xl p-4">
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-amber mb-2">market view</div>
-          <p className="text-sm text-hi/90 leading-relaxed">{s.market_view}</p>
-        </div>
-      )}
-
-      <div className="bg-card border border-line rounded-xl overflow-hidden">
-        <div className="px-4 py-2.5 border-b border-line font-mono text-[10px] uppercase tracking-[0.18em] text-lo">{s.legs.length} leg{s.legs.length>1?'s':''}</div>
-        <div className="divide-y divide-line">
-          {s.legs.map((l,i)=>(
-            <div key={i} className="px-4 py-3">
-              <div className="flex items-center gap-3 flex-wrap">
-                <span className="font-mono text-sm text-hi min-w-[140px]">{l.instrument||'—'}</span>
-                <DirChip d={l.direction}/>
-                {(l.entry!=null||l.exit_price!=null)&&(
-                  <span className="font-mono text-xs text-lo">
-                    <span className="text-hi">{l.entry??'—'}</span>
-                    <span className="mx-1 opacity-50">→</span>
-                    <span className="text-hi">{l.exit_price??'—'}</span>
-                  </span>
-                )}
-                {l.setup_type&&<Chip tone="text-lo border-line bg-well">{l.setup_type}</Chip>}
-                <span className="ml-auto"><ResultChip r={l.outcome||'FLAT'}/></span>
-              </div>
-              {l.motive&&(
-                <p className="text-xs text-hi/70 leading-relaxed mt-2">
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-profit mr-2">why</span>{l.motive}
-                </p>
-              )}
-              {(l.entry_time||l.exit_time)&&(
-                <div className="font-mono text-[10px] text-lo mt-1.5">{l.entry_time||'—'} → {l.exit_time||'—'}{l.quantity?` · qty ${l.quantity}`:''}</div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {s.summary&&(
-        <div className="bg-card border border-line rounded-xl p-4">
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-lo mb-2">recap summary</div>
-          <p className="text-sm text-hi/85 leading-relaxed">{s.summary}</p>
-        </div>
-      )}
-
-      <div className="aspect-video rounded-xl overflow-hidden border border-line bg-well">
-        <iframe className="w-full h-full" src={`https://www.youtube.com/embed/${s.id}`}
-          title="session video" loading="lazy"
-          allow="accelerometer;clipboard-write;encrypted-media;picture-in-picture" allowFullScreen/>
-      </div>
-    </div>
-  );
-}
-
-/* ----------------------------------------------------------------- setups */
-function SetupsPage({d}){
-  return (
-    <div className="pt-8 space-y-7">
-      <div>
-        <h1 className="font-disp font-900 text-2xl text-hi">Setups</h1>
-        <p className="text-sm text-lo mt-1">Win rate by setup. Only setups with 3+ trades shown.</p>
-      </div>
-
-      <div className="bg-card border border-line rounded-xl divide-y divide-line">
-        {d.setup_stats.map((s,i)=>(
-          <div key={i} className="flex items-center gap-3 px-4 py-3">
-            <span className="font-mono text-[11px] text-lo w-5">{i+1}</span>
-            <span className="text-sm text-hi grow">{s.setup}</span>
-            <span className="font-mono text-[11px] text-lo w-14 text-right">{s.wins}/{s.total}</span>
-            <div className="w-28 h-1.5 bg-well rounded-full overflow-hidden hidden sm:block">
-              <div className={`h-full ${s.win_rate>=60?'bg-profit':s.win_rate>=45?'bg-amber':'bg-loss'}`} style={{width:s.win_rate+'%'}}></div>
-            </div>
-            <span className={`font-mono text-sm font-semibold w-16 text-right ${s.win_rate>=60?'text-profit':s.win_rate>=45?'text-amber':'text-loss'}`}>{s.win_rate}%</span>
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <h2 className="font-disp font-800 text-sm uppercase tracking-[0.16em] text-hi mb-3">By instrument</h2>
-        <div className="grid sm:grid-cols-3 gap-3">
-          {d.instrument_stats.map((it,i)=>(
-            <div key={i} className="bg-card border border-line rounded-xl p-4">
-              <div className="font-mono text-sm text-hi">{it.instrument}</div>
-              <div className="font-mono text-2xl font-bold text-profit mt-2">{it.win_rate}<span className="text-lo text-sm">%</span></div>
-              <div className="font-mono text-[11px] text-lo mt-1">{it.wins}/{it.total} trades</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h2 className="font-disp font-800 text-sm uppercase tracking-[0.16em] text-hi mb-3">Month by month</h2>
-        <div className="bg-card border border-line rounded-xl divide-y divide-line">
-          {[...d.monthly].reverse().map((mo,i)=>(
-            <div key={i} className="flex items-center gap-3 px-4 py-2.5">
-              <span className="font-mono text-[11px] text-lo w-20">{mo.month}</span>
-              <span className="font-mono text-[11px] text-lo">{mo.sessions} sessions</span>
-              {mo.win_rate!=null&&(
-                <React.Fragment>
-                  <div className="ml-auto w-32 h-1.5 bg-well rounded-full overflow-hidden hidden sm:block">
-                    <div className="h-full bg-profit" style={{width:mo.win_rate+'%'}}></div>
-                  </div>
-                  <span className="font-mono text-sm text-profit w-14 text-right">{mo.win_rate}%</span>
-                </React.Fragment>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-      <Disclaimer/>
-    </div>
-  );
-}
-
-/* ----------------------------------------------------------------- plans */
-const SCN = [['gap_up','Gap up'],['flat','Flat'],['gap_down','Gap down']];
-function PlansPage({d}){
-  return (
-    <div className="pt-8 space-y-5">
-      <div>
-        <h1 className="font-disp font-900 text-2xl text-hi">Next-day plans</h1>
-        <p className="text-sm text-lo mt-1">{d.plans.length} pre-market predictions · newest first</p>
-      </div>
-      <div className="space-y-3">
-        {d.plans.map((p,i)=>(
-          <article key={i} className="bg-card border border-line rounded-xl p-5">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-mono text-[11px] text-lo">plan of {fmtDate(p.date)}</span>
-              {p.for_date&&<span className="font-mono text-[10px] text-lo">→ for {fmtDate(p.for_date)}</span>}
-              {p.bias&&<Chip tone={biasTone(p.bias)}>{p.bias}</Chip>}
-              <a href={p.video_url} target="_blank" rel="noreferrer"
-                 className="ml-auto font-mono text-[10px] text-lo hover:text-amber">watch ↗</a>
-            </div>
-            {p.plan_summary&&<p className="text-sm text-hi/90 leading-relaxed mt-2.5">{p.plan_summary}</p>}
-            {Object.keys(p.scenarios||{}).length>0&&(
-              <div className="grid sm:grid-cols-3 gap-2 mt-3">
-                {SCN.map(([k,label])=>p.scenarios[k]&&(
-                  <div key={k} className="rounded-lg border border-line bg-well/40 p-2.5">
-                    <div className="font-mono text-[10px] uppercase tracking-wider text-lo mb-1">{label}</div>
-                    <div className="text-xs text-hi/85 leading-relaxed">{p.scenarios[k]}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-            {p.key_levels.length>0&&(
-              <div className="flex flex-wrap gap-1.5 mt-3">
-                {p.key_levels.map((l,j)=>(
-                  <span key={j} title={l.note} className="font-mono text-[10px] px-2 py-0.5 rounded border border-line text-hi/80 bg-well/50">
-                    {l.instrument} <span className="text-amber">{l.level}</span>
-                  </span>
-                ))}
-              </div>
-            )}
-          </article>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ----------------------------------------------------------------- disclaimer */
-function Disclaimer(){
-  return (
-    <section className="bg-well/50 border border-line rounded-xl p-5 text-[12px] text-lo leading-relaxed">
-      <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-lo/70 mb-2">about this site</div>
-      <p className="mb-2">Independent analysis project — not affiliated with or endorsed by the trader whose public videos it summarises.</p>
-      <p className="mb-2">Outcomes reflect what the trader states in his recaps — self-reported, not independently audited. Win rates with small sample sizes are not statistically reliable.</p>
-      <p>Nothing here is investment advice. Trading options carries substantial risk.</p>
-    </section>
-  );
-}
-
-/* ----------------------------------------------------------------- loading */
-function Skeleton(){
-  return (
-    <div className="space-y-3 pt-8">
-      {[1,2,3].map(i=>(
-        <div key={i} className="bg-card border border-line rounded-lg px-4 py-3 animate-pulse">
-          <div className="flex gap-3">
-            <div className="h-3 w-20 bg-well rounded"></div>
-            <div className="h-3 w-12 bg-well rounded"></div>
-            <div className="h-3 w-32 bg-well rounded"></div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ----------------------------------------------------------------- app */
-function App(){
-  const hash = useHash();
-  const [data,setData] = useState(null);
-  const [err,setErr]   = useState('');
-
-  useEffect(()=>{
-    fetch('data/data.json').then(r=>r.json()).then(setData)
-      .catch(()=>setErr('Could not load data. Run the site from a web server, not by opening the file directly.'));
-  },[]);
-
-  if(err)  return <div className="max-w-xl mx-auto px-6 py-20 text-center text-lo text-sm">{err}</div>;
-  if(!data) return <div><Nav/><main className="max-w-6xl mx-auto px-4 sm:px-6"><Skeleton/></main></div>;
-
-  let page;
-  if(hash.startsWith('#/session/'))  page = <SessionDetail id={decodeURIComponent(hash.slice('#/session/'.length))} d={data}/>;
-  else if(hash.startsWith('#/sessions')) page = <SessionsPage d={data}/>;
-  else if(hash.startsWith('#/setups'))   page = <SetupsPage   d={data}/>;
-  else if(hash.startsWith('#/plans'))    page = <PlansPage    d={data}/>;
-  else                                   page = <Overview     d={data}/>;
-
+/* ---------- streak row: last 20 as fire/ash dots ---------- */
+function Streak({streak}){
+  const wins = streak.filter(x=>x==='WIN').length;
   return (
     <div>
-      <Nav/>
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pb-10">{page}</main>
-      <footer className="border-t border-line py-6 text-center font-mono text-[10px] text-lo/50 tracking-wide">
-        trade mirror · independent analysis · free & open
-      </footer>
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-sm font-600 text-slate">Last 20 sessions</span>
+        <span className="text-sm font-700"><span className="text-win">{wins}W</span> · <span className="text-loss">{streak.length-wins}L</span></span>
+      </div>
+      <div className="flex gap-[3px] flex-wrap">
+        {streak.map((x,i)=>(
+          <div key={i}
+            title={x}
+            className={`h-7 flex-1 min-w-[10px] rounded-[3px] ${x==='WIN'?'bg-win':'bg-loss/85'}`}/>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- collapsed session card (cricket-scorecard row) ---------- */
+function SessionCard({s, expandedDefault=false}){
+  const [open,setOpen]=useState(expandedDefault);
+  const d = dayName(s.date);
+  const win = isWin(s);
+  const pts = sessionPts(s);
+  return (
+    <div className={`rounded-2xl border overflow-hidden bg-card ${win?'border-win/25':'border-loss/25'}`}>
+      {/* collapsed: exactly 4 glanceable things — date, dir mix, result stamp, pts */}
+      <button onClick={()=>setOpen(o=>!o)}
+        className={`w-full text-left p-3.5 flex items-center gap-3 ${win?'bg-winbg/40':'bg-lossbg/40'}`}>
+        <div className="shrink-0 text-center w-12">
+          <div className="text-2xl font-num font-800 leading-none tabnum">{d.d}</div>
+          <div className="text-[11px] text-slate font-600 uppercase">{d.m}</div>
+          <div className="text-[10px] text-slate">{d.dow}</div>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex gap-1 mb-1 flex-wrap">
+            {[...new Set(s.legs.map(l=>l.direction))].map(dir=>(
+              <span key={dir} className={`text-[11px] font-700 px-1.5 py-0.5 rounded ${dir==='SHORT'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>{dir}</span>
+            ))}
+            <span className="text-[11px] font-600 px-1.5 py-0.5 rounded bg-ink/5 text-slate">{s.legs.length} legs</span>
+          </div>
+          <div className={`text-2xl font-num font-800 tabnum whitespace-nowrap ${win?'text-win':'text-loss'}`}>{fmt(pts)} <span className="text-xs font-600 text-slate">pts</span></div>
+        </div>
+        <div className="shrink-0 pr-1">
+          <Stamp win={win} size="text-lg"/>
+        </div>
+        <svg className={`shrink-0 w-4 h-4 text-slate transition-transform ${open?'rotate-180':''}`} viewBox="0 0 20 20" fill="currentColor"><path d="M5 7l5 5 5-5z"/></svg>
+      </button>
+
+      {open && (
+        <div className="px-3.5 pb-3.5 pt-1 fadeup">
+          {s.market_view && <p className="text-[13px] text-ink/80 leading-snug mb-3 border-l-2 border-gold pl-2.5 bg-gold/5 py-1.5 rounded-r">{s.market_view}</p>}
+          <div className="space-y-2">
+            {s.legs.map((l,i)=>(
+              <div key={i} className="rounded-xl border border-line p-2.5">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="font-700 text-[13px] truncate">{l.instrument}</span>
+                  <span className={`text-[11px] font-700 px-1.5 py-0.5 rounded shrink-0 ${l.direction==='SHORT'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>{l.direction}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center mb-1.5">
+                  <div><div className="text-[10px] text-slate">Entry</div><div className="font-num font-700 text-sm tabnum">{l.entry}</div></div>
+                  <div><div className="text-[10px] text-slate">Exit</div><div className="font-num font-700 text-sm tabnum">{l.exit}</div></div>
+                  <div><div className="text-[10px] text-slate">P&amp;L</div><div className={`font-num font-800 text-sm tabnum ${l.pnl_points>=0?'text-win':'text-loss'}`}>{fmt(l.pnl_points)}</div></div>
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-slate">
+                  <span>🕒 {l.entry_time}→{l.exit_time}</span>
+                  <span className="px-1.5 py-0.5 rounded bg-ink/5 font-600 text-ink/70">{l.setup_type}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-2 mt-3">
+            <a href={`#/session/${s.date}`} className="flex-1 text-center py-2.5 rounded-xl bg-ink text-paper font-700 text-sm">Poori detail</a>
+            <button onClick={(e)=>{e.stopPropagation();shareSession(s);}} className="px-4 py-2.5 rounded-xl bg-[#25D366] text-white font-700 text-sm flex items-center gap-1.5">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.87 9.87 0 001.515 5.26l-.999 3.648 3.974-.755z"/></svg>
+              Share
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- setup leaderboard row (reliability without numeracy) ---------- */
+function SetupRow({s, max}){
+  // visual confidence: dots for sample size, bar for rate, label word instead of %
+  const word = s.win_rate>=85?'Bahut strong': s.win_rate>=70?'Strong': s.win_rate>=50?'Theek-thaak': 'Kamzor';
+  const wordColor = s.win_rate>=70?'text-win': s.win_rate>=50?'text-gold':'text-loss';
+  const barColor = s.win_rate>=70?'bg-win': s.win_rate>=50?'bg-gold':'bg-loss';
+  const sampleSmall = s.total < 12;
+  return (
+    <div className="py-2.5 border-b border-line last:border-0">
+      <div className="flex items-baseline justify-between gap-2 mb-1.5">
+        <span className="font-700 text-[14px] capitalize">{s.setup}</span>
+        <span className={`text-[12px] font-700 ${wordColor}`}>{word}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="flex-1 h-3 rounded-full bg-ink/5 overflow-hidden">
+          <div className={`h-full rounded-full bar-anim ${barColor}`} style={{'--w':`${s.win_rate}%`, width:`${s.win_rate}%`}}/>
+        </div>
+        <span className="text-[12px] font-num font-700 tabnum w-10 text-right">{Math.round(s.win_rate)}%</span>
+      </div>
+      <div className="text-[11px] text-slate mt-1">
+        {s.wins} jeet / {s.total} trade {sampleSmall && <span className="text-gold">· chhota sample</span>}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- plan scorecard (predicted vs actual) ---------- */
+function PlanCard({p, sessions}){
+  const d = dayName(p.date);
+  const matched = p.matched_session ? sessions.find(s=>s.date===p.matched_session) : null;
+  const biasColor = {bullish:'text-win bg-winbg', bearish:'text-loss bg-lossbg', neutral:'text-slate bg-ink/5', range:'text-slate bg-ink/5'}[p.bias] || 'text-slate bg-ink/5';
+  const biasHi = {bullish:'Tezi (Bullish)', bearish:'Mandi (Bearish)', neutral:'Neutral', range:'Range'}[p.bias] || p.bias;
+  return (
+    <div className="rounded-2xl border border-line bg-card overflow-hidden">
+      <div className="p-3.5">
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-[13px] font-700 text-slate">{d.full} · {d.dow}</div>
+          {!matched && <span className="text-[11px] font-700 px-2 py-0.5 rounded-full bg-gold/15 text-gold">Aane wala plan</span>}
+        </div>
+        <div className="flex items-center gap-2 mb-2.5">
+          <span className="text-[12px] text-slate">Unhone socha:</span>
+          <span className={`text-sm font-700 px-2.5 py-0.5 rounded-full ${biasColor}`}>{biasHi}</span>
+        </div>
+        <p className="text-[13px] text-ink/80 leading-snug mb-3">{p.plan_summary}</p>
+
+        {/* scenarios */}
+        <div className="grid grid-cols-3 gap-1.5 mb-3">
+          {[['gap_up','Gap Up','▲'],['flat','Flat','▬'],['gap_down','Gap Down','▼']].map(([k,lab,ic])=>(
+            <div key={k} className="rounded-lg border border-line p-2 text-center">
+              <div className="text-[11px] font-700 text-slate mb-0.5">{ic} {lab}</div>
+              <div className="text-[11px] text-ink/75 leading-tight">{p.scenarios[k]}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* key levels */}
+        <div className="flex flex-wrap gap-1.5 mb-1">
+          {p.key_levels.map((lv,i)=>(
+            <span key={i} className={`text-[11px] font-num font-700 tabnum px-2 py-0.5 rounded ${lv.type==='resistance'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>
+              {lv.level} {lv.type==='resistance'?'R':'S'}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* verdict strip: predicted vs actual */}
+      {matched ? (
+        <a href={`#/session/${matched.date}`} className={`block px-3.5 py-2.5 flex items-center justify-between ${isWin(matched)?'bg-winbg':'bg-lossbg'}`}>
+          <span className="text-[12px] font-600 text-ink/70">Us din market ne kiya:</span>
+          <span className="flex items-center gap-2">
+            <span className={`font-700 text-sm ${isWin(matched)?'text-win':'text-loss'}`}>{fmt(sessionPts(matched))} pts</span>
+            <Stamp win={isWin(matched)} size="text-base"/>
+          </span>
+        </a>
+      ) : (
+        <div className="px-3.5 py-2.5 bg-ink/[.03] text-[12px] text-slate text-center font-600">Result abhi aana baaki hai</div>
+      )}
+    </div>
+  );
+}
+
+/* ====================== PAGES ====================== */
+
+function Home({data, go}){
+  const latest = data.sessions[0];
+  const d = dayName(latest.date);
+  const win = isWin(latest);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const latestDate = new Date(latest.date+'T00:00:00');
+  const isToday = latestDate.getTime()===today.getTime();
+
+  return (
+    <div className="space-y-5">
+      {/* HERO — latest session, the answer to "aaj kya hua" in <2s */}
+      <div className="fadeup">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-[13px] font-700 text-slate uppercase tracking-wide">{isToday?'Aaj ka result':'Pichhli session'}</span>
+          <span className="text-[12px] text-slate">· {d.full}</span>
+        </div>
+
+        <div className={`rounded-3xl p-5 border-2 ${win?'border-win/30 bg-winbg':'border-loss/30 bg-lossbg'}`}>
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-sm font-700 text-slate">{latest.legs.length} trades · total points</span>
+            <div className="shrink-0 overflow-visible"><Stamp win={win} size="text-2xl" animate={true}/></div>
+          </div>
+          <div className={`font-num font-900 leading-none tabnum ${win?'text-win':'text-loss'}`} style={{fontSize:'clamp(48px,16vw,76px)'}}>
+            {fmt(sessionPts(latest))}
+          </div>
+
+          {latest.market_view && (
+            <p className="text-[13px] text-ink/80 leading-snug mt-4 border-l-2 border-gold pl-2.5">{latest.market_view}</p>
+          )}
+
+          <div className="grid grid-cols-2 gap-2 mt-4">
+            {latest.legs.slice(0,4).map((l,i)=>(
+              <div key={i} className="rounded-xl bg-card/70 border border-line p-2">
+                <div className="text-[11px] font-700 truncate">{l.instrument}</div>
+                <div className={`font-num font-800 text-sm tabnum ${l.pnl_points>=0?'text-win':'text-loss'}`}>{fmt(l.pnl_points)} pts</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-2 mt-4">
+            <a href={`#/session/${latest.date}`} className="flex-1 text-center py-3 rounded-xl bg-ink text-paper font-700">Poori detail dekho</a>
+            <button onClick={()=>shareSession(latest)} className="px-4 py-3 rounded-xl bg-[#25D366] text-white font-700 flex items-center gap-1.5">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.87 9.87 0 001.515 5.26l-.999 3.648 3.974-.755z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* streak */}
+      <div className="rounded-2xl border border-line bg-card p-4">
+        <Streak streak={data.streak}/>
+      </div>
+
+      {/* headline stats — big numbers, Hindi labels */}
+      <div className="grid grid-cols-3 gap-2.5">
+        <Stat big={`${data.meta.win_rate}%`} label="Win rate" sub={`${data.meta.decided_trades} trades`} accent="win"/>
+        <Stat big={data.meta.total_sessions} label="Sessions" sub="record kiye"/>
+        <Stat big={data.meta.total_legs} label="Trade legs" sub="extracted"/>
+      </div>
+
+      <a href="#/sessions" className="block text-center py-3.5 rounded-2xl border-2 border-ink font-700">Saari sessions dekho →</a>
+
+      {/* what is this — below fold, for the curious, never blocks the data */}
+      <div className="rounded-2xl bg-ink text-paper/90 p-4 text-[13px] leading-relaxed">
+        <div className="font-700 text-paper mb-1">Ye kya hai?</div>
+        Trade Mirror, <b>Intraday Hunter</b> ke YouTube videos se nikali gayi har trade ko verify karke yahan dikhata hai. Aapko har video dekhne ki zaroorat nahi — yahan poora record milta hai. <span className="text-paper/60">Ye ek independent project hai, Intraday Hunter se affiliated nahi.</span>
+      </div>
+    </div>
+  );
+}
+
+function Stat({big,label,sub,accent}){
+  const c = accent==='win'?'text-win':'text-ink';
+  return (
+    <div className="rounded-2xl border border-line bg-card p-3 text-center">
+      <div className={`font-num font-900 tabnum leading-none ${c}`} style={{fontSize:'clamp(20px,6vw,28px)'}}>{big}</div>
+      <div className="text-[12px] font-700 mt-1">{label}</div>
+      <div className="text-[10px] text-slate">{sub}</div>
+    </div>
+  );
+}
+
+function Sessions({data}){
+  const [filter,setFilter]=useState('ALL');
+  const list = useMemo(()=> data.sessions.filter(s=> filter==='ALL'? true : filter==='WIN'? isWin(s) : !isWin(s)), [filter,data]);
+  const pills=[['ALL','Sabhi'],['WIN','Sirf Profit'],['LOSS','Sirf Loss']];
+  return (
+    <div>
+      <h1 className="text-2xl font-800 mb-3">Saari Sessions</h1>
+      <div className="flex gap-2 mb-4">
+        {pills.map(([k,lab])=>(
+          <button key={k} onClick={()=>setFilter(k)}
+            className={`px-3.5 py-2 rounded-full text-[13px] font-700 border-2 ${filter===k?(k==='WIN'?'bg-win text-white border-win':k==='LOSS'?'bg-loss text-white border-loss':'bg-ink text-paper border-ink'):'border-line text-slate'}`}>
+            {lab}
+          </button>
+        ))}
+      </div>
+      <div className="space-y-3">
+        {list.map((s,i)=> <SessionCard key={s.date} s={s}/>)}
+      </div>
+    </div>
+  );
+}
+
+function SessionDetail({data, date}){
+  const s = data.sessions.find(x=>x.date===date);
+  if(!s) return <Empty msg="Ye session nahi mili."/>;
+  const d = dayName(s.date); const win=isWin(s);
+  const plan = data.plans.find(p=>p.matched_session===s.date);
+  const vid = ytId(s.video_url);
+  return (
+    <div className="space-y-4">
+      <a href="#/sessions" className="text-[13px] text-slate font-600">← Saari sessions</a>
+      <div className={`rounded-3xl p-5 border-2 ${win?'border-win/30 bg-winbg':'border-loss/30 bg-lossbg'}`}>
+        <div className="flex items-start justify-between">
+          <div className="min-w-0">
+            <div className="text-[13px] font-700 text-slate">{d.full} · {d.dow}</div>
+            <div className="flex items-center gap-3 mt-1">
+              <div className={`font-num font-900 tabnum leading-none ${win?'text-win':'text-loss'}`} style={{fontSize:'clamp(40px,13vw,64px)'}}>{fmt(sessionPts(s))}</div>
+              <div className="shrink-0"><Stamp win={win} size="text-2xl" animate={true}/></div>
+            </div>
+            <div className="text-sm text-slate font-600 mt-1">total points · {s.legs.length} trades</div>
+          </div>
+        </div>
+        {s.market_view && <p className="text-[13px] text-ink/80 leading-snug mt-4 border-l-2 border-gold pl-2.5">{s.market_view}</p>}
+      </div>
+
+      {/* legs */}
+      <div>
+        <h2 className="font-800 text-lg mb-2">Trades ({s.legs.length})</h2>
+        <div className="space-y-2">
+          {s.legs.map((l,i)=>(
+            <div key={i} className={`rounded-2xl border bg-card p-3 ${l.pnl_points>=0?'border-win/25':'border-loss/25'}`}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-700 text-sm">{l.instrument}</span>
+                <span className={`text-[11px] font-700 px-2 py-0.5 rounded ${l.direction==='SHORT'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>{l.direction}</span>
+              </div>
+              <div className="grid grid-cols-4 gap-2 text-center mb-2">
+                <Mini label="Entry" v={l.entry}/>
+                <Mini label="Exit" v={l.exit}/>
+                <Mini label="P&L" v={fmt(l.pnl_points)} c={l.pnl_points>=0?'text-win':'text-loss'}/>
+                <Mini label="Qty" v={l.quantity}/>
+              </div>
+              <div className="text-[12px] text-ink/70 space-y-1">
+                <div>🎯 <b>Kyun li:</b> {l.motive}</div>
+                <div>🚪 <b>Kyun nikle:</b> {l.exit_reason}</div>
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-slate">🕒 {l.entry_time} → {l.exit_time}</span>
+                  <span className="px-2 py-0.5 rounded bg-ink/5 font-600">{l.setup_type}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* plan vs actual */}
+      {plan && (
+        <div>
+          <h2 className="font-800 text-lg mb-2">Raat ka plan vs Asli result</h2>
+          <PlanCard p={plan} sessions={data.sessions}/>
+        </div>
+      )}
+
+      {/* video */}
+      {vid && (
+        <div>
+          <h2 className="font-800 text-lg mb-2">Video</h2>
+          <div className="rounded-2xl overflow-hidden border border-line bg-black" style={{aspectRatio:'16/9'}}>
+            <iframe loading="lazy" className="w-full h-full" src={`https://www.youtube.com/embed/${vid}`} title="session video" allowFullScreen frameBorder="0"></iframe>
+          </div>
+        </div>
+      )}
+
+      <button onClick={()=>shareSession(s)} className="w-full py-3.5 rounded-2xl bg-[#25D366] text-white font-700 flex items-center justify-center gap-2">
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.87 9.87 0 001.515 5.26l-.999 3.648 3.974-.755z"/></svg>
+        WhatsApp pe share karo
+      </button>
+    </div>
+  );
+}
+function Mini({label,v,c='text-ink'}){
+  return <div><div className="text-[10px] text-slate">{label}</div><div className={`font-num font-800 text-sm tabnum ${c}`}>{v}</div></div>;
+}
+
+function Setups({data}){
+  const sorted = [...data.setup_stats].sort((a,b)=> b.win_rate-a.win_rate || b.total-a.total);
+  const maxRate = Math.max(...sorted.map(s=>s.win_rate));
+  const maxMonth = Math.max(...data.monthly.map(m=>m.win_rate));
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-800">Setups & Record</h1>
+
+      <div className="rounded-2xl border border-line bg-card p-4">
+        <h2 className="font-800 mb-1">Kaun sa setup chalta hai</h2>
+        <p className="text-[12px] text-slate mb-2">Lambi line = zyada bharosa. Chhota sample dhyaan se dekho.</p>
+        <div>{sorted.map((s,i)=> <SetupRow key={i} s={s} max={maxRate}/>)}</div>
+      </div>
+
+      <div className="rounded-2xl border border-line bg-card p-4">
+        <h2 className="font-800 mb-3">Index-wise win rate</h2>
+        <div className="space-y-3">
+          {data.instrument_stats.map((s,i)=>(
+            <div key={i}>
+              <div className="flex justify-between text-[13px] mb-1"><span className="font-700">{s.instrument}</span><span className="font-num font-700 tabnum">{Math.round(s.win_rate)}%</span></div>
+              <div className="h-3 rounded-full bg-ink/5 overflow-hidden">
+                <div className="h-full rounded-full bg-win bar-anim" style={{'--w':`${s.win_rate}%`, width:`${s.win_rate}%`}}/>
+              </div>
+              <div className="text-[11px] text-slate mt-0.5">{s.wins}/{s.total} sessions</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-line bg-card p-4">
+        <h2 className="font-800 mb-3">Mahina-dar-mahina</h2>
+        <div className="flex items-end gap-1.5 h-32">
+          {data.monthly.map((m,i)=>{
+            const h = (m.win_rate/100)*100;
+            const mon = new Date(m.month+'-01').toLocaleDateString('en',{month:'short'});
+            return (
+              <div key={i} className="flex-1 flex flex-col items-center justify-end h-full">
+                <span className="text-[10px] font-num font-700 tabnum mb-1">{Math.round(m.win_rate)}</span>
+                <div className="w-full rounded-t-md bg-gradient-to-t from-win to-win/70 bar-anim" style={{'--w':'100%', height:`${h}%`, minHeight:'4px'}}/>
+                <span className="text-[9px] text-slate mt-1">{mon}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Plans({data}){
+  return (
+    <div>
+      <h1 className="text-2xl font-800 mb-1">Plans — Scorecard</h1>
+      <p className="text-[13px] text-slate mb-4">Raat ko unhone kya socha, aur agle din market ne kya kiya.</p>
+      <div className="space-y-3">
+        {data.plans.map((p,i)=> <PlanCard key={p.date} p={p} sessions={data.sessions}/>)}
+      </div>
+    </div>
+  );
+}
+
+function Empty({msg}){
+  return <div className="text-center py-16 text-slate font-600">{msg} <div className="mt-3"><a href="#/" className="text-ink underline">Home</a></div></div>;
+}
+
+/* ---------- shell / router ---------- */
+const TABS = [
+  ['#/','Home','M3 11l9-8 9 8M5 10v10h14V10'],
+  ['#/sessions','Sessions','M4 6h16M4 12h16M4 18h16'],
+  ['#/setups','Setups','M4 19V9m6 10V5m6 14v-7'],
+  ['#/plans','Plans','M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2']
+];
+
+function useHash(){
+  const [hash,setHash]=useState(location.hash||'#/');
+  useEffect(()=>{
+    const on=()=>{ setHash(location.hash||'#/'); window.scrollTo(0,0); };
+    window.addEventListener('hashchange',on);
+    return ()=>window.removeEventListener('hashchange',on);
+  },[]);
+  return hash;
+}
+
+function App(){
+  const [data,setData]=useState(null);
+  const [err,setErr]=useState(false);
+  const hash = useHash();
+
+  useEffect(()=>{
+    fetch('data/data.json').then(r=>{ if(!r.ok) throw 0; return r.json();})
+      .then(setData).catch(()=>setErr(true));
+  },[]);
+
+  let page=null, activeTab='#/';
+  if(data){
+    const [_,root,arg] = hash.split('/'); // ['#','session','2026-..']
+    if(hash.startsWith('#/sessions')){ page=<Sessions data={data}/>; activeTab='#/sessions'; }
+    else if(hash.startsWith('#/session/')){ page=<SessionDetail data={data} date={arg}/>; activeTab='#/sessions'; }
+    else if(hash.startsWith('#/setups')){ page=<Setups data={data}/>; activeTab='#/setups'; }
+    else if(hash.startsWith('#/plans')){ page=<Plans data={data}/>; activeTab='#/plans'; }
+    else { page=<Home data={data}/>; activeTab='#/'; }
+  }
+
+  return (
+    <div className="min-h-screen pb-24 max-w-md mx-auto">
+      {/* header */}
+      <header className="sticky top-0 z-20 bg-paper/95 backdrop-blur border-b border-line px-4 py-3 flex items-center justify-between">
+        <a href="#/" className="flex items-center gap-2">
+          <span className="w-8 h-8 rounded-lg bg-ink text-paper grid place-items-center font-stamp text-sm">TM</span>
+          <span className="font-800 leading-none">Trade Mirror</span>
+        </a>
+        {data && <span className="text-[11px] font-700 px-2 py-1 rounded-full bg-win/10 text-win flex items-center gap-1">
+          <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.4 5 5.6.5-4.2 3.7 1.3 5.5L10 18l-5.1 2.7 1.3-5.5L2 11.5 7.6 11z"/></svg>
+          Verified
+        </span>}
+      </header>
+
+      <main className="px-4 pt-4">
+        {err && <Empty msg="Data load nahi ho paya. data/data.json check karo."/>}
+        {!data && !err && <LoadSkeleton/>}
+        {page}
+      </main>
+
+      {/* bottom tab bar */}
+      {data && (
+        <nav className="fixed bottom-0 inset-x-0 z-20 bg-paper/97 backdrop-blur border-t border-line max-w-md mx-auto">
+          <div className="grid grid-cols-4">
+            {TABS.map(([href,label,d])=>{
+              const on = href===activeTab;
+              return (
+                <a key={href} href={href} className={`py-2.5 flex flex-col items-center gap-0.5 ${on?'text-ink':'text-slate'}`}>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={on?2.4:1.8} strokeLinecap="round" strokeLinejoin="round"><path d={d}/></svg>
+                  <span className={`text-[11px] ${on?'font-800':'font-600'}`}>{label}</span>
+                </a>
+              );
+            })}
+          </div>
+        </nav>
+      )}
+    </div>
+  );
+}
+
+/* skeleton so FCP shows meaningful shape, not a spinner */
+function LoadSkeleton(){
+  return (
+    <div className="space-y-4 animate-pulse">
+      <div className="h-5 w-32 bg-line rounded"/>
+      <div className="h-52 bg-line rounded-3xl"/>
+      <div className="h-16 bg-line rounded-2xl"/>
+      <div className="grid grid-cols-3 gap-2.5">
+        <div className="h-20 bg-line rounded-2xl"/><div className="h-20 bg-line rounded-2xl"/><div className="h-20 bg-line rounded-2xl"/>
+      </div>
     </div>
   );
 }
