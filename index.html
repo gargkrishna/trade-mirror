@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trade Mirror — verified F&O session ledger</title>
+<meta name="description" content="A structured, searchable ledger built from an Indian intraday F&O trader's daily recaps. Win rates by setup, session-by-session breakdowns, next-day plans.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      ink:'#0A0E15', card:'#101622', well:'#0C111B', line:'rgba(154,170,196,0.13)',
+      hi:'#E8EDF6', lo:'#8A96AB', amber:'#F0A63C', profit:'#33C98E', loss:'#F0565C', violet:'#8B7CF6',
+    },
+    fontFamily: {
+      disp:['Archivo','sans-serif'], body:['"IBM Plex Sans"','sans-serif'], mono:['"IBM Plex Mono"','monospace'],
+    },
+  }},
+};
+</script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.0/babel.min.js"></script>
+<style>
+  html { color-scheme: dark; }
+  .font-mono { font-variant-numeric: tabular-nums; }
+  body { background: radial-gradient(1100px 480px at 50% -200px, rgba(240,166,60,0.07), transparent 62%), #0A0E15; }
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-thumb { background: rgba(154,170,196,0.18); border-radius: 6px; }
+  :focus-visible { outline: 2px solid #F0A63C; outline-offset: 2px; border-radius: 4px; }
+  .glow-amber { text-shadow: 0 0 16px rgba(240,166,60,0.40); }
+  .redact { letter-spacing: 1px; background: rgba(154,170,196,0.16); color: transparent; border-radius: 3px; user-select: none; }
+  @media (prefers-reduced-motion: reduce) { * { transition-duration: 0.01ms !important; } }
+</style>
+</head>
+<body class="bg-ink text-hi font-body min-h-screen antialiased">
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useMemo, useCallback } = React;
+
+/* ============================== CONFIG — edit these ============================== */
+const GUMROAD_URL = "https://gumroad.com/l/your-product-id";   // ← your Gumroad product link
+const PRICE = "₹99/mo";                                         // ← shown on the unlock screen + buttons
+/* ================================================================================ */
+
+/* ------------------------------------------------------------------- helpers */
+const fmtPts = (v) => v == null ? '—' : (v > 0 ? `+${Math.round(v*100)/100}` : `${Math.round(v*100)/100}`);
+const pnlClass = (v) => v == null ? 'text-lo' : v >= 0 ? 'text-profit' : 'text-loss';
+const fmtDate = (s) => {
+  if (!s) return '—';
+  const d = new Date(s);
+  return isNaN(d) ? s : d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+const resultTone = (r) => r === 'PROFIT' ? 'text-profit border-profit/40 bg-profit/10'
+  : r === 'LOSS' ? 'text-loss border-loss/40 bg-loss/10'
+  : r === 'MIXED' ? 'text-amber border-amber/40 bg-amber/10' : 'text-lo border-line bg-well';
+
+/* ------------------------------------------------------------------- crypto */
+// Decrypt full.enc with the access key. Mirrors export_site.py (PBKDF2-SHA256 + AES-256-GCM).
+async function decryptBundle(enc, passphrase) {
+  const b = (s) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const salt = b(enc.salt), iv = b(enc.iv), data = b(enc.data);
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(passphrase), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: enc.iter, hash: 'SHA-256' },
+    base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+/* ------------------------------------------------------------------- routing */
+function useHashRoute() {
+  const [hash, setHash] = useState(window.location.hash || '#/');
+  useEffect(() => {
+    const on = () => setHash(window.location.hash || '#/');
+    window.addEventListener('hashchange', on);
+    return () => window.removeEventListener('hashchange', on);
+  }, []);
+  return hash;
+}
+const go = (path) => { window.location.hash = path; };
+
+/* ------------------------------------------------------------------- atoms */
+function Chip({ tone, children }) {
+  return <span className={`px-2 py-0.5 rounded border text-[10px] font-mono uppercase tracking-[0.12em] ${tone}`}>{children}</span>;
+}
+function ResultChip({ r }) {
+  return <Chip tone={resultTone(r)}>{r === 'PROFIT' ? 'profit' : r === 'LOSS' ? 'loss' : r === 'MIXED' ? 'mixed' : 'flat'}</Chip>;
+}
+function dirChip(d) {
+  if (!d) return null;
+  return <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border ${d === 'LONG' ? 'text-profit border-profit/40 bg-profit/10' : 'text-loss border-loss/40 bg-loss/10'}`}>{d}</span>;
+}
+
+/* a button that links to Gumroad */
+function BuyButton({ children = `Unlock full access — ${PRICE}` }) {
+  return (
+    <a href={GUMROAD_URL} target="_blank" rel="noreferrer"
+       className="inline-block px-5 py-2.5 rounded-lg bg-amber text-ink font-semibold text-sm hover:brightness-110 transition">
+      {children}
+    </a>
+  );
+}
+
+/* a panel shown where paid content would be */
+function LockedPanel({ title, blurb }) {
+  return (
+    <div className="bg-card border border-line rounded-xl p-8 text-center">
+      <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-amber mb-3">locked</div>
+      <h3 className="font-disp font-800 text-lg text-hi mb-2">{title}</h3>
+      <p className="text-sm text-lo leading-relaxed max-w-md mx-auto mb-5">{blurb}</p>
+      <div className="flex items-center justify-center gap-3 flex-wrap">
+        <BuyButton />
+        <button onClick={() => go('#/unlock')} className="text-sm text-lo hover:text-hi underline underline-offset-2">I already have a key</button>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------- nav */
+function Nav({ unlocked, onLock }) {
+  const hash = useHashRoute();
+  const tabs = [['#/', 'Overview'], ['#/sessions', 'Sessions'], ['#/setups', 'Setups'], ['#/plans', 'Plans']];
+  const active = (h) => hash === h || (h !== '#/' && hash.startsWith(h));
+  return (
+    <nav className="sticky top-0 z-30 bg-ink/90 backdrop-blur border-b border-line">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-5">
+        <a href="#/" className="font-disp font-900 text-lg tracking-[0.06em] uppercase shrink-0">
+          Trade<span className="text-amber glow-amber">/</span>Mirror
+        </a>
+        <div className="flex gap-1 overflow-x-auto">
+          {tabs.map(([h, label]) => (
+            <a key={h} href={h}
+               className={`px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition ${active(h) ? 'bg-card text-amber' : 'text-lo hover:text-hi'}`}>
+              {label}
+            </a>
+          ))}
+        </div>
+        <div className="ml-auto shrink-0">
+          {unlocked
+            ? <button onClick={onLock} className="font-mono text-[11px] text-profit border border-profit/40 bg-profit/10 rounded-lg px-3 py-1.5">● unlocked</button>
+            : <a href={GUMROAD_URL} target="_blank" rel="noreferrer" className="font-mono text-[11px] text-ink bg-amber rounded-lg px-3 py-1.5 font-semibold hover:brightness-110 transition">Get full access</a>}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+/* ------------------------------------------------------------------- overview */
+function StatCell({ label, children, sub }) {
+  return (
+    <div className="px-5 py-4">
+      <div className="text-[10px] uppercase tracking-[0.2em] text-lo font-medium mb-1.5">{label}</div>
+      <div className="font-mono text-2xl leading-none">{children}</div>
+      {sub && <div className="text-[11px] text-lo mt-1.5">{sub}</div>}
+    </div>
+  );
+}
+
+function Overview({ pub, unlocked }) {
+  const m = pub.meta;
+  return (
+    <div className="space-y-8">
+      <header className="pt-10">
+        <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-amber mb-3">independent session ledger · updated as he posts</div>
+        <h1 className="font-disp font-900 text-3xl sm:text-4xl leading-tight max-w-3xl">
+          Skip the {m.total_sessions}+ videos. Read every session — and every new one the evening it drops.
+        </h1>
+        <p className="text-lo text-sm sm:text-base leading-relaxed max-w-2xl mt-4">
+          {m.total_sessions} live sessions reconstructed from this trader's daily recaps — instruments, setups,
+          entry reasoning and outcomes. The archive keeps growing: each new recap is added and pushed here,
+          so members read the breakdown instead of scrubbing an hour of video.
+        </p>
+        <div className="flex items-center gap-3 mt-5 flex-wrap font-mono text-[11px] text-lo">
+          <span className="px-2 py-1 rounded border border-profit/40 bg-profit/10 text-profit">● updated {fmtDate(m.last_updated)}</span>
+          <span>latest session {fmtDate(m.date_to)}</span>
+        </div>
+        <div className="flex items-center gap-3 mt-6 flex-wrap">
+          {!unlocked && <BuyButton />}
+          <a href="#/sessions" className="text-sm text-lo hover:text-hi underline underline-offset-2">See the free sample →</a>
+        </div>
+      </header>
+
+      <section className="bg-card border border-line rounded-xl overflow-hidden">
+        <div className="flex flex-wrap divide-x divide-line">
+          <StatCell label="Win rate" sub={`${m.decided_legs} decided trades`}>
+            <span className="text-profit glow-amber">{m.win_rate}<span className="text-lo text-base">%</span></span>
+          </StatCell>
+          <StatCell label="Sessions" sub="live trading days">
+            <span className="text-hi">{m.total_sessions}</span>
+          </StatCell>
+          <StatCell label="Setups tracked" sub="distinct named setups">
+            <span className="text-hi">{m.setups_tracked}</span>
+          </StatCell>
+          <StatCell label="Next-day plans" sub="pre-market predictions">
+            <span className="text-violet">{m.plans_count}</span>
+          </StatCell>
+          <StatCell label="Covering" sub="date range">
+            <span className="text-hi text-base">{fmtDate(m.date_from)} – {fmtDate(m.date_to)}</span>
+          </StatCell>
+        </div>
+      </section>
+
+      {/* setup board teaser — names shown, win rates redacted */}
+      <section>
+        <div className="flex items-baseline justify-between mb-3">
+          <h2 className="font-disp font-800 text-sm uppercase tracking-[0.16em] text-hi">Best setups by win rate</h2>
+          <span className="font-mono text-[11px] text-lo">{m.setups_tracked} tracked</span>
+        </div>
+        <div className="bg-card border border-line rounded-xl divide-y divide-line">
+          {pub.top_setups.map((s, i) => (
+            <div key={i} className="flex items-center gap-3 px-4 py-3">
+              <span className="font-mono text-[11px] text-lo w-5">{i + 1}</span>
+              <span className="text-sm text-hi">{s.setup}</span>
+              <span className="font-mono text-[11px] text-lo">n={s.total}</span>
+              <span className="ml-auto font-mono text-sm redact px-2 py-0.5">88.8%</span>
+            </div>
+          ))}
+          {!unlocked && (
+            <div className="px-4 py-3 text-center">
+              <span className="text-sm text-lo">+ {m.setups_tracked - pub.top_setups.length} more setups with full win rates · </span>
+              <a href="#/setups" className="text-sm text-amber hover:underline">unlock the board →</a>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* sample sessions */}
+      <section>
+        <div className="flex items-baseline justify-between mb-3">
+          <h2 className="font-disp font-800 text-sm uppercase tracking-[0.16em] text-hi">Recent sessions</h2>
+          <span className="font-mono text-[11px] text-lo">free sample</span>
+        </div>
+        <div className="space-y-2">
+          {pub.teaser_sessions.map((s, i) => <TeaserRow key={i} s={s} />)}
+        </div>
+        {!unlocked && (
+          <div className="mt-3">
+            <LockedPanel title={`${pub.locked_sessions} more sessions inside`}
+              blurb="The full archive has every session with its legs, entry reasoning, market view and outcome — the setup win-rate board, all next-day plans, and every new session added the evening it's posted." />
+          </div>
+        )}
+      </section>
+
+      <Methodology />
+    </div>
+  );
+}
+
+function TeaserRow({ s }) {
+  return (
+    <div className="bg-card border border-line rounded-lg px-4 py-3 flex items-center gap-3 flex-wrap">
+      <span className="font-mono text-[11px] text-lo w-24 shrink-0">{fmtDate(s.date)}</span>
+      <ResultChip r={s.result} />
+      <span className="text-sm text-hi">{s.instruments.join(' · ') || '—'}</span>
+      <span className="font-mono text-[11px] text-lo">{s.leg_count} leg{s.leg_count > 1 ? 's' : ''}</span>
+      {s.setups.slice(0, 2).map((x, i) => <Chip key={i} tone="text-lo border-line bg-well">{x}</Chip>)}
+      <a href={s.video_url} target="_blank" rel="noreferrer" className="ml-auto font-mono text-[10px] text-lo hover:text-amber">video ↗</a>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------- sessions */
+function SessionsPage({ pub, full }) {
+  const [q, setQ] = useState('');
+  const [res, setRes] = useState('ALL');
+
+  if (!full) {
+    return (
+      <div className="pt-8 space-y-6">
+        <PageHead title="Sessions" sub={`Free sample — ${pub.teaser_sessions.length} of ${pub.meta.total_sessions} sessions`} />
+        <div className="space-y-2">{pub.teaser_sessions.map((s, i) => <TeaserRow key={i} s={s} />)}</div>
+        <LockedPanel title={`${pub.locked_sessions} more sessions`}
+          blurb="Unlock to read every session in full — legs, entry motive, market view, prices and outcome — search the whole archive, and get each new session added the evening it's posted." />
+      </div>
+    );
+  }
+
+  const sessions = full.sessions.filter(s => {
+    if (res !== 'ALL' && s.result !== res) return false;
+    if (q) {
+      const hay = [s.title, ...(s.instruments || []), ...(s.setups || []), s.market_view, s.summary].filter(Boolean).join(' ').toLowerCase();
+      if (!hay.includes(q.toLowerCase())) return false;
+    }
+    return true;
+  });
+
+  return (
+    <div className="pt-8 space-y-5">
+      <PageHead title="Sessions" sub={`${full.sessions.length} live sessions · newest first`} />
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="inline-flex rounded-lg border border-line bg-well p-0.5">
+          {['ALL', 'PROFIT', 'LOSS', 'MIXED'].map(o => (
+            <button key={o} onClick={() => setRes(o)}
+              className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase tracking-wider transition ${res === o ? 'bg-card text-amber' : 'text-lo hover:text-hi'}`}>{o}</button>
+          ))}
+        </div>
+        <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search instrument, setup, view…"
+          className="grow min-w-[220px] bg-well border border-line rounded-lg px-3 py-1.5 text-sm placeholder:text-lo/60" />
+        <span className="font-mono text-[11px] text-lo">{sessions.length} shown</span>
+      </div>
+      <div className="space-y-2">
+        {sessions.map(s => <SessionRow key={s.id} s={s} />)}
+        {sessions.length === 0 && <div className="bg-card border border-line rounded-xl px-4 py-12 text-center text-lo text-sm">No sessions match that.</div>}
+      </div>
+    </div>
+  );
+}
+
+function SessionRow({ s }) {
+  return (
+    <a href={`#/session/${s.id}`} className="block bg-card border border-line rounded-lg px-4 py-3 hover:border-lo/40 transition">
+      <div className="flex items-center gap-3 flex-wrap">
+        <span className="font-mono text-[11px] text-lo w-24 shrink-0">{fmtDate(s.date)}</span>
+        <ResultChip r={s.result} />
+        <span className="text-sm text-hi">{s.instruments.join(' · ') || '—'}</span>
+        <span className="font-mono text-[11px] text-lo">{s.leg_count} leg{s.leg_count > 1 ? 's' : ''}</span>
+        {s.setups.slice(0, 3).map((x, i) => <Chip key={i} tone="text-lo border-line bg-well">{x}</Chip>)}
+        {s.net_points != null && <span className={`ml-auto font-mono text-sm font-semibold ${pnlClass(s.net_points)}`}>{fmtPts(s.net_points)} pts</span>}
+      </div>
+    </a>
+  );
+}
+
+/* ------------------------------------------------------------------- session detail */
+function SessionDetail({ id, full }) {
+  if (!full) return <div className="pt-8"><LockedPanel title="This session is locked" blurb="Unlock full access to read every session in detail." /></div>;
+  const s = full.sessions.find(x => x.id === id);
+  if (!s) return <div className="pt-8 text-lo text-sm">Session not found. <a href="#/sessions" className="text-amber">Back to sessions →</a></div>;
+
+  return (
+    <div className="pt-8 space-y-5 max-w-3xl">
+      <a href="#/sessions" className="font-mono text-[11px] text-lo hover:text-hi">← all sessions</a>
+      <div className="flex items-center gap-3 flex-wrap">
+        <h1 className="font-disp font-800 text-xl text-hi">{fmtDate(s.date)}</h1>
+        <ResultChip r={s.result} />
+        {s.net_points != null && <span className={`font-mono text-lg font-bold ${pnlClass(s.net_points)}`}>{fmtPts(s.net_points)} pts</span>}
+      </div>
+
+      {s.market_view && (
+        <div className="bg-card border border-line rounded-xl p-4">
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-amber mb-2">market view</div>
+          <p className="text-sm text-hi/90 leading-relaxed">{s.market_view}</p>
+        </div>
+      )}
+
+      <div className="bg-card border border-line rounded-xl overflow-hidden">
+        <div className="px-4 py-2.5 border-b border-line font-mono text-[10px] uppercase tracking-[0.18em] text-lo">{s.legs.length} leg{s.legs.length > 1 ? 's' : ''}</div>
+        <div className="divide-y divide-line">
+          {s.legs.map((l, i) => (
+            <div key={i} className="px-4 py-3">
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="font-mono text-sm text-hi min-w-[150px]">{l.instrument || '—'}</span>
+                {dirChip(l.direction)}
+                {(l.entry != null || l.exit_price != null) && (
+                  <span className="font-mono text-xs text-lo"><span className="text-hi">{l.entry ?? '—'}</span> → <span className="text-hi">{l.exit_price ?? '—'}</span></span>
+                )}
+                {l.setup_type && <Chip tone="text-lo border-line bg-well">{l.setup_type}</Chip>}
+                <span className="ml-auto"><ResultChip r={l.outcome || 'FLAT'} /></span>
+              </div>
+              {l.motive && (
+                <p className="text-xs text-hi/70 leading-relaxed mt-2">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-profit mr-2">why</span>{l.motive}
+                </p>
+              )}
+              {(l.entry_time || l.exit_time) && (
+                <div className="font-mono text-[10px] text-lo mt-1.5">{l.entry_time || '—'} → {l.exit_time || '—'}{l.quantity ? ` · qty ${l.quantity}` : ''}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {s.summary && (
+        <div className="bg-card border border-line rounded-xl p-4">
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-lo mb-2">recap summary</div>
+          <p className="text-sm text-hi/85 leading-relaxed">{s.summary}</p>
+        </div>
+      )}
+
+      <div className="aspect-video rounded-xl overflow-hidden border border-line bg-well">
+        <iframe className="w-full h-full" src={`https://www.youtube.com/embed/${s.id}`} title="session video" loading="lazy"
+          allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture" allowFullScreen></iframe>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------- setups */
+function SetupsPage({ pub, full }) {
+  if (!full) {
+    return (
+      <div className="pt-8 space-y-6">
+        <PageHead title="Setups" sub="Win rate for every named setup" />
+        <div className="bg-card border border-line rounded-xl divide-y divide-line">
+          {pub.top_setups.map((s, i) => (
+            <div key={i} className="flex items-center gap-3 px-4 py-3">
+              <span className="font-mono text-[11px] text-lo w-5">{i + 1}</span>
+              <span className="text-sm text-hi">{s.setup}</span>
+              <span className="font-mono text-[11px] text-lo">n={s.total}</span>
+              <span className="ml-auto font-mono text-sm redact px-2 py-0.5">88.8%</span>
+            </div>
+          ))}
+        </div>
+        <LockedPanel title={`${pub.meta.setups_tracked} setups with real win rates`}
+          blurb="Unlock to see the win rate and sample size for every setup the trader uses — plus the per-instrument breakdown and month-by-month performance." />
+        <Methodology />
+      </div>
+    );
+  }
+
+  return (
+    <div className="pt-8 space-y-7">
+      <PageHead title="Setups" sub="Win rate by named setup. Sample size shown — small samples are not predictive." />
+      <div className="bg-card border border-line rounded-xl divide-y divide-line">
+        {full.setup_stats.map((s, i) => (
+          <div key={i} className="flex items-center gap-3 px-4 py-3">
+            <span className="font-mono text-[11px] text-lo w-5">{i + 1}</span>
+            <span className="text-sm text-hi grow">{s.setup}</span>
+            <span className="font-mono text-[11px] text-lo w-14 text-right">{s.wins}/{s.total}</span>
+            <div className="w-28 h-1.5 bg-well rounded-full overflow-hidden hidden sm:block">
+              <div className={`h-full ${s.win_rate >= 60 ? 'bg-profit' : s.win_rate >= 45 ? 'bg-amber' : 'bg-loss'}`} style={{ width: s.win_rate + '%' }}></div>
+            </div>
+            <span className={`font-mono text-sm font-semibold w-16 text-right ${s.win_rate >= 60 ? 'text-profit' : s.win_rate >= 45 ? 'text-amber' : 'text-loss'}`}>{s.win_rate}%</span>
+          </div>
+        ))}
+      </div>
+
+      <div>
+        <h2 className="font-disp font-800 text-sm uppercase tracking-[0.16em] text-hi mb-3">By instrument</h2>
+        <div className="grid sm:grid-cols-3 gap-3">
+          {full.instrument_stats.map((it, i) => (
+            <div key={i} className="bg-card border border-line rounded-xl p-4">
+              <div className="font-mono text-sm text-hi">{it.instrument}</div>
+              <div className="font-mono text-2xl font-bold text-profit mt-2">{it.win_rate}<span className="text-lo text-sm">%</span></div>
+              <div className="font-mono text-[11px] text-lo mt-1">{it.wins}/{it.total} trades</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h2 className="font-disp font-800 text-sm uppercase tracking-[0.16em] text-hi mb-3">Month by month</h2>
+        <div className="bg-card border border-line rounded-xl divide-y divide-line">
+          {full.monthly.map((mo, i) => (
+            <div key={i} className="flex items-center gap-3 px-4 py-2.5">
+              <span className="font-mono text-[11px] text-lo w-20">{mo.month}</span>
+              <span className="font-mono text-[11px] text-lo">{mo.sessions} sessions</span>
+              {mo.win_rate != null && (
+                <>
+                  <div className="ml-auto w-32 h-1.5 bg-well rounded-full overflow-hidden hidden sm:block">
+                    <div className="h-full bg-profit" style={{ width: mo.win_rate + '%' }}></div>
+                  </div>
+                  <span className="font-mono text-sm text-profit w-14 text-right">{mo.win_rate}%</span>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      <Methodology />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------- plans */
+const SCN = [['gap_up', 'Gap up'], ['flat', 'Flat'], ['gap_down', 'Gap down']];
+function biasTone(b) {
+  return b === 'bullish' ? 'text-profit border-profit/40 bg-profit/10'
+    : b === 'bearish' ? 'text-loss border-loss/40 bg-loss/10'
+    : b === 'range' ? 'text-amber border-amber/40 bg-amber/10' : 'text-lo border-line bg-well';
+}
+function PlansPage({ pub, full }) {
+  if (!full) {
+    return (
+      <div className="pt-8 space-y-6">
+        <PageHead title="Next-day plans" sub={`${pub.meta.plans_count} pre-market predictions`} />
+        <LockedPanel title={`${pub.meta.plans_count} next-day plans`}
+          blurb="Each evening the trader records what he expects the next session to do — bias, key levels, and how he'll act on a gap up, gap down or flat open. Members get every plan, including the newest, as part of the subscription." />
+      </div>
+    );
+  }
+  return (
+    <div className="pt-8 space-y-5">
+      <PageHead title="Next-day plans" sub={`${full.plans.length} pre-market predictions, newest first`} />
+      <div className="space-y-3">
+        {full.plans.map((p, i) => (
+          <article key={i} className="bg-card border border-line rounded-xl p-5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-mono text-[11px] text-lo">plan of {fmtDate(p.date)}</span>
+              {p.bias && <Chip tone={biasTone(p.bias)}>{p.bias}</Chip>}
+              <a href={p.video_url} target="_blank" rel="noreferrer" className="ml-auto font-mono text-[10px] text-lo hover:text-amber">video ↗</a>
+            </div>
+            {p.plan_summary && <p className="text-sm text-hi/90 leading-relaxed mt-2.5">{p.plan_summary}</p>}
+            <div className="grid sm:grid-cols-3 gap-2 mt-3">
+              {SCN.map(([k, label]) => p.scenarios[k] && (
+                <div key={k} className="rounded-lg border border-line bg-well/40 p-2.5">
+                  <div className="font-mono text-[10px] uppercase tracking-wider text-lo mb-1">{label}</div>
+                  <div className="text-xs text-hi/85 leading-relaxed">{p.scenarios[k]}</div>
+                </div>
+              ))}
+            </div>
+            {p.key_levels.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {p.key_levels.map((l, j) => (
+                  <span key={j} title={l.note} className="font-mono text-[10px] px-2 py-0.5 rounded border border-line text-hi/80 bg-well/50">
+                    {l.instrument} <span className="text-amber">{l.level}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------- unlock */
+function UnlockPage({ onUnlock, unlocked }) {
+  const [key, setKey] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+
+  const submit = async () => {
+    setErr(''); setBusy(true);
+    const ok = await onUnlock(key.trim());
+    setBusy(false);
+    if (ok) go('#/sessions');
+    else setErr('That key did not work. Check it matches the one in your Gumroad receipt.');
+  };
+
+  return (
+    <div className="pt-12 max-w-md mx-auto">
+      <div className="bg-card border border-line rounded-xl p-7">
+        <h1 className="font-disp font-800 text-xl text-hi">{unlocked ? 'You have full access' : 'Unlock the full ledger'}</h1>
+        {unlocked ? (
+          <p className="text-sm text-lo leading-relaxed mt-3">Your access key is active in this browser. <a href="#/sessions" className="text-amber">Go to sessions →</a></p>
+        ) : (
+          <>
+            <p className="text-sm text-lo leading-relaxed mt-3">
+              Subscribe on Gumroad and you'll get an access key. Paste it below to unlock every session,
+              the setup board, and all next-day plans — plus every new session as it's added. Your key works
+              for as long as your subscription is active.
+            </p>
+            <div className="mt-5">
+              <BuyButton />
+            </div>
+            <div className="border-t border-line my-6"></div>
+            <label className="block text-[11px] uppercase tracking-[0.16em] text-lo font-medium mb-1.5">Access key</label>
+            <input value={key} onChange={e => setKey(e.target.value)} onKeyDown={e => e.key === 'Enter' && submit()}
+              placeholder="paste your key" autoFocus
+              className="w-full bg-well border border-line rounded-lg px-3 py-2 font-mono text-sm placeholder:text-lo/50" />
+            {err && <p className="text-loss text-[12px] mt-2">{err}</p>}
+            <button onClick={submit} disabled={busy || !key.trim()}
+              className="w-full mt-3 py-2.5 rounded-lg bg-amber text-ink font-semibold text-sm hover:brightness-110 disabled:opacity-40 transition">
+              {busy ? 'Checking…' : 'Unlock'}
+            </button>
+            <p className="text-[11px] text-lo/70 leading-relaxed mt-4">
+              The data is decrypted on your device — your key is stored only in this browser tab and never sent anywhere.
+              Your latest key is always in your Gumroad library.
+            </p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------- shared */
+function PageHead({ title, sub }) {
+  return (
+    <div>
+      <h1 className="font-disp font-900 text-2xl text-hi">{title}</h1>
+      {sub && <p className="text-sm text-lo mt-1">{sub}</p>}
+    </div>
+  );
+}
+
+function Methodology() {
+  return (
+    <section className="bg-well/50 border border-line rounded-xl p-5 text-[12px] text-lo leading-relaxed">
+      <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-lo/80 mb-2">how this is built · please read</div>
+      <p className="mb-2">
+        This is an <span className="text-hi/80">independent analysis project</span>. It is not affiliated with, endorsed by, or operated
+        by the trader whose public videos it summarises.
+      </p>
+      <p className="mb-2">
+        Every figure is extracted from the trader's own daily recap videos. Outcomes (profit / loss) reflect what he
+        states in those recaps — they are <span className="text-hi/80">self-reported, not independently audited</span>, and exact prices
+        are available for only a small share of trades. Win rates with small sample sizes (shown as n) are not statistically reliable.
+      </p>
+      <p>
+        Nothing here is investment advice or a recommendation. Past performance does not indicate future results.
+        Trading options carries substantial risk.
+      </p>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="mt-16 border-t border-line py-8 text-center">
+      <div className="font-mono text-[10px] text-lo/60 tracking-wide">
+        Trade Mirror · independent analysis · not investment advice · <a href="#/unlock" className="hover:text-lo">access</a>
+      </div>
+    </footer>
+  );
+}
+
+/* ------------------------------------------------------------------- app */
+function App() {
+  const hash = useHashRoute();
+  const [pub, setPub] = useState(null);
+  const [full, setFull] = useState(null);
+  const [encCache, setEncCache] = useState(null);
+  const [bootErr, setBootErr] = useState('');
+
+  // load free data once
+  useEffect(() => {
+    fetch('data/public.json').then(r => r.json()).then(setPub)
+      .catch(() => setBootErr('Could not load the data. If you are viewing this file directly, run it from a web server.'));
+  }, []);
+
+  const fetchEnc = useCallback(async () => {
+    if (encCache) return encCache;
+    const e = await fetch('data/full.enc').then(r => r.json());
+    setEncCache(e);
+    return e;
+  }, [encCache]);
+
+  const unlock = useCallback(async (key) => {
+    try {
+      const e = await fetchEnc();
+      const data = await decryptBundle(e, key);
+      setFull(data);
+      try { sessionStorage.setItem('tm_key', key); } catch (_) {}
+      return true;
+    } catch (_) { return false; }
+  }, [fetchEnc]);
+
+  const lock = useCallback(() => {
+    setFull(null);
+    try { sessionStorage.removeItem('tm_key'); } catch (_) {}
+    go('#/');
+  }, []);
+
+  // auto-unlock if a key is remembered in this tab
+  useEffect(() => {
+    let saved = null;
+    try { saved = sessionStorage.getItem('tm_key'); } catch (_) {}
+    if (saved && pub && !full) { unlock(saved); }
+  }, [pub, full, unlock]);
+
+  if (bootErr) return <div className="max-w-xl mx-auto px-6 py-20 text-center text-lo">{bootErr}</div>;
+  if (!pub) return <div className="max-w-xl mx-auto px-6 py-20 text-center font-mono text-[12px] text-lo">loading…</div>;
+
+  let page;
+  if (hash.startsWith('#/session/')) page = <SessionDetail id={decodeURIComponent(hash.slice('#/session/'.length))} full={full} />;
+  else if (hash.startsWith('#/sessions')) page = <SessionsPage pub={pub} full={full} />;
+  else if (hash.startsWith('#/setups')) page = <SetupsPage pub={pub} full={full} />;
+  else if (hash.startsWith('#/plans')) page = <PlansPage pub={pub} full={full} />;
+  else if (hash.startsWith('#/unlock')) page = <UnlockPage onUnlock={unlock} unlocked={!!full} />;
+  else page = <Overview pub={pub} unlocked={!!full} />;
+
+  return (
+    <div>
+      <Nav unlocked={!!full} onLock={lock} />
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pb-10">{page}</main>
+      <Footer />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
