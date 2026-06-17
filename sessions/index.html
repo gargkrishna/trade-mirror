@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Session archive | Trade Mirror</title>
+<meta name="description" content="All 94 executed intraday F&amp;O sessions with verified profit and loss.">
+<link rel="canonical" href="https://gargkrishna.github.io/trade-mirror/sessions/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Session archive | Trade Mirror">
+<meta property="og:description" content="All 94 executed intraday F&amp;O sessions with verified profit and loss.">
+<meta property="og:url" content="https://gargkrishna.github.io/trade-mirror/sessions/">
+<meta property="og:site_name" content="Trade Mirror">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Session archive | Trade Mirror">
+<meta name="twitter:description" content="All 94 executed intraday F&amp;O sessions with verified profit and loss.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#14110F;--paper:#FBF7F0;--card:#FFF;--win:#0B7A3B;--winbg:#E7F5EC;
+--loss:#C42026;--lossbg:#FBE9E9;--gold:#B07A00;--goldbg:#FBF1D6;--slate:#6B6258;--line:#E9E2D6}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:Inter,system-ui,-apple-system,sans-serif;
+line-height:1.6;font-size:16px}
+.num{font-family:"Archivo",Inter,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+a{color:inherit}
+header.site{border-bottom:1px solid var(--line);background:var(--card)}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:18px}
+.brand .mark{width:30px;height:30px;border-radius:7px;background:var(--ink);color:var(--paper);
+display:grid;place-items:center;font-weight:800;font-size:13px;font-family:"Archivo Black",sans-serif}
+nav.top a{text-decoration:none;color:var(--slate);font-weight:600;font-size:14px;margin-left:16px}
+nav.top a:hover{color:var(--ink)}
+.badge-v{font-size:12px;font-weight:700;color:var(--win);background:var(--winbg);
+padding:3px 9px;border-radius:999px}
+main{padding:26px 0 10px}
+h1{font-size:26px;line-height:1.25;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+h2{font-size:19px;font-weight:800;margin:28px 0 12px}
+h3{font-size:15px;font-weight:700}
+p.lead{color:var(--slate);margin-bottom:18px}
+.muted{color:var(--slate)}
+.small{font-size:13px}
+/* result stamp - the signature element */
+.stamp{display:inline-block;border:3px double currentColor;border-radius:8px;padding:3px 12px;
+font-family:"Archivo Black",sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+transform:rotate(-6deg);line-height:1}
+.stamp.win{color:var(--win)}.stamp.loss{color:var(--loss)}
+.hero{border:2px solid;border-radius:20px;padding:22px}
+.hero.win{border-color:rgba(11,122,59,.35);background:var(--winbg)}
+.hero.loss{border-color:rgba(196,32,38,.35);background:var(--lossbg)}
+.hero .big{font-family:"Archivo",sans-serif;font-weight:900;line-height:1;
+font-size:clamp(40px,13vw,66px);font-variant-numeric:tabular-nums}
+.hero .big.win{color:var(--win)}.hero .big.loss{color:var(--loss)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-block}
+.pill.win{background:var(--winbg);color:var(--win)}
+.pill.loss{background:var(--lossbg);color:var(--loss)}
+.pill.gold{background:var(--goldbg);color:var(--gold)}
+.pill.slate{background:#EFEBE3;color:var(--slate)}
+.pill.long{background:var(--winbg);color:var(--win)}
+.pill.short{background:var(--lossbg);color:var(--loss)}
+.grid{display:grid;gap:12px}
+.grid.s3{grid-template-columns:repeat(3,1fr)}
+.grid.s2{grid-template-columns:repeat(2,1fr)}
+.stat{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px}
+.stat .v{font-family:"Archivo",sans-serif;font-weight:900;font-size:24px;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12px;color:var(--slate);font-weight:600;margin-top:2px}
+.card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:16px;margin-bottom:12px}
+.card.win{border-color:rgba(11,122,59,.28)}
+.card.loss{border-color:rgba(196,32,38,.28)}
+.legs{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.legs+.legs{margin-top:8px}
+.kv{display:grid;grid-template-columns:auto auto;gap:4px 18px;font-size:13px;color:var(--slate)}
+.kv b{color:var(--ink);font-weight:700}
+.scn{display:grid;gap:8px;grid-template-columns:1fr}
+.scn .box{border:1px solid var(--line);border-radius:10px;padding:10px}
+.scn .box .h{font-size:12px;font-weight:700;color:var(--slate);margin-bottom:3px}
+.levels{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.lev{font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;font-family:"Archivo",sans-serif}
+.lev.r{background:var(--lossbg);color:var(--loss)}.lev.s{background:var(--winbg);color:var(--win)}
+.list a{display:block;text-decoration:none;border:1px solid var(--line);border-radius:14px;
+background:var(--card);padding:13px 15px;margin-bottom:9px}
+.list a:hover{border-color:#cfc7b8}
+.btn{display:inline-block;text-decoration:none;background:var(--ink);color:var(--paper);
+font-weight:700;padding:11px 16px;border-radius:12px;font-size:14px}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.verdict{border-radius:0 0 16px 16px;margin:14px -16px -16px;padding:12px 16px;
+display:flex;align-items:center;justify-content:space-between}
+.verdict.win{background:var(--winbg)}.verdict.loss{background:var(--lossbg)}
+hr.sep{border:0;border-top:1px solid var(--line);margin:24px 0}
+footer.site{border-top:1px solid var(--line);background:var(--card);margin-top:30px;padding:24px 0 40px}
+footer .disc{font-size:13px;color:var(--slate);margin-bottom:16px}
+.suggest textarea,.suggest input{width:100%;border:1px solid var(--line);border-radius:10px;
+padding:10px 12px;font:inherit;font-size:14px;background:var(--paper);margin-bottom:8px}
+.suggest textarea{min-height:84px;resize:vertical}
+.suggest button{cursor:pointer}
+.crumb{font-size:13px;color:var(--slate);margin-bottom:12px}
+.crumb a{text-decoration:none}
+@media(max-width:520px){.grid.s3{grid-template-columns:1fr 1fr}.hero{padding:18px}}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="../"><span class="mark">TM</span>Trade Mirror</a>
+  <nav class="top"><a href="../plans/">Plans</a><a href="./">Sessions</a></nav>
+</div></header>
+<main><div class="wrap">
+<div class="crumb"><a href="../">Home</a> / Sessions</div><h1>Session archive</h1><p class="lead">Every executed intraday session, with real rupee profit and loss.</p><div class="list"><a href="2026-06-17/">
+          <div class="row"><b>17 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.24L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-16/">
+          <div class="row"><b>16 Jun 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹2.42L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-15/">
+          <div class="row"><b>15 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.48L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-12/">
+          <div class="row"><b>12 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.67L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-11/">
+          <div class="row"><b>11 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.03L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-10/">
+          <div class="row"><b>10 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.68L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-09/">
+          <div class="row"><b>9 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.95L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-08/">
+          <div class="row"><b>8 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.76L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-05/">
+          <div class="row"><b>5 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.08L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-04/">
+          <div class="row"><b>4 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.59L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-03/">
+          <div class="row"><b>3 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹4.85L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-02/">
+          <div class="row"><b>2 Jun 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹2.93L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-06-01/">
+          <div class="row"><b>1 Jun 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.56L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-29/">
+          <div class="row"><b>29 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹0</span>
+            <span class="small muted">3 trades</span></div></a><a href="2026-05-27/">
+          <div class="row"><b>27 May 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹2.55L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-26/">
+          <div class="row"><b>26 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.92L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-25/">
+          <div class="row"><b>25 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.57L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-22/">
+          <div class="row"><b>22 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.83L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-21/">
+          <div class="row"><b>21 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.84L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-20/">
+          <div class="row"><b>20 May 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.48L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-19/">
+          <div class="row"><b>19 May 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">+₹0</span>
+            <span class="small muted">3 trades</span></div></a><a href="2026-05-18/">
+          <div class="row"><b>18 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.27L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-15/">
+          <div class="row"><b>15 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.49L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-14/">
+          <div class="row"><b>14 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.36L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-13/">
+          <div class="row"><b>13 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹0</span>
+            <span class="small muted">3 trades</span></div></a><a href="2026-05-12/">
+          <div class="row"><b>12 May 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.19L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-11/">
+          <div class="row"><b>11 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.79L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-08/">
+          <div class="row"><b>8 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.06L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-07/">
+          <div class="row"><b>7 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.86L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-06/">
+          <div class="row"><b>6 May 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.39L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-05/">
+          <div class="row"><b>5 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.35L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-05-04/">
+          <div class="row"><b>4 May 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹4.44L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-30/">
+          <div class="row"><b>30 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹0</span>
+            <span class="small muted">1 trades</span></div></a><a href="2026-04-29/">
+          <div class="row"><b>29 Apr 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹2.80L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-28/">
+          <div class="row"><b>28 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.50L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-27/">
+          <div class="row"><b>27 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.69L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-24/">
+          <div class="row"><b>24 Apr 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.27L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-23/">
+          <div class="row"><b>23 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.50L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-22/">
+          <div class="row"><b>22 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.77L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-21/">
+          <div class="row"><b>21 Apr 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹2.22L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-20/">
+          <div class="row"><b>20 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.38L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-17/">
+          <div class="row"><b>17 Apr 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.28L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-16/">
+          <div class="row"><b>16 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.22L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-15/">
+          <div class="row"><b>15 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.43L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-13/">
+          <div class="row"><b>13 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹4.35L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-10/">
+          <div class="row"><b>10 Apr 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">+₹0</span>
+            <span class="small muted">3 trades</span></div></a><a href="2026-04-09/">
+          <div class="row"><b>9 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.22L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-08/">
+          <div class="row"><b>8 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.54L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-07/">
+          <div class="row"><b>7 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.78L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-06/">
+          <div class="row"><b>6 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.49L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-02/">
+          <div class="row"><b>2 Apr 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.62L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-04-01/">
+          <div class="row"><b>1 Apr 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.22L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-30/">
+          <div class="row"><b>30 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹0</span>
+            <span class="small muted">3 trades</span></div></a><a href="2026-03-27/">
+          <div class="row"><b>27 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.56L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-25/">
+          <div class="row"><b>25 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.55L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-24/">
+          <div class="row"><b>24 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.61L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-23/">
+          <div class="row"><b>23 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹4L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-20/">
+          <div class="row"><b>20 Mar 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.07L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-19/">
+          <div class="row"><b>19 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹4.36L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-18/">
+          <div class="row"><b>18 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹1.97L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-17/">
+          <div class="row"><b>17 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.71L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-16/">
+          <div class="row"><b>16 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.27L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-13/">
+          <div class="row"><b>13 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.56L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-12/">
+          <div class="row"><b>12 Mar 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.31L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-11/">
+          <div class="row"><b>11 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.08L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-10/">
+          <div class="row"><b>10 Mar 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.42L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-09/">
+          <div class="row"><b>9 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹0</span>
+            <span class="small muted">3 trades</span></div></a><a href="2026-03-06/">
+          <div class="row"><b>6 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.11L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-05/">
+          <div class="row"><b>5 Mar 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹3.30L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-04/">
+          <div class="row"><b>4 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.49L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-03-02/">
+          <div class="row"><b>2 Mar 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.38L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-27/">
+          <div class="row"><b>27 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.13L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-26/">
+          <div class="row"><b>26 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹1.99L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-25/">
+          <div class="row"><b>25 Feb 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹2.43L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-24/">
+          <div class="row"><b>24 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.48L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-23/">
+          <div class="row"><b>23 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.46L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-20/">
+          <div class="row"><b>20 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹4.44L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-19/">
+          <div class="row"><b>19 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.10L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-18/">
+          <div class="row"><b>18 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹98,691</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-17/">
+          <div class="row"><b>17 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.71L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-16/">
+          <div class="row"><b>16 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.19L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-13/">
+          <div class="row"><b>13 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹0</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-12/">
+          <div class="row"><b>12 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹1.06L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-11/">
+          <div class="row"><b>11 Feb 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹2.48L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-10/">
+          <div class="row"><b>10 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹1.03L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-09/">
+          <div class="row"><b>9 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹1.03L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-06/">
+          <div class="row"><b>6 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.47L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-05/">
+          <div class="row"><b>5 Feb 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹2.79L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-04/">
+          <div class="row"><b>4 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.74L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-03/">
+          <div class="row"><b>3 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹3.29L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-02/">
+          <div class="row"><b>2 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.70L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-02-01/">
+          <div class="row"><b>1 Feb 2026</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹2.21L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2026-01-30/">
+          <div class="row"><b>30 Jan 2026</b><span class="stamp loss">Loss</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--loss)">-₹2.48L</span>
+            <span class="small muted">4 trades</span></div></a><a href="2025-01-08/">
+          <div class="row"><b>8 Jan 2025</b><span class="stamp win">Profit</span></div>
+          <div class="row" style="margin-top:4px">
+            <span class="num" style="font-weight:800;font-size:20px;color:var(--win)">+₹4.58L</span>
+            <span class="small muted">4 trades</span></div></a></div>
+</div></main>
+<footer class="site"><div class="wrap">
+  <p class="disc"><b>Independent project.</b> Trade Mirror is an independent tracker and is
+  not affiliated with, endorsed by, or connected to Intraday Hunter. All trades shown are extracted
+  from publicly available YouTube videos for record-keeping. If you are Intraday Hunter or his team,
+  please reach out at gargkrishna1282002@gmail.com.</p>
+  
+      <h3>Have a suggestion?</h3>
+      <p class="small muted" style="margin:4px 0 10px">Tell us what to add or fix. Your email is optional.</p>
+      <form class="suggest" action="https://formsubmit.co/gargkrishna1282002@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="New Trade Mirror suggestion">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" style="display:none">
+        <input type="email" name="email" placeholder="Your email (optional)">
+        <textarea name="message" placeholder="Your suggestion..." required></textarea>
+        <button class="btn" type="submit">Send suggestion</button>
+      </form>
+</div></footer>
+</body>
+</html>
