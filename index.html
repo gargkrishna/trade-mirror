@@ -76,14 +76,27 @@ tailwind.config = {
 const { useState, useEffect, useMemo, useRef } = React;
 
 /* ---------- tiny helpers ---------- */
-const fmt = (n)=> (n>=0?'+':'') + n.toFixed(2);
+const fmt = (n)=> (n==null) ? '—' : (n>=0?'+':'') + n.toFixed(2);
+// Indian rupee: grouped (1,00,000) with lakh/crore short-form for big numbers
+const inr = (n)=>{
+  if(n==null) return '—';
+  const sign = n<0?'-':'+';
+  const a = Math.abs(Math.round(n));
+  if(a>=10000000){ return `${sign}₹${(a/10000000).toFixed(a%10000000?2:0)}Cr`; }
+  if(a>=100000){ return `${sign}₹${(a/100000).toFixed(a%100000?2:0)}L`; }
+  return `${sign}₹${a.toLocaleString('en-IN')}`;
+};
+// his words for trade direction (from transcript analysis: बाइंग साइड / सेलिंग साइड)
+const dirHi = (d)=> d==='SHORT' ? 'सेलिंग' : 'बाइंग';
+const ytThumb = (url)=>{ const id=ytId(url); return id?`https://img.youtube.com/vi/${id}/hqdefault.jpg`:''; };
 const dayName = (iso)=>{
   const d = new Date(iso+'T00:00:00');
   const days=['Ravi','Som','Mangal','Budh','Guru','Shukra','Shani'];
   const mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return {dow:days[d.getDay()], d:d.getDate(), m:mon[d.getMonth()], full:`${d.getDate()} ${mon[d.getMonth()]} ${d.getFullYear()}`};
 };
-const sessionPts = (s)=> s.legs.reduce((a,l)=>a+l.pnl_points,0);
+const sessionPts = (s)=> s.legs.reduce((a,l)=>a+(l.pnl_points||0),0);
+const sessionRs = (s)=> (typeof s.pnl_rupees==='number') ? s.pnl_rupees : s.legs.reduce((a,l)=>a+(l.pnl_rupees||0),0);
 const isWin = (s)=> s.result==='PROFIT';
 const ytId = (url)=>{ try{ const u=new URL(url); return u.searchParams.get('v') || u.pathname.split('/').pop(); }catch(e){return '';} };
 
@@ -91,11 +104,12 @@ const ytId = (url)=>{ try{ const u=new URL(url); return u.searchParams.get('v') 
 function shareSession(s){
   const d = dayName(s.date);
   const verdict = isWin(s) ? '✅ PROFIT' : '❌ LOSS';
+  const rs = inr(sessionRs(s));
   const pts = fmt(sessionPts(s));
-  const legs = s.legs.map(l=>`• ${l.instrument} ${l.direction} → ${fmt(l.pnl_points)} pts`).join('\n');
+  const legs = s.legs.map(l=>`• ${l.instrument} ${l.direction} → ${inr(l.pnl_rupees)}`).join('\n');
   const txt =
 `📊 Intraday Hunter — ${d.full}
-Result: ${verdict}  (${pts} pts)
+Result: ${verdict}  ${rs}  (${pts} pts)
 
 ${legs}
 
@@ -122,8 +136,8 @@ function Streak({streak}){
   return (
     <div>
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-sm font-600 text-slate">Last 20 sessions</span>
-        <span className="text-sm font-700"><span className="text-win">{wins}W</span> · <span className="text-loss">{streak.length-wins}L</span></span>
+        <span className="text-sm font-600 text-slate">पिछली 20 सेशन</span>
+        <span className="text-sm font-700"><span className="text-win">{wins} जीत</span> · <span className="text-loss">{streak.length-wins} हार</span></span>
       </div>
       <div className="flex gap-[3px] flex-wrap">
         {streak.map((x,i)=>(
@@ -136,55 +150,78 @@ function Streak({streak}){
   );
 }
 
-/* ---------- collapsed session card (cricket-scorecard row) ---------- */
-function SessionCard({s, expandedDefault=false}){
+/* ---------- collapsed session card (thumbnail + scorecard row) ---------- */
+function SessionCard({s, expandedDefault=false, plan=null}){
   const [open,setOpen]=useState(expandedDefault);
   const d = dayName(s.date);
   const win = isWin(s);
   const pts = sessionPts(s);
+  const rs = sessionRs(s);
+  const thumb = ytThumb(s.video_url);
+  const biasHi = plan ? (plan.bias_hi || plan.bias) : null;
+  const biasCls = plan ? ({bullish:'bg-win/10 text-win',bearish:'bg-loss/10 text-loss',neutral:'bg-ink/5 text-slate',range:'bg-ink/5 text-slate'}[plan.bias]||'bg-ink/5 text-slate') : '';
   return (
     <div className={`rounded-2xl border overflow-hidden bg-card ${win?'border-win/25':'border-loss/25'}`}>
-      {/* collapsed: exactly 4 glanceable things — date, dir mix, result stamp, pts */}
-      <button onClick={()=>setOpen(o=>!o)}
-        className={`w-full text-left p-3.5 flex items-center gap-3 ${win?'bg-winbg/40':'bg-lossbg/40'}`}>
-        <div className="shrink-0 text-center w-12">
-          <div className="text-2xl font-num font-800 leading-none tabnum">{d.d}</div>
-          <div className="text-[11px] text-slate font-600 uppercase">{d.m}</div>
-          <div className="text-[10px] text-slate">{d.dow}</div>
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex gap-1 mb-1 flex-wrap">
-            {[...new Set(s.legs.map(l=>l.direction))].map(dir=>(
-              <span key={dir} className={`text-[11px] font-700 px-1.5 py-0.5 rounded ${dir==='SHORT'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>{dir}</span>
-            ))}
-            <span className="text-[11px] font-600 px-1.5 py-0.5 rounded bg-ink/5 text-slate">{s.legs.length} legs</span>
+      <button onClick={()=>setOpen(o=>!o)} className="w-full text-left">
+        {/* top row: thumbnail | result */}
+        <div className="flex">
+          {/* video thumbnail with play badge + date chip */}
+          <div className="relative w-28 shrink-0 bg-ink/5" style={{aspectRatio:'16/11'}}>
+            {thumb
+              ? <img src={thumb} alt="" loading="lazy" className="w-full h-full object-cover"
+                  onError={(e)=>{e.target.style.display='none';}}/>
+              : <div className="w-full h-full grid place-items-center text-slate text-xs">video</div>}
+            <span className="absolute inset-0 grid place-items-center">
+              <span className="w-8 h-8 rounded-full bg-black/55 grid place-items-center">
+                <svg className="w-3.5 h-3.5 text-white ml-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </span>
+            <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-black/60 text-white text-[10px] font-700 tabnum">{d.d} {d.m}</span>
           </div>
-          <div className={`text-2xl font-num font-800 tabnum whitespace-nowrap ${win?'text-win':'text-loss'}`}>{fmt(pts)} <span className="text-xs font-600 text-slate">pts</span></div>
+
+          {/* result block — RUPEES is the headline */}
+          <div className={`flex-1 min-w-0 p-3 flex flex-col justify-center ${win?'bg-winbg/40':'bg-lossbg/40'}`}>
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <div className={`font-num font-900 tabnum leading-none ${win?'text-win':'text-loss'}`} style={{fontSize:'clamp(22px,7vw,30px)'}}>{inr(rs)}</div>
+                <div className="text-[11px] text-slate font-600 mt-0.5">{fmt(pts)} pts · {s.legs.length} ट्रेड</div>
+              </div>
+              <div className="shrink-0"><Stamp win={win} size="text-sm"/></div>
+            </div>
+            <div className="flex gap-1 mt-1.5 flex-wrap items-center">
+              {biasHi && <span className={`text-[10px] font-700 px-1.5 py-0.5 rounded ${biasCls}`}>प्लान: {biasHi}</span>}
+              {[...new Set(s.legs.map(l=>l.direction))].map(dir=>(
+                <span key={dir} className={`text-[10px] font-700 px-1.5 py-0.5 rounded ${dir==='SHORT'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>{dirHi(dir)}</span>
+              ))}
+              <svg className={`w-4 h-4 text-slate ml-auto transition-transform ${open?'rotate-180':''}`} viewBox="0 0 20 20" fill="currentColor"><path d="M5 7l5 5 5-5z"/></svg>
+            </div>
+          </div>
         </div>
-        <div className="shrink-0 pr-1">
-          <Stamp win={win} size="text-lg"/>
-        </div>
-        <svg className={`shrink-0 w-4 h-4 text-slate transition-transform ${open?'rotate-180':''}`} viewBox="0 0 20 20" fill="currentColor"><path d="M5 7l5 5 5-5z"/></svg>
       </button>
 
       {open && (
-        <div className="px-3.5 pb-3.5 pt-1 fadeup">
-          {s.market_view && <p className="text-[13px] text-ink/80 leading-snug mb-3 border-l-2 border-gold pl-2.5 bg-gold/5 py-1.5 rounded-r">{s.market_view}</p>}
+        <div className="px-3.5 pb-3.5 pt-3 fadeup">
+          {s.view_hi && <p className="text-[13px] text-ink/85 leading-relaxed mb-3 border-l-2 border-gold pl-2.5 bg-gold/5 py-2 rounded-r">{s.view_hi}</p>}
           <div className="space-y-2">
             {s.legs.map((l,i)=>(
               <div key={i} className="rounded-xl border border-line p-2.5">
-                <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
                   <span className="font-700 text-[13px] truncate">{l.instrument}</span>
-                  <span className={`text-[11px] font-700 px-1.5 py-0.5 rounded shrink-0 ${l.direction==='SHORT'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>{l.direction}</span>
+                  <span className={`text-[11px] font-700 px-1.5 py-0.5 rounded shrink-0 ${l.direction==='SHORT'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>{dirHi(l.direction)}</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-center mb-1.5">
-                  <div><div className="text-[10px] text-slate">Entry</div><div className="font-num font-700 text-sm tabnum">{l.entry}</div></div>
-                  <div><div className="text-[10px] text-slate">Exit</div><div className="font-num font-700 text-sm tabnum">{l.exit}</div></div>
-                  <div><div className="text-[10px] text-slate">P&amp;L</div><div className={`font-num font-800 text-sm tabnum ${l.pnl_points>=0?'text-win':'text-loss'}`}>{fmt(l.pnl_points)}</div></div>
+                <div className="flex items-end justify-between gap-2">
+                  <div className="grid grid-cols-2 gap-x-3 text-[11px]">
+                    <span className="text-slate">एंट्री <b className="text-ink font-num">{l.entry ?? '—'}</b></span>
+                    <span className="text-slate">एग्जिट <b className="text-ink font-num">{l.exit ?? '—'}</b></span>
+                  </div>
+                  <div className="text-right">
+                    <div className={`font-num font-800 text-base tabnum ${(l.pnl_rupees||0)>=0?'text-win':'text-loss'}`}>{inr(l.pnl_rupees)}</div>
+                    <div className="text-[10px] text-slate">{fmt(l.pnl_points)} pts</div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-slate">
-                  <span>🕒 {l.entry_time}→{l.exit_time}</span>
-                  <span className="px-1.5 py-0.5 rounded bg-ink/5 font-600 text-ink/70">{l.setup_type}</span>
+                <div className="flex items-center justify-between text-[11px] text-slate mt-1.5 pt-1.5 border-t border-line">
+                  <span>🕒 {l.entry_time||'—'}→{l.exit_time||'—'}</span>
+                  <span className="px-1.5 py-0.5 rounded bg-ink/5 font-600 text-ink/70">{l.setup_hi || l.setup_type}</span>
                 </div>
               </div>
             ))}
@@ -203,16 +240,15 @@ function SessionCard({s, expandedDefault=false}){
 }
 
 /* ---------- setup leaderboard row (reliability without numeracy) ---------- */
-function SetupRow({s, max}){
-  // visual confidence: dots for sample size, bar for rate, label word instead of %
-  const word = s.win_rate>=85?'Bahut strong': s.win_rate>=70?'Strong': s.win_rate>=50?'Theek-thaak': 'Kamzor';
+function SetupRow({s}){
+  // confidence as words, not just % — for low-numeracy users
+  const word = s.win_rate>=85?'बहुत मजबूत': s.win_rate>=70?'मजबूत': s.win_rate>=50?'ठीक-ठाक': 'कमज़ोर';
   const wordColor = s.win_rate>=70?'text-win': s.win_rate>=50?'text-gold':'text-loss';
   const barColor = s.win_rate>=70?'bg-win': s.win_rate>=50?'bg-gold':'bg-loss';
-  const sampleSmall = s.total < 12;
   return (
     <div className="py-2.5 border-b border-line last:border-0">
       <div className="flex items-baseline justify-between gap-2 mb-1.5">
-        <span className="font-700 text-[14px] capitalize">{s.setup}</span>
+        <span className="font-700 text-[14px]">{s.setup_hi || s.setup}</span>
         <span className={`text-[12px] font-700 ${wordColor}`}>{word}</span>
       </div>
       <div className="flex items-center gap-2">
@@ -222,7 +258,7 @@ function SetupRow({s, max}){
         <span className="text-[12px] font-num font-700 tabnum w-10 text-right">{Math.round(s.win_rate)}%</span>
       </div>
       <div className="text-[11px] text-slate mt-1">
-        {s.wins} jeet / {s.total} trade {sampleSmall && <span className="text-gold">· chhota sample</span>}
+        {s.wins} जीत / {s.total} ट्रेड {!s.proven && <span className="text-gold">· कम सैंपल</span>}
       </div>
     </div>
   );
@@ -233,23 +269,23 @@ function PlanCard({p, sessions}){
   const d = dayName(p.date);
   const matched = p.matched_session ? sessions.find(s=>s.date===p.matched_session) : null;
   const biasColor = {bullish:'text-win bg-winbg', bearish:'text-loss bg-lossbg', neutral:'text-slate bg-ink/5', range:'text-slate bg-ink/5'}[p.bias] || 'text-slate bg-ink/5';
-  const biasHi = {bullish:'Tezi (Bullish)', bearish:'Mandi (Bearish)', neutral:'Neutral', range:'Range'}[p.bias] || p.bias;
+  const biasHi = p.bias_hi || p.bias;
   return (
     <div className="rounded-2xl border border-line bg-card overflow-hidden">
       <div className="p-3.5">
         <div className="flex items-center justify-between mb-2">
           <div className="text-[13px] font-700 text-slate">{d.full} · {d.dow}</div>
-          {!matched && <span className="text-[11px] font-700 px-2 py-0.5 rounded-full bg-gold/15 text-gold">Aane wala plan</span>}
+          {!matched && <span className="text-[11px] font-700 px-2 py-0.5 rounded-full bg-gold/15 text-gold">अगले दिन का प्लान</span>}
         </div>
         <div className="flex items-center gap-2 mb-2.5">
-          <span className="text-[12px] text-slate">Unhone socha:</span>
+          <span className="text-[12px] text-slate">उन्होंने सोचा:</span>
           <span className={`text-sm font-700 px-2.5 py-0.5 rounded-full ${biasColor}`}>{biasHi}</span>
         </div>
-        <p className="text-[13px] text-ink/80 leading-snug mb-3">{p.plan_summary}</p>
+        <p className="text-[13px] text-ink/85 leading-relaxed mb-3">{p.plan_summary_hi || p.plan_summary}</p>
 
-        {/* scenarios */}
+        {/* scenarios — his exact opening vocabulary */}
         <div className="grid grid-cols-3 gap-1.5 mb-3">
-          {[['gap_up','Gap Up','▲'],['flat','Flat','▬'],['gap_down','Gap Down','▼']].map(([k,lab,ic])=>(
+          {[['gap_up','गैप अप','▲'],['flat','फ्लैट','▬'],['gap_down','गैप डाउन','▼']].map(([k,lab,ic])=>(
             <div key={k} className="rounded-lg border border-line p-2 text-center">
               <div className="text-[11px] font-700 text-slate mb-0.5">{ic} {lab}</div>
               <div className="text-[11px] text-ink/75 leading-tight">{p.scenarios[k]}</div>
@@ -261,7 +297,7 @@ function PlanCard({p, sessions}){
         <div className="flex flex-wrap gap-1.5 mb-1">
           {p.key_levels.map((lv,i)=>(
             <span key={i} className={`text-[11px] font-num font-700 tabnum px-2 py-0.5 rounded ${lv.type==='resistance'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>
-              {lv.level} {lv.type==='resistance'?'R':'S'}
+              {lv.level} {lv.type==='resistance'?'रेज़िस्टेंस':'सपोर्ट'}
             </span>
           ))}
         </div>
@@ -270,14 +306,14 @@ function PlanCard({p, sessions}){
       {/* verdict strip: predicted vs actual */}
       {matched ? (
         <a href={`#/session/${matched.date}`} className={`block px-3.5 py-2.5 flex items-center justify-between ${isWin(matched)?'bg-winbg':'bg-lossbg'}`}>
-          <span className="text-[12px] font-600 text-ink/70">Us din market ne kiya:</span>
+          <span className="text-[12px] font-600 text-ink/70">मार्केट ने क्या किया:</span>
           <span className="flex items-center gap-2">
-            <span className={`font-700 text-sm ${isWin(matched)?'text-win':'text-loss'}`}>{fmt(sessionPts(matched))} pts</span>
+            <span className={`font-700 text-base ${isWin(matched)?'text-win':'text-loss'}`}>{inr(sessionRs(matched))}</span>
             <Stamp win={isWin(matched)} size="text-base"/>
           </span>
         </a>
       ) : (
-        <div className="px-3.5 py-2.5 bg-ink/[.03] text-[12px] text-slate text-center font-600">Result abhi aana baaki hai</div>
+        <div className="px-3.5 py-2.5 bg-ink/[.03] text-[12px] text-slate text-center font-600">रिज़ल्ट अभी आना बाकी है</div>
       )}
     </div>
   );
@@ -298,28 +334,29 @@ function Home({data, go}){
       {/* HERO — latest session, the answer to "aaj kya hua" in <2s */}
       <div className="fadeup">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-[13px] font-700 text-slate uppercase tracking-wide">{isToday?'Aaj ka result':'Pichhli session'}</span>
+          <span className="text-[13px] font-700 text-slate uppercase tracking-wide">{isToday?'आज का रिज़ल्ट':'पिछली सेशन'}</span>
           <span className="text-[12px] text-slate">· {d.full}</span>
         </div>
 
         <div className={`rounded-3xl p-5 border-2 ${win?'border-win/30 bg-winbg':'border-loss/30 bg-lossbg'}`}>
           <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-sm font-700 text-slate">{latest.legs.length} trades · total points</span>
+            <span className="text-sm font-700 text-slate">{latest.legs.length} ट्रेड · रिज़ल्ट</span>
             <div className="shrink-0 overflow-visible"><Stamp win={win} size="text-2xl" animate={true}/></div>
           </div>
-          <div className={`font-num font-900 leading-none tabnum ${win?'text-win':'text-loss'}`} style={{fontSize:'clamp(48px,16vw,76px)'}}>
-            {fmt(sessionPts(latest))}
+          <div className={`font-num font-900 leading-none tabnum ${win?'text-win':'text-loss'}`} style={{fontSize:'clamp(44px,15vw,72px)'}}>
+            {inr(sessionRs(latest))}
           </div>
+          <div className="text-sm font-600 text-slate mt-1">{fmt(sessionPts(latest))} points</div>
 
-          {latest.market_view && (
-            <p className="text-[13px] text-ink/80 leading-snug mt-4 border-l-2 border-gold pl-2.5">{latest.market_view}</p>
+          {latest.view_hi && (
+            <p className="text-[13px] text-ink/85 leading-relaxed mt-4 border-l-2 border-gold pl-2.5">{latest.view_hi}</p>
           )}
 
           <div className="grid grid-cols-2 gap-2 mt-4">
             {latest.legs.slice(0,4).map((l,i)=>(
               <div key={i} className="rounded-xl bg-card/70 border border-line p-2">
                 <div className="text-[11px] font-700 truncate">{l.instrument}</div>
-                <div className={`font-num font-800 text-sm tabnum ${l.pnl_points>=0?'text-win':'text-loss'}`}>{fmt(l.pnl_points)} pts</div>
+                <div className={`font-num font-800 text-sm tabnum ${(l.pnl_rupees||0)>=0?'text-win':'text-loss'}`}>{inr(l.pnl_rupees)}</div>
               </div>
             ))}
           </div>
@@ -338,11 +375,22 @@ function Home({data, go}){
         <Streak streak={data.streak}/>
       </div>
 
+      {/* total money earned — real, from DB */}
+      {typeof data.meta.total_money==='number' && (
+        <div className={`rounded-2xl border-2 p-4 flex items-center justify-between ${data.meta.total_money>=0?'border-win/25 bg-winbg/50':'border-loss/25 bg-lossbg/50'}`}>
+          <div>
+            <div className="text-[12px] font-700 text-slate">{data.monthly?.length||0} महीने का कुल</div>
+            <div className="text-[11px] text-slate">{data.meta.total_sessions} सेशन में</div>
+          </div>
+          <div className={`font-num font-900 tabnum ${data.meta.total_money>=0?'text-win':'text-loss'}`} style={{fontSize:'clamp(28px,9vw,40px)'}}>{inr(data.meta.total_money)}</div>
+        </div>
+      )}
+
       {/* headline stats — big numbers, Hindi labels */}
       <div className="grid grid-cols-3 gap-2.5">
-        <Stat big={`${data.meta.win_rate}%`} label="Win rate" sub={`${data.meta.decided_trades} trades`} accent="win"/>
-        <Stat big={data.meta.total_sessions} label="Sessions" sub="record kiye"/>
-        <Stat big={data.meta.total_legs} label="Trade legs" sub="extracted"/>
+        <Stat big={`${data.meta.win_rate}%`} label="जीत का रिकॉर्ड" sub={`${data.meta.decided_trades} ट्रेड`} accent="win"/>
+        <Stat big={data.meta.total_sessions} label="ट्रेडिंग सेशन" sub="रिकॉर्ड किए"/>
+        <Stat big={data.meta.total_legs} label="कुल ट्रेड" sub="निकाले गए"/>
       </div>
 
       <a href="#/sessions" className="block text-center py-3.5 rounded-2xl border-2 border-ink font-700">Saari sessions dekho →</a>
@@ -383,7 +431,7 @@ function Sessions({data}){
         ))}
       </div>
       <div className="space-y-3">
-        {list.map((s,i)=> <SessionCard key={s.date} s={s}/>)}
+        {list.map((s,i)=> <SessionCard key={s.date} s={s} plan={data.plans.find(p=>p.matched_session===s.date)}/>)}
       </div>
     </div>
   );
@@ -403,37 +451,42 @@ function SessionDetail({data, date}){
           <div className="min-w-0">
             <div className="text-[13px] font-700 text-slate">{d.full} · {d.dow}</div>
             <div className="flex items-center gap-3 mt-1">
-              <div className={`font-num font-900 tabnum leading-none ${win?'text-win':'text-loss'}`} style={{fontSize:'clamp(40px,13vw,64px)'}}>{fmt(sessionPts(s))}</div>
+              <div className={`font-num font-900 tabnum leading-none ${win?'text-win':'text-loss'}`} style={{fontSize:'clamp(40px,13vw,64px)'}}>{inr(sessionRs(s))}</div>
               <div className="shrink-0"><Stamp win={win} size="text-2xl" animate={true}/></div>
             </div>
-            <div className="text-sm text-slate font-600 mt-1">total points · {s.legs.length} trades</div>
+            <div className="text-sm text-slate font-600 mt-1">{fmt(sessionPts(s))} points · {s.legs.length} ट्रेड</div>
           </div>
         </div>
-        {s.market_view && <p className="text-[13px] text-ink/80 leading-snug mt-4 border-l-2 border-gold pl-2.5">{s.market_view}</p>}
+        {s.view_hi && <p className="text-[13px] text-ink/85 leading-relaxed mt-4 border-l-2 border-gold pl-2.5">{s.view_hi}</p>}
       </div>
 
       {/* legs */}
       <div>
-        <h2 className="font-800 text-lg mb-2">Trades ({s.legs.length})</h2>
+        <h2 className="font-800 text-lg mb-2">ट्रेड ({s.legs.length})</h2>
         <div className="space-y-2">
           {s.legs.map((l,i)=>(
-            <div key={i} className={`rounded-2xl border bg-card p-3 ${l.pnl_points>=0?'border-win/25':'border-loss/25'}`}>
+            <div key={i} className={`rounded-2xl border bg-card p-3 ${(l.pnl_rupees||0)>=0?'border-win/25':'border-loss/25'}`}>
               <div className="flex items-center justify-between mb-2">
                 <span className="font-700 text-sm">{l.instrument}</span>
-                <span className={`text-[11px] font-700 px-2 py-0.5 rounded ${l.direction==='SHORT'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>{l.direction}</span>
+                <span className={`text-[11px] font-700 px-2 py-0.5 rounded ${l.direction==='SHORT'?'bg-loss/10 text-loss':'bg-win/10 text-win'}`}>{dirHi(l.direction)} साइड</span>
               </div>
-              <div className="grid grid-cols-4 gap-2 text-center mb-2">
-                <Mini label="Entry" v={l.entry}/>
-                <Mini label="Exit" v={l.exit}/>
-                <Mini label="P&L" v={fmt(l.pnl_points)} c={l.pnl_points>=0?'text-win':'text-loss'}/>
-                <Mini label="Qty" v={l.quantity}/>
+              <div className="flex items-end justify-between gap-3 mb-2">
+                <div className="grid grid-cols-3 gap-x-3 text-center">
+                  <Mini label="एंट्री" v={l.entry ?? '—'}/>
+                  <Mini label="एग्जिट" v={l.exit ?? '—'}/>
+                  <Mini label="क्वांटिटी" v={l.quantity ?? '—'}/>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className={`font-num font-900 text-xl tabnum leading-none ${(l.pnl_rupees||0)>=0?'text-win':'text-loss'}`}>{inr(l.pnl_rupees)}</div>
+                  <div className="text-[10px] text-slate mt-0.5">{fmt(l.pnl_points)} pts</div>
+                </div>
               </div>
-              <div className="text-[12px] text-ink/70 space-y-1">
-                <div>🎯 <b>Kyun li:</b> {l.motive}</div>
-                <div>🚪 <b>Kyun nikle:</b> {l.exit_reason}</div>
+              <div className="text-[12px] text-ink/75 space-y-1">
+                <div>🎯 <b>एंट्री क्यों ली:</b> {l.motive_hi}</div>
+                <div>🚪 <b>क्यों निकले:</b> {l.exit_hi}</div>
                 <div className="flex items-center justify-between pt-1">
-                  <span className="text-slate">🕒 {l.entry_time} → {l.exit_time}</span>
-                  <span className="px-2 py-0.5 rounded bg-ink/5 font-600">{l.setup_type}</span>
+                  <span className="text-slate">🕒 {l.entry_time||'—'} → {l.exit_time||'—'}</span>
+                  <span className="px-2 py-0.5 rounded bg-ink/5 font-600">{l.setup_hi || l.setup_type}</span>
                 </div>
               </div>
             </div>
@@ -444,7 +497,7 @@ function SessionDetail({data, date}){
       {/* plan vs actual */}
       {plan && (
         <div>
-          <h2 className="font-800 text-lg mb-2">Raat ka plan vs Asli result</h2>
+          <h2 className="font-800 text-lg mb-2">रात का प्लान vs असली रिज़ल्ट</h2>
           <PlanCard p={plan} sessions={data.sessions}/>
         </div>
       )}
@@ -471,21 +524,35 @@ function Mini({label,v,c='text-ink'}){
 }
 
 function Setups({data}){
-  const sorted = [...data.setup_stats].sort((a,b)=> b.win_rate-a.win_rate || b.total-a.total);
-  const maxRate = Math.max(...sorted.map(s=>s.win_rate));
-  const maxMonth = Math.max(...data.monthly.map(m=>m.win_rate));
+  const proven = data.setup_stats.filter(s=>s.proven);
+  const small  = data.setup_stats.filter(s=>!s.proven);
+  const [showAll,setShowAll]=useState(false);
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-800">Setups & Record</h1>
+      <h1 className="text-2xl font-800">सेटअप और रिकॉर्ड</h1>
 
       <div className="rounded-2xl border border-line bg-card p-4">
-        <h2 className="font-800 mb-1">Kaun sa setup chalta hai</h2>
-        <p className="text-[12px] text-slate mb-2">Lambi line = zyada bharosa. Chhota sample dhyaan se dekho.</p>
-        <div>{sorted.map((s,i)=> <SetupRow key={i} s={s} max={maxRate}/>)}</div>
+        <h2 className="font-800 mb-1">पक्के सेटअप</h2>
+        <p className="text-[12px] text-slate mb-2">ये वो सेटअप हैं जो उन्होंने सबसे ज़्यादा बार ट्रेड किए — इन पर भरोसा बनता है।</p>
+        <div>{proven.map((s,i)=> <SetupRow key={i} s={s}/>)}</div>
       </div>
 
       <div className="rounded-2xl border border-line bg-card p-4">
-        <h2 className="font-800 mb-3">Index-wise win rate</h2>
+        <div className="flex items-center justify-between mb-1">
+          <h2 className="font-800">कभी-कभी वाले सेटअप</h2>
+          <span className="text-[11px] text-slate">{small.length} सेटअप</span>
+        </div>
+        <p className="text-[12px] text-slate mb-2">कम बार इस्तेमाल हुए — सैंपल छोटा है, इसलिए रिज़ल्ट पक्का नहीं।</p>
+        <div>{(showAll?small:small.slice(0,5)).map((s,i)=> <SetupRow key={i} s={s}/>)}</div>
+        {small.length>5 && (
+          <button onClick={()=>setShowAll(v=>!v)} className="w-full mt-2 py-2 text-[13px] font-700 text-ink/70">
+            {showAll? 'कम दिखाओ' : `सभी ${small.length} देखो →`}
+          </button>
+        )}
+      </div>
+
+      <div className="rounded-2xl border border-line bg-card p-4">
+        <h2 className="font-800 mb-3">इंडेक्स-वाइज़ रिकॉर्ड</h2>
         <div className="space-y-3">
           {data.instrument_stats.map((s,i)=>(
             <div key={i}>
@@ -493,14 +560,14 @@ function Setups({data}){
               <div className="h-3 rounded-full bg-ink/5 overflow-hidden">
                 <div className="h-full rounded-full bg-win bar-anim" style={{'--w':`${s.win_rate}%`, width:`${s.win_rate}%`}}/>
               </div>
-              <div className="text-[11px] text-slate mt-0.5">{s.wins}/{s.total} sessions</div>
+              <div className="text-[11px] text-slate mt-0.5">{s.wins}/{s.total} ट्रेड</div>
             </div>
           ))}
         </div>
       </div>
 
       <div className="rounded-2xl border border-line bg-card p-4">
-        <h2 className="font-800 mb-3">Mahina-dar-mahina</h2>
+        <h2 className="font-800 mb-3">महीना-दर-महीना</h2>
         <div className="flex items-end gap-1.5 h-32">
           {data.monthly.map((m,i)=>{
             const h = (m.win_rate/100)*100;
@@ -514,18 +581,20 @@ function Setups({data}){
             );
           })}
         </div>
+        <p className="text-[11px] text-slate mt-2 text-center">हर महीने जीती हुई सेशन का %</p>
       </div>
     </div>
   );
 }
 
 function Plans({data}){
+  const plans = [...data.plans].sort((a,b)=> b.date.localeCompare(a.date));
   return (
     <div>
-      <h1 className="text-2xl font-800 mb-1">Plans — Scorecard</h1>
-      <p className="text-[13px] text-slate mb-4">Raat ko unhone kya socha, aur agle din market ne kya kiya.</p>
+      <h1 className="text-2xl font-800 mb-1">प्लान — स्कोरकार्ड</h1>
+      <p className="text-[13px] text-slate mb-4">रात को उन्होंने क्या सोचा, और अगले दिन मार्केट ने क्या किया।</p>
       <div className="space-y-3">
-        {data.plans.map((p,i)=> <PlanCard key={p.date} p={p} sessions={data.sessions}/>)}
+        {plans.map((p,i)=> <PlanCard key={p.date+i} p={p} sessions={data.sessions}/>)}
       </div>
     </div>
   );
@@ -537,10 +606,10 @@ function Empty({msg}){
 
 /* ---------- shell / router ---------- */
 const TABS = [
-  ['#/','Home','M3 11l9-8 9 8M5 10v10h14V10'],
-  ['#/sessions','Sessions','M4 6h16M4 12h16M4 18h16'],
-  ['#/setups','Setups','M4 19V9m6 10V5m6 14v-7'],
-  ['#/plans','Plans','M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2']
+  ['#/','होम','M3 11l9-8 9 8M5 10v10h14V10'],
+  ['#/sessions','सेशन','M4 6h16M4 12h16M4 18h16'],
+  ['#/setups','सेटअप','M4 19V9m6 10V5m6 14v-7'],
+  ['#/plans','प्लान','M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2']
 ];
 
 function useHash(){
@@ -583,7 +652,7 @@ function App(){
         </a>
         {data && <span className="text-[11px] font-700 px-2 py-1 rounded-full bg-win/10 text-win flex items-center gap-1">
           <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.4 5 5.6.5-4.2 3.7 1.3 5.5L10 18l-5.1 2.7 1.3-5.5L2 11.5 7.6 11z"/></svg>
-          Verified
+          वेरिफाइड
         </span>}
       </header>
 
