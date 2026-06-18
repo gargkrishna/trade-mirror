@@ -3,218 +3,260 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Intraday Hunter Trades — 19 Feb 2026 | Result +₹3.10L | Trade Mirror</title>
-<meta name="description" content="Profit +₹3.10L across 4 intraday F&amp;O trades on 19 Feb 2026. Entries, exits and P&amp;L.">
+<title>Intraday Hunter — 19 Feb 2026 · +₹3.10L | Trade Mirror</title>
+<meta name="description" content="Profit +₹3.10L across 4 intraday F&amp;O trades on 19 Feb 2026. Entries, exits, P&amp;L.">
 <link rel="canonical" href="https://gargkrishna.github.io/trade-mirror/sessions/2026-02-19/">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Intraday Hunter Trades — 19 Feb 2026 | Result +₹3.10L | Trade Mirror">
-<meta property="og:description" content="Profit +₹3.10L across 4 intraday F&amp;O trades on 19 Feb 2026. Entries, exits and P&amp;L.">
-<meta property="og:url" content="https://gargkrishna.github.io/trade-mirror/sessions/2026-02-19/">
+<meta property="og:type" content="article"><meta property="og:title" content="Intraday Hunter — 19 Feb 2026 · +₹3.10L | Trade Mirror">
+<meta property="og:description" content="Profit +₹3.10L across 4 intraday F&amp;O trades on 19 Feb 2026. Entries, exits, P&amp;L."><meta property="og:url" content="https://gargkrishna.github.io/trade-mirror/sessions/2026-02-19/">
 <meta property="og:site_name" content="Trade Mirror">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Intraday Hunter Trades — 19 Feb 2026 | Result +₹3.10L | Trade Mirror">
-<meta name="twitter:description" content="Profit +₹3.10L across 4 intraday F&amp;O trades on 19 Feb 2026. Entries, exits and P&amp;L.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Intraday Hunter — 19 Feb 2026 · +₹3.10L | Trade Mirror">
+<meta name="twitter:description" content="Profit +₹3.10L across 4 intraday F&amp;O trades on 19 Feb 2026. Entries, exits, P&amp;L.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#0A0E15;--paper:#0A0E15;--card:#101622;--well:#0C111B;
---win:#33C98E;--winbg:rgba(51,201,142,0.10);
---loss:#F0565C;--lossbg:rgba(240,86,92,0.10);
---gold:#F0A63C;--goldbg:rgba(240,166,60,0.10);
---slate:#8A96AB;--line:rgba(154,170,196,0.13);--hi:#E8EDF6}
+:root{
+  --ink:#0A0E15; --card:#101622; --well:#0C111B; --line:rgba(154,170,196,0.13);
+  --line2:rgba(154,170,196,0.22);
+  --hi:#E8EDF6; --lo:#8A96AB; --amber:#F0A63C; --win:#33C98E; --loss:#F0565C;
+}
 html{-webkit-text-size-adjust:100%;color-scheme:dark}
-body{background:radial-gradient(1100px 480px at 50% -180px,rgba(240,166,60,0.07),transparent 62%),#0A0E15;
-color:var(--hi);font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
-line-height:1.6;font-size:16px;min-height:100vh}
+body{
+  background:radial-gradient(1200px 520px at 50% -220px,rgba(240,166,60,0.06),transparent 60%),var(--ink);
+  color:var(--hi);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.6;
+  font-size:15px;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
 .num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
-.wrap{max-width:760px;margin:0 auto;padding:0 18px}
-a{color:inherit}
-header.site{border-bottom:1px solid var(--line);background:rgba(16,22,34,0.85);backdrop-filter:blur(8px)}
-header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:18px}
-.brand .mark{width:30px;height:30px;border-radius:7px;background:var(--gold);color:var(--ink);
-display:grid;place-items:center;font-weight:900;font-size:13px;font-family:"Archivo",sans-serif}
-nav.top a{text-decoration:none;color:var(--slate);font-weight:600;font-size:14px;margin-left:16px}
+.mono{font-family:"IBM Plex Mono",monospace}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--lo)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+.win-fg{color:var(--win)} .loss-fg{color:var(--loss)} .muted{color:var(--lo)}
+.small{font-size:13px} .tiny{font-size:11px}
+
+/* header */
+header.site{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--line);
+  background:rgba(10,14,21,0.82);backdrop-filter:blur(10px)}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.brand{font-family:"Archivo",sans-serif;font-weight:900;font-size:19px;letter-spacing:0.04em;
+  text-transform:uppercase}
+.brand .sl{color:var(--amber)}
+nav.top{display:flex;gap:22px}
+nav.top a{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--lo);padding:4px 0;border-bottom:2px solid transparent}
 nav.top a:hover{color:var(--hi)}
-.badge-v{font-size:12px;font-weight:700;color:var(--win);background:var(--winbg);
-padding:3px 9px;border-radius:999px}
-main{padding:26px 0 10px}
-h1{font-size:26px;line-height:1.25;font-weight:800;letter-spacing:-.01em;margin-bottom:6px;font-family:"Archivo",sans-serif}
-h2{font-size:19px;font-weight:800;margin:28px 0 12px;font-family:"Archivo",sans-serif}
-h3{font-size:15px;font-weight:700}
-p.lead{color:var(--slate);margin-bottom:18px}
-.muted{color:var(--slate)}
-.small{font-size:13px}
-/* result stamp - the signature element */
-.stamp{display:inline-block;border:3px double currentColor;border-radius:8px;padding:3px 12px;
-font-family:"Archivo",sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
-transform:rotate(-6deg);line-height:1}
-.stamp.win{color:var(--win);text-shadow:0 0 16px rgba(51,201,142,0.35)}
-.stamp.loss{color:var(--loss);text-shadow:0 0 16px rgba(240,86,92,0.35)}
-.hero{border:2px solid;border-radius:20px;padding:22px}
-.hero.win{border-color:rgba(51,201,142,.35);background:var(--winbg)}
-.hero.loss{border-color:rgba(240,86,92,.35);background:var(--lossbg)}
-.hero .big{font-family:"Archivo",sans-serif;font-weight:900;line-height:1;
-font-size:clamp(40px,13vw,66px);font-variant-numeric:tabular-nums}
-.hero .big.win{color:var(--win)}.hero .big.loss{color:var(--loss)}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-block}
-.pill.win{background:var(--winbg);color:var(--win)}
-.pill.loss{background:var(--lossbg);color:var(--loss)}
-.pill.gold{background:var(--goldbg);color:var(--gold)}
-.pill.slate{background:var(--well);color:var(--slate)}
-.pill.long{background:var(--winbg);color:var(--win)}
-.pill.short{background:var(--lossbg);color:var(--loss)}
-.grid{display:grid;gap:12px}
-.grid.s3{grid-template-columns:repeat(3,1fr)}
-.grid.s2{grid-template-columns:repeat(2,1fr)}
-.stat{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px}
-.stat .v{font-family:"Archivo",sans-serif;font-weight:900;font-size:24px;font-variant-numeric:tabular-nums}
-.stat .l{font-size:12px;color:var(--slate);font-weight:600;margin-top:2px}
-.card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:16px;margin-bottom:12px}
-.card.win{border-color:rgba(51,201,142,.28)}
-.card.loss{border-color:rgba(240,86,92,.28)}
-.legs{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--well)}
-.legs+.legs{margin-top:8px}
-.kv{display:grid;grid-template-columns:auto auto;gap:4px 18px;font-size:13px;color:var(--slate)}
-.kv b{color:var(--hi);font-weight:700}
-.scn{display:grid;gap:8px;grid-template-columns:1fr}
-.scn .box{border:1px solid var(--line);border-radius:10px;padding:10px}
-.scn .box .h{font-size:12px;font-weight:700;color:var(--slate);margin-bottom:3px}
-.levels{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.lev{font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;font-family:"Archivo",sans-serif}
-.lev.r{background:var(--lossbg);color:var(--loss)}.lev.s{background:var(--winbg);color:var(--win)}
-.list a{display:block;text-decoration:none;border:1px solid var(--line);border-radius:14px;
-background:var(--card);padding:13px 15px;margin-bottom:9px}
-.list a:hover{border-color:var(--gold)}
-.btn{display:inline-block;text-decoration:none;background:var(--gold);color:var(--ink);
-font-weight:700;padding:11px 16px;border-radius:12px;font-size:14px}
-.btn.ghost{background:transparent;color:var(--hi);border:2px solid var(--line)}
-.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
-.verdict{border-radius:0 0 16px 16px;margin:14px -16px -16px;padding:12px 16px;
-display:flex;align-items:center;justify-content:space-between}
-.verdict.win{background:var(--winbg)}.verdict.loss{background:var(--lossbg)}
-hr.sep{border:0;border-top:1px solid var(--line);margin:24px 0}
-/* thumbnails + ledger card styling (matches the app) */
-.thumb{display:block;flex-shrink:0;width:112px;border-radius:8px;overflow:hidden;
-border:1px solid var(--line);background:var(--ink);aspect-ratio:16/9}
+
+main{padding:34px 0 12px}
+
+/* page head */
+h1{font-family:"Archivo",sans-serif;font-weight:800;font-size:27px;line-height:1.18;
+  letter-spacing:-0.01em;margin-bottom:8px}
+h2{font-family:"Archivo",sans-serif;font-weight:800;font-size:15px;letter-spacing:0.02em;
+  margin:30px 0 14px;display:flex;align-items:baseline;gap:10px}
+h2 .c{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--lo);font-weight:400;letter-spacing:0}
+h3{font-family:"Archivo",sans-serif;font-weight:700;font-size:14px}
+p.lead{color:var(--lo);font-size:15px;margin-bottom:22px;max-width:62ch}
+
+/* stat strip (signature dashboard element) */
+.strip{border:1px solid var(--line);border-radius:16px;background:var(--card);
+  display:flex;flex-wrap:wrap;overflow:hidden}
+.strip .cell{flex:1 1 0;min-width:120px;padding:15px 18px;border-right:1px solid var(--line)}
+.strip .cell:last-child{border-right:0}
+.strip .cell .l{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--lo);margin-bottom:7px}
+.strip .cell .v{font-family:"Archivo",sans-serif;font-weight:900;font-size:23px;line-height:1;
+  font-variant-numeric:tabular-nums}
+.strip .cell .v small{font-size:13px;color:var(--lo);font-weight:600}
+
+/* streak dots */
+.dots{display:flex;flex-wrap:wrap;gap:4px;padding-top:3px}
+.dots i{width:8px;height:8px;border-radius:50%;display:block}
+.dots i.w{background:var(--win)} .dots i.l{background:var(--loss)} .dots i.n{background:rgba(154,170,196,0.30)}
+
+/* hero / latest */
+.latest{border:1px solid var(--line);border-left:3px solid var(--lo);border-radius:16px;
+  background:var(--card);padding:18px;display:flex;gap:16px;align-items:flex-start}
+.latest.win{border-left-color:var(--win)} .latest.loss{border-left-color:var(--loss)}
+.latest .main{flex:1;min-width:0}
+.big{font-family:"Archivo",sans-serif;font-weight:900;line-height:0.95;
+  font-variant-numeric:tabular-nums;font-size:clamp(34px,8vw,52px)}
+.note{font-size:13px;color:var(--hi);opacity:0.82;margin-top:12px;
+  border-left:2px solid var(--amber);padding-left:11px;line-height:1.5}
+
+/* thumbnail */
+.thumb{flex-shrink:0;width:150px;border-radius:10px;overflow:hidden;border:1px solid var(--line);
+  background:var(--ink);aspect-ratio:16/9;display:block}
+.thumb.sm{width:104px}
 .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.thumb.sm{width:88px}
-.ledger{display:flex;gap:13px;align-items:center;border:1px solid var(--line);
-border-left:3px solid var(--slate);border-radius:14px;background:var(--card);
-padding:13px 15px;margin-bottom:9px}
-.ledger:hover{border-color:var(--gold)}
-.ledger.win{border-left-color:var(--win)}
-.ledger.loss{border-left-color:var(--loss)}
-.ledger .body{flex:1;min-width:0;text-decoration:none;display:block}
-.rail{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--slate);
-font-family:"IBM Plex Mono",monospace;margin-top:6px;max-width:320px}
-.rail .ln{position:relative;flex:1;height:1px;background:var(--line);min-width:34px}
-.rail .ln::before{content:"";position:absolute;left:-1px;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--win)}
-.rail .ln::after{content:"";position:absolute;right:-1px;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--loss)}
-footer.site{border-top:1px solid var(--line);background:var(--card);margin-top:30px;padding:24px 0 40px}
-footer .disc{font-size:13px;color:var(--slate);margin-bottom:16px}
-.suggest textarea,.suggest input{width:100%;border:1px solid var(--line);border-radius:10px;
-padding:10px 12px;font:inherit;font-size:14px;background:var(--well);color:var(--hi);margin-bottom:8px}
-.suggest textarea{min-height:84px;resize:vertical}
-.suggest button{cursor:pointer}
-.crumb{font-size:13px;color:var(--slate);margin-bottom:12px}
-.crumb a{text-decoration:none}
-@media(max-width:520px){.grid.s3{grid-template-columns:1fr 1fr}.hero{padding:18px}}
-:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* time rail */
+.rail{display:flex;align-items:center;gap:9px;font-family:"IBM Plex Mono",monospace;
+  font-size:11px;color:var(--lo);margin-top:11px;max-width:340px}
+.rail .ln{position:relative;flex:1;height:1px;background:var(--line);min-width:36px}
+.rail .ln::before,.rail .ln::after{content:"";position:absolute;top:-3px;width:7px;height:7px;border-radius:50%}
+.rail .ln::before{left:-1px;background:var(--win)} .rail .ln::after{right:-1px;background:var(--loss)}
+
+/* ledger row */
+.row-link{display:flex;gap:14px;align-items:center;border:1px solid var(--line);
+  border-left:3px solid var(--lo);border-radius:14px;background:var(--card);
+  padding:11px 14px;margin-bottom:8px;transition:border-color .12s}
+.row-link.win{border-left-color:var(--win)} .row-link.loss{border-left-color:var(--loss)}
+.row-link:hover{border-color:var(--line2)}
+.row-link .body{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.row-link .lside .d{font-family:"Archivo",sans-serif;font-weight:700;font-size:15px}
+.row-link .lside .m{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--lo);margin-top:2px}
+.row-link .rside{text-align:right;flex-shrink:0}
+.row-link .rside .amt{font-family:"Archivo",sans-serif;font-weight:900;font-size:21px;
+  font-variant-numeric:tabular-nums}
+.row-link .rside .tag{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--lo);margin-top:1px}
+
+/* legs table */
+.legtable{border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.leg{display:flex;align-items:center;gap:12px;padding:11px 15px;flex-wrap:wrap}
+.leg + .leg{border-top:1px solid var(--line)}
+.leg .inst{font-family:"IBM Plex Mono",monospace;font-size:13px;min-width:150px;font-weight:500}
+.leg .px{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--lo)}
+.leg .px b{color:var(--hi);font-weight:500}
+.leg .sp{flex:1}
+.leg .amt{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;text-align:right}
+.leg .sub{flex-basis:100%;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--lo);
+  display:flex;justify-content:space-between;gap:10px}
+
+/* chips */
+.chip{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 8px;border-radius:6px;border:1px solid var(--line);color:var(--lo);background:var(--well);
+  display:inline-block;white-space:nowrap}
+.chip.dir-long{color:var(--win);border-color:rgba(51,201,142,0.4);background:rgba(51,201,142,0.08)}
+.chip.dir-short{color:var(--loss);border-color:rgba(240,86,92,0.4);background:rgba(240,86,92,0.08)}
+.chip.bias-bullish{color:var(--win);border-color:rgba(51,201,142,0.4)}
+.chip.bias-bearish{color:var(--loss);border-color:rgba(240,86,92,0.4)}
+.chip.bias-neutral{color:var(--lo)}
+.chip.amber{color:var(--amber);border-color:rgba(240,166,60,0.4);background:rgba(240,166,60,0.08)}
+
+/* accuracy bar */
+.accbar{display:flex;height:12px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.accbar span{display:block}
+.accbar .matched{background:var(--win)} .accbar .partial{background:var(--amber)}
+.accbar .missed{background:var(--loss)} .accbar .unknown{background:rgba(154,170,196,0.30)}
+.acclegend{display:flex;flex-wrap:wrap;gap:14px;margin-top:11px}
+.acclegend .it{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--lo)}
+.acclegend .it b{font-family:"IBM Plex Mono",monospace;color:var(--hi);font-weight:600}
+.acclegend .sw{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+/* generic card */
+.card{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px;margin-bottom:12px}
+.card.win{border-left:3px solid var(--win)} .card.loss{border-left:3px solid var(--loss)}
+
+/* scenarios + levels */
+.scn{display:grid;gap:8px;margin-top:13px}
+.scn .b{border:1px solid var(--line);border-radius:10px;padding:11px;background:var(--well)}
+.scn .b .h{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--lo);margin-bottom:4px}
+.scn .b.hit{border-color:rgba(240,166,60,0.4)}
+.scn .b.hit .h{color:var(--amber)}
+.levels{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+.lev{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:3px 9px;border-radius:6px;
+  border:1px solid var(--line);color:var(--hi);background:var(--well)}
+.lev .v{color:var(--amber)}
+
+/* buttons */
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.btn{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:13px;padding:10px 16px;
+  border-radius:10px;background:var(--amber);color:var(--ink);border:1px solid var(--amber)}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--hi);border:1px solid var(--line2)}
+.btn.ghost:hover{border-color:var(--lo)}
+
+/* crumb */
+.crumb{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--lo);margin-bottom:14px}
+.crumb a:hover{color:var(--hi)}
+
+/* footer */
+footer.site{border-top:1px solid var(--line);margin-top:44px;padding:26px 0 48px}
+footer .disc{font-size:12px;color:var(--lo);margin-bottom:18px;line-height:1.6;max-width:70ch}
+.suggest input,.suggest textarea{width:100%;background:var(--well);border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;color:var(--hi);margin-bottom:8px}
+.suggest textarea{min-height:80px;resize:vertical}
+
+@media(max-width:680px){
+  .strip .cell{flex-basis:50%;border-bottom:1px solid var(--line)}
+  .latest{flex-direction:column} .thumb{width:100%}
+  .leg .inst{min-width:0;flex-basis:100%}
+}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:4px}
 </style>
 </head>
 <body>
 <header class="site"><div class="wrap">
-  <a class="brand" href="../../"><span class="mark">TM</span>Trade Mirror</a>
-  <nav class="top"><a href="../../plans/">Plans</a><a href="../">Sessions</a></nav>
+  <a class="brand" href="../../">Trade<span class="sl">/</span>Mirror</a>
+  <nav class="top"><a href="../">Sessions</a><a href="../../plans/">Plans</a></nav>
 </div></header>
 <main><div class="wrap">
 <div class="crumb"><a href="../../">Home</a> / <a href="../">Sessions</a> / 19 Feb 2026</div>
-    <h1>Intraday Hunter Trades — 19 Feb 2026</h1>
-    <div class="hero win">
-      <div style="display:flex;gap:14px;align-items:flex-start">
-        <a class="thumb " href="https://www.youtube.com/watch?v=Uge3LJjZFFE" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Uge3LJjZFFE/mqdefault.jpg"></a>
-        <div class="row" style="flex:1;min-width:0">
-          <div><div class="small muted">Thursday</div>
-          <div class="big win">+₹3.10L</div>
-          <div class="small muted">+276.07 pts · 4 trades</div></div>
-          <span class="stamp win">Profit</span>
-        </div>
+    <p class="eyebrow">Thursday · 19 Feb 2026</p>
+    <h1>Intraday Hunter — 19 Feb 2026</h1>
+    <div class="latest win">
+      <a class="thumb " href="https://www.youtube.com/watch?v=Uge3LJjZFFE" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Uge3LJjZFFE/mqdefault.jpg"></a>
+      <div class="main">
+        <div class="big win-fg">+₹3.10L</div>
+        <div class="small muted" style="margin-top:6px">+276.07 pts · 4 trades · executed Short</div>
+        <div class="rail"><span class="win-fg">09:28</span><span class="ln"></span><span class="loss-fg">10:15</span></div>
+        <div class="note">The trader identifies a rejection pattern in BankNifty, Nifty, and Sensex after a multi-day rally. He enters short positions (puts) across all three indices, anticipating a move to trap buyers, and successfully books profits once the indices align in a downward trend.</div>
       </div>
-      <div class="rail"><span style="color:var(--win)">09:28</span><span class="ln"></span><span style="color:var(--loss)">10:15</span></div>
-      <p class="small" style="margin-top:12px;border-left:3px solid var(--gold);padding-left:10px">The trader identifies a rejection pattern in BankNifty, Nifty, and Sensex after a multi-day rally. He enters short positions (puts) across all three indices, anticipating a move to trap buyers, and successfully books profits once the indices align in a downward trend.</p>
     </div>
-    <h2>Trades (4)</h2>
-    <div class="legs">
-          <div class="row"><b>BANKNIFTY 61500 PE</b><span class="pill short">Short</span></div>
-          <div class="row" style="margin-top:8px">
-            <div class="kv"><span>Entry</span><b class="num">359.0</b>
-              <span>Exit</span><b class="num">412.85</b>
-              <span>Qty</span><b class="num">1170</b></div>
-            <div style="text-align:right"><div class="num" style="font-weight:900;font-size:20px;color:var(--win)">+₹72,891</div>
-              <div class="small muted">+53.85 pts</div></div>
-          </div>
-          <div class="small muted" style="margin-top:8px;display:flex;justify-content:space-between">
-            <span>09:28 → 10:15</span>
-            <span>rejection / trap</span></div>
-          
-        </div><div class="legs">
-          <div class="row"><b>BANKNIFTY 61400 PE</b><span class="pill short">Short</span></div>
-          <div class="row" style="margin-top:8px">
-            <div class="kv"><span>Entry</span><b class="num">313.15</b>
-              <span>Exit</span><b class="num">356.55</b>
-              <span>Qty</span><b class="num">1170</b></div>
-            <div style="text-align:right"><div class="num" style="font-weight:900;font-size:20px;color:var(--win)">+₹60,372</div>
-              <div class="small muted">+43.40 pts</div></div>
-          </div>
-          <div class="small muted" style="margin-top:8px;display:flex;justify-content:space-between">
-            <span>09:28 → 10:15</span>
-            <span>rejection / trap</span></div>
-          
-        </div><div class="legs">
-          <div class="row"><b>SENSEX 83800 PE</b><span class="pill short">Short</span></div>
-          <div class="row" style="margin-top:8px">
-            <div class="kv"><span>Entry</span><b class="num">177.45</b>
-              <span>Exit</span><b class="num">314.85</b>
-              <span>Qty</span><b class="num">840</b></div>
-            <div style="text-align:right"><div class="num" style="font-weight:900;font-size:20px;color:var(--win)">+₹1.23L</div>
-              <div class="small muted">+137.40 pts</div></div>
-          </div>
-          <div class="small muted" style="margin-top:8px;display:flex;justify-content:space-between">
-            <span>09:28 → 10:15</span>
-            <span>rejection / trap</span></div>
-          
-        </div><div class="legs">
-          <div class="row"><b>NIFTY 25850 PE</b><span class="pill short">Short</span></div>
-          <div class="row" style="margin-top:8px">
-            <div class="kv"><span>Entry</span><b class="num">209.42</b>
-              <span>Exit</span><b class="num">168.0</b>
-              <span>Qty</span><b class="num">1300</b></div>
-            <div style="text-align:right"><div class="num" style="font-weight:900;font-size:20px;color:var(--win)">+₹53,846</div>
-              <div class="small muted">+41.42 pts</div></div>
-          </div>
-          <div class="small muted" style="margin-top:8px;display:flex;justify-content:space-between">
-            <span>09:28 → 10:15</span>
-            <span>rejection / trap</span></div>
-          
-        </div><div class="btnrow"><a class="btn ghost" href="https://www.youtube.com/watch?v=Uge3LJjZFFE" rel="nofollow noopener" target="_blank">Watch on YouTube</a></div>
+    <h2>Trades <span class="c">4 legs</span></h2>
+    <div class="legtable"><div class="leg">
+          <span class="inst">BANKNIFTY 61500 PE</span>
+          <span class="chip dir-short">Short</span>
+          <span class="px"><b>359.0</b> → <b>412.85</b></span>
+          <span class="px">×1170</span>
+          <span class="sp"></span>
+          <span class="amt win-fg">+₹72,891</span>
+          <div class="sub"><span>09:28 → 10:15</span><span>rejection / trap</span><span class="muted">+53.85 pts</span></div>
+        </div><div class="leg">
+          <span class="inst">BANKNIFTY 61400 PE</span>
+          <span class="chip dir-short">Short</span>
+          <span class="px"><b>313.15</b> → <b>356.55</b></span>
+          <span class="px">×1170</span>
+          <span class="sp"></span>
+          <span class="amt win-fg">+₹60,372</span>
+          <div class="sub"><span>09:28 → 10:15</span><span>rejection / trap</span><span class="muted">+43.40 pts</span></div>
+        </div><div class="leg">
+          <span class="inst">SENSEX 83800 PE</span>
+          <span class="chip dir-short">Short</span>
+          <span class="px"><b>177.45</b> → <b>314.85</b></span>
+          <span class="px">×840</span>
+          <span class="sp"></span>
+          <span class="amt win-fg">+₹1.23L</span>
+          <div class="sub"><span>09:28 → 10:15</span><span>rejection / trap</span><span class="muted">+137.40 pts</span></div>
+        </div><div class="leg">
+          <span class="inst">NIFTY 25850 PE</span>
+          <span class="chip dir-short">Short</span>
+          <span class="px"><b>209.42</b> → <b>168.0</b></span>
+          <span class="px">×1300</span>
+          <span class="sp"></span>
+          <span class="amt win-fg">+₹53,846</span>
+          <div class="sub"><span>09:28 → 10:15</span><span>rejection / trap</span><span class="muted">+41.42 pts</span></div>
+        </div></div>
+    <div class="btnrow">
+      
+      <a class="btn ghost" href="https://www.youtube.com/watch?v=Uge3LJjZFFE" rel="nofollow noopener" target="_blank">Watch on YouTube</a>
+    </div>
 </div></main>
 <footer class="site"><div class="wrap">
-  <p class="disc"><b>Independent project.</b> Trade Mirror is an independent tracker and is
-  not affiliated with, endorsed by, or connected to Intraday Hunter. All trades shown are extracted
-  from publicly available YouTube videos for record-keeping. If you are Intraday Hunter or his team,
-  please reach out at gargkrishna1282002@gmail.com.</p>
+  <p class="disc"><b>Independent project.</b> Trade Mirror is an independent tracker, not affiliated
+  with or endorsed by Intraday Hunter. Trades are extracted from public YouTube videos for record-keeping.
+  If you are Intraday Hunter or his team, reach out at gargkrishna1282002@gmail.com.</p>
   
-      <h3>Have a suggestion?</h3>
-      <p class="small muted" style="margin:4px 0 10px">Tell us what to add or fix. Your email is optional.</p>
+      <h3>Suggest a change</h3>
+      <p class="small muted" style="margin:5px 0 11px">Spot something wrong, or want a feature added? Send it over. Email optional.</p>
       <form class="suggest" action="https://formsubmit.co/gargkrishna1282002@gmail.com" method="POST">
         <input type="hidden" name="_subject" value="New Trade Mirror suggestion">
         <input type="hidden" name="_captcha" value="false">
         <input type="text" name="_honey" style="display:none">
         <input type="email" name="email" placeholder="Your email (optional)">
-        <textarea name="message" placeholder="Your suggestion..." required></textarea>
-        <button class="btn" type="submit">Send suggestion</button>
+        <textarea name="message" placeholder="What should change?" required></textarea>
+        <button class="btn" type="submit">Send</button>
       </form>
 </div></footer>
 </body>

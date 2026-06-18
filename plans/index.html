@@ -6,555 +6,1024 @@
 <title>Plan archive | Trade Mirror</title>
 <meta name="description" content="All 102 intraday plans from Intraday Hunter, matched to actual session results.">
 <link rel="canonical" href="https://gargkrishna.github.io/trade-mirror/plans/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Plan archive | Trade Mirror">
-<meta property="og:description" content="All 102 intraday plans from Intraday Hunter, matched to actual session results.">
-<meta property="og:url" content="https://gargkrishna.github.io/trade-mirror/plans/">
+<meta property="og:type" content="website"><meta property="og:title" content="Plan archive | Trade Mirror">
+<meta property="og:description" content="All 102 intraday plans from Intraday Hunter, matched to actual session results."><meta property="og:url" content="https://gargkrishna.github.io/trade-mirror/plans/">
 <meta property="og:site_name" content="Trade Mirror">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Plan archive | Trade Mirror">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Plan archive | Trade Mirror">
 <meta name="twitter:description" content="All 102 intraday plans from Intraday Hunter, matched to actual session results.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#0A0E15;--paper:#0A0E15;--card:#101622;--well:#0C111B;
---win:#33C98E;--winbg:rgba(51,201,142,0.10);
---loss:#F0565C;--lossbg:rgba(240,86,92,0.10);
---gold:#F0A63C;--goldbg:rgba(240,166,60,0.10);
---slate:#8A96AB;--line:rgba(154,170,196,0.13);--hi:#E8EDF6}
+:root{
+  --ink:#0A0E15; --card:#101622; --well:#0C111B; --line:rgba(154,170,196,0.13);
+  --line2:rgba(154,170,196,0.22);
+  --hi:#E8EDF6; --lo:#8A96AB; --amber:#F0A63C; --win:#33C98E; --loss:#F0565C;
+}
 html{-webkit-text-size-adjust:100%;color-scheme:dark}
-body{background:radial-gradient(1100px 480px at 50% -180px,rgba(240,166,60,0.07),transparent 62%),#0A0E15;
-color:var(--hi);font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
-line-height:1.6;font-size:16px;min-height:100vh}
+body{
+  background:radial-gradient(1200px 520px at 50% -220px,rgba(240,166,60,0.06),transparent 60%),var(--ink);
+  color:var(--hi);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.6;
+  font-size:15px;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
 .num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
-.wrap{max-width:760px;margin:0 auto;padding:0 18px}
-a{color:inherit}
-header.site{border-bottom:1px solid var(--line);background:rgba(16,22,34,0.85);backdrop-filter:blur(8px)}
-header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:18px}
-.brand .mark{width:30px;height:30px;border-radius:7px;background:var(--gold);color:var(--ink);
-display:grid;place-items:center;font-weight:900;font-size:13px;font-family:"Archivo",sans-serif}
-nav.top a{text-decoration:none;color:var(--slate);font-weight:600;font-size:14px;margin-left:16px}
+.mono{font-family:"IBM Plex Mono",monospace}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--lo)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+.win-fg{color:var(--win)} .loss-fg{color:var(--loss)} .muted{color:var(--lo)}
+.small{font-size:13px} .tiny{font-size:11px}
+
+/* header */
+header.site{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--line);
+  background:rgba(10,14,21,0.82);backdrop-filter:blur(10px)}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.brand{font-family:"Archivo",sans-serif;font-weight:900;font-size:19px;letter-spacing:0.04em;
+  text-transform:uppercase}
+.brand .sl{color:var(--amber)}
+nav.top{display:flex;gap:22px}
+nav.top a{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--lo);padding:4px 0;border-bottom:2px solid transparent}
 nav.top a:hover{color:var(--hi)}
-.badge-v{font-size:12px;font-weight:700;color:var(--win);background:var(--winbg);
-padding:3px 9px;border-radius:999px}
-main{padding:26px 0 10px}
-h1{font-size:26px;line-height:1.25;font-weight:800;letter-spacing:-.01em;margin-bottom:6px;font-family:"Archivo",sans-serif}
-h2{font-size:19px;font-weight:800;margin:28px 0 12px;font-family:"Archivo",sans-serif}
-h3{font-size:15px;font-weight:700}
-p.lead{color:var(--slate);margin-bottom:18px}
-.muted{color:var(--slate)}
-.small{font-size:13px}
-/* result stamp - the signature element */
-.stamp{display:inline-block;border:3px double currentColor;border-radius:8px;padding:3px 12px;
-font-family:"Archivo",sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
-transform:rotate(-6deg);line-height:1}
-.stamp.win{color:var(--win);text-shadow:0 0 16px rgba(51,201,142,0.35)}
-.stamp.loss{color:var(--loss);text-shadow:0 0 16px rgba(240,86,92,0.35)}
-.hero{border:2px solid;border-radius:20px;padding:22px}
-.hero.win{border-color:rgba(51,201,142,.35);background:var(--winbg)}
-.hero.loss{border-color:rgba(240,86,92,.35);background:var(--lossbg)}
-.hero .big{font-family:"Archivo",sans-serif;font-weight:900;line-height:1;
-font-size:clamp(40px,13vw,66px);font-variant-numeric:tabular-nums}
-.hero .big.win{color:var(--win)}.hero .big.loss{color:var(--loss)}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-block}
-.pill.win{background:var(--winbg);color:var(--win)}
-.pill.loss{background:var(--lossbg);color:var(--loss)}
-.pill.gold{background:var(--goldbg);color:var(--gold)}
-.pill.slate{background:var(--well);color:var(--slate)}
-.pill.long{background:var(--winbg);color:var(--win)}
-.pill.short{background:var(--lossbg);color:var(--loss)}
-.grid{display:grid;gap:12px}
-.grid.s3{grid-template-columns:repeat(3,1fr)}
-.grid.s2{grid-template-columns:repeat(2,1fr)}
-.stat{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px}
-.stat .v{font-family:"Archivo",sans-serif;font-weight:900;font-size:24px;font-variant-numeric:tabular-nums}
-.stat .l{font-size:12px;color:var(--slate);font-weight:600;margin-top:2px}
-.card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:16px;margin-bottom:12px}
-.card.win{border-color:rgba(51,201,142,.28)}
-.card.loss{border-color:rgba(240,86,92,.28)}
-.legs{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--well)}
-.legs+.legs{margin-top:8px}
-.kv{display:grid;grid-template-columns:auto auto;gap:4px 18px;font-size:13px;color:var(--slate)}
-.kv b{color:var(--hi);font-weight:700}
-.scn{display:grid;gap:8px;grid-template-columns:1fr}
-.scn .box{border:1px solid var(--line);border-radius:10px;padding:10px}
-.scn .box .h{font-size:12px;font-weight:700;color:var(--slate);margin-bottom:3px}
-.levels{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.lev{font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;font-family:"Archivo",sans-serif}
-.lev.r{background:var(--lossbg);color:var(--loss)}.lev.s{background:var(--winbg);color:var(--win)}
-.list a{display:block;text-decoration:none;border:1px solid var(--line);border-radius:14px;
-background:var(--card);padding:13px 15px;margin-bottom:9px}
-.list a:hover{border-color:var(--gold)}
-.btn{display:inline-block;text-decoration:none;background:var(--gold);color:var(--ink);
-font-weight:700;padding:11px 16px;border-radius:12px;font-size:14px}
-.btn.ghost{background:transparent;color:var(--hi);border:2px solid var(--line)}
-.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
-.verdict{border-radius:0 0 16px 16px;margin:14px -16px -16px;padding:12px 16px;
-display:flex;align-items:center;justify-content:space-between}
-.verdict.win{background:var(--winbg)}.verdict.loss{background:var(--lossbg)}
-hr.sep{border:0;border-top:1px solid var(--line);margin:24px 0}
-/* thumbnails + ledger card styling (matches the app) */
-.thumb{display:block;flex-shrink:0;width:112px;border-radius:8px;overflow:hidden;
-border:1px solid var(--line);background:var(--ink);aspect-ratio:16/9}
+
+main{padding:34px 0 12px}
+
+/* page head */
+h1{font-family:"Archivo",sans-serif;font-weight:800;font-size:27px;line-height:1.18;
+  letter-spacing:-0.01em;margin-bottom:8px}
+h2{font-family:"Archivo",sans-serif;font-weight:800;font-size:15px;letter-spacing:0.02em;
+  margin:30px 0 14px;display:flex;align-items:baseline;gap:10px}
+h2 .c{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--lo);font-weight:400;letter-spacing:0}
+h3{font-family:"Archivo",sans-serif;font-weight:700;font-size:14px}
+p.lead{color:var(--lo);font-size:15px;margin-bottom:22px;max-width:62ch}
+
+/* stat strip (signature dashboard element) */
+.strip{border:1px solid var(--line);border-radius:16px;background:var(--card);
+  display:flex;flex-wrap:wrap;overflow:hidden}
+.strip .cell{flex:1 1 0;min-width:120px;padding:15px 18px;border-right:1px solid var(--line)}
+.strip .cell:last-child{border-right:0}
+.strip .cell .l{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--lo);margin-bottom:7px}
+.strip .cell .v{font-family:"Archivo",sans-serif;font-weight:900;font-size:23px;line-height:1;
+  font-variant-numeric:tabular-nums}
+.strip .cell .v small{font-size:13px;color:var(--lo);font-weight:600}
+
+/* streak dots */
+.dots{display:flex;flex-wrap:wrap;gap:4px;padding-top:3px}
+.dots i{width:8px;height:8px;border-radius:50%;display:block}
+.dots i.w{background:var(--win)} .dots i.l{background:var(--loss)} .dots i.n{background:rgba(154,170,196,0.30)}
+
+/* hero / latest */
+.latest{border:1px solid var(--line);border-left:3px solid var(--lo);border-radius:16px;
+  background:var(--card);padding:18px;display:flex;gap:16px;align-items:flex-start}
+.latest.win{border-left-color:var(--win)} .latest.loss{border-left-color:var(--loss)}
+.latest .main{flex:1;min-width:0}
+.big{font-family:"Archivo",sans-serif;font-weight:900;line-height:0.95;
+  font-variant-numeric:tabular-nums;font-size:clamp(34px,8vw,52px)}
+.note{font-size:13px;color:var(--hi);opacity:0.82;margin-top:12px;
+  border-left:2px solid var(--amber);padding-left:11px;line-height:1.5}
+
+/* thumbnail */
+.thumb{flex-shrink:0;width:150px;border-radius:10px;overflow:hidden;border:1px solid var(--line);
+  background:var(--ink);aspect-ratio:16/9;display:block}
+.thumb.sm{width:104px}
 .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.thumb.sm{width:88px}
-.ledger{display:flex;gap:13px;align-items:center;border:1px solid var(--line);
-border-left:3px solid var(--slate);border-radius:14px;background:var(--card);
-padding:13px 15px;margin-bottom:9px}
-.ledger:hover{border-color:var(--gold)}
-.ledger.win{border-left-color:var(--win)}
-.ledger.loss{border-left-color:var(--loss)}
-.ledger .body{flex:1;min-width:0;text-decoration:none;display:block}
-.rail{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--slate);
-font-family:"IBM Plex Mono",monospace;margin-top:6px;max-width:320px}
-.rail .ln{position:relative;flex:1;height:1px;background:var(--line);min-width:34px}
-.rail .ln::before{content:"";position:absolute;left:-1px;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--win)}
-.rail .ln::after{content:"";position:absolute;right:-1px;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--loss)}
-footer.site{border-top:1px solid var(--line);background:var(--card);margin-top:30px;padding:24px 0 40px}
-footer .disc{font-size:13px;color:var(--slate);margin-bottom:16px}
-.suggest textarea,.suggest input{width:100%;border:1px solid var(--line);border-radius:10px;
-padding:10px 12px;font:inherit;font-size:14px;background:var(--well);color:var(--hi);margin-bottom:8px}
-.suggest textarea{min-height:84px;resize:vertical}
-.suggest button{cursor:pointer}
-.crumb{font-size:13px;color:var(--slate);margin-bottom:12px}
-.crumb a{text-decoration:none}
-@media(max-width:520px){.grid.s3{grid-template-columns:1fr 1fr}.hero{padding:18px}}
-:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* time rail */
+.rail{display:flex;align-items:center;gap:9px;font-family:"IBM Plex Mono",monospace;
+  font-size:11px;color:var(--lo);margin-top:11px;max-width:340px}
+.rail .ln{position:relative;flex:1;height:1px;background:var(--line);min-width:36px}
+.rail .ln::before,.rail .ln::after{content:"";position:absolute;top:-3px;width:7px;height:7px;border-radius:50%}
+.rail .ln::before{left:-1px;background:var(--win)} .rail .ln::after{right:-1px;background:var(--loss)}
+
+/* ledger row */
+.row-link{display:flex;gap:14px;align-items:center;border:1px solid var(--line);
+  border-left:3px solid var(--lo);border-radius:14px;background:var(--card);
+  padding:11px 14px;margin-bottom:8px;transition:border-color .12s}
+.row-link.win{border-left-color:var(--win)} .row-link.loss{border-left-color:var(--loss)}
+.row-link:hover{border-color:var(--line2)}
+.row-link .body{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.row-link .lside .d{font-family:"Archivo",sans-serif;font-weight:700;font-size:15px}
+.row-link .lside .m{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--lo);margin-top:2px}
+.row-link .rside{text-align:right;flex-shrink:0}
+.row-link .rside .amt{font-family:"Archivo",sans-serif;font-weight:900;font-size:21px;
+  font-variant-numeric:tabular-nums}
+.row-link .rside .tag{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--lo);margin-top:1px}
+
+/* legs table */
+.legtable{border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.leg{display:flex;align-items:center;gap:12px;padding:11px 15px;flex-wrap:wrap}
+.leg + .leg{border-top:1px solid var(--line)}
+.leg .inst{font-family:"IBM Plex Mono",monospace;font-size:13px;min-width:150px;font-weight:500}
+.leg .px{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--lo)}
+.leg .px b{color:var(--hi);font-weight:500}
+.leg .sp{flex:1}
+.leg .amt{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;text-align:right}
+.leg .sub{flex-basis:100%;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--lo);
+  display:flex;justify-content:space-between;gap:10px}
+
+/* chips */
+.chip{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 8px;border-radius:6px;border:1px solid var(--line);color:var(--lo);background:var(--well);
+  display:inline-block;white-space:nowrap}
+.chip.dir-long{color:var(--win);border-color:rgba(51,201,142,0.4);background:rgba(51,201,142,0.08)}
+.chip.dir-short{color:var(--loss);border-color:rgba(240,86,92,0.4);background:rgba(240,86,92,0.08)}
+.chip.bias-bullish{color:var(--win);border-color:rgba(51,201,142,0.4)}
+.chip.bias-bearish{color:var(--loss);border-color:rgba(240,86,92,0.4)}
+.chip.bias-neutral{color:var(--lo)}
+.chip.amber{color:var(--amber);border-color:rgba(240,166,60,0.4);background:rgba(240,166,60,0.08)}
+
+/* accuracy bar */
+.accbar{display:flex;height:12px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.accbar span{display:block}
+.accbar .matched{background:var(--win)} .accbar .partial{background:var(--amber)}
+.accbar .missed{background:var(--loss)} .accbar .unknown{background:rgba(154,170,196,0.30)}
+.acclegend{display:flex;flex-wrap:wrap;gap:14px;margin-top:11px}
+.acclegend .it{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--lo)}
+.acclegend .it b{font-family:"IBM Plex Mono",monospace;color:var(--hi);font-weight:600}
+.acclegend .sw{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+/* generic card */
+.card{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:16px;margin-bottom:12px}
+.card.win{border-left:3px solid var(--win)} .card.loss{border-left:3px solid var(--loss)}
+
+/* scenarios + levels */
+.scn{display:grid;gap:8px;margin-top:13px}
+.scn .b{border:1px solid var(--line);border-radius:10px;padding:11px;background:var(--well)}
+.scn .b .h{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--lo);margin-bottom:4px}
+.scn .b.hit{border-color:rgba(240,166,60,0.4)}
+.scn .b.hit .h{color:var(--amber)}
+.levels{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+.lev{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:3px 9px;border-radius:6px;
+  border:1px solid var(--line);color:var(--hi);background:var(--well)}
+.lev .v{color:var(--amber)}
+
+/* buttons */
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.btn{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:13px;padding:10px 16px;
+  border-radius:10px;background:var(--amber);color:var(--ink);border:1px solid var(--amber)}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--hi);border:1px solid var(--line2)}
+.btn.ghost:hover{border-color:var(--lo)}
+
+/* crumb */
+.crumb{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--lo);margin-bottom:14px}
+.crumb a:hover{color:var(--hi)}
+
+/* footer */
+footer.site{border-top:1px solid var(--line);margin-top:44px;padding:26px 0 48px}
+footer .disc{font-size:12px;color:var(--lo);margin-bottom:18px;line-height:1.6;max-width:70ch}
+.suggest input,.suggest textarea{width:100%;background:var(--well);border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;color:var(--hi);margin-bottom:8px}
+.suggest textarea{min-height:80px;resize:vertical}
+
+@media(max-width:680px){
+  .strip .cell{flex-basis:50%;border-bottom:1px solid var(--line)}
+  .latest{flex-direction:column} .thumb{width:100%}
+  .leg .inst{min-width:0;flex-basis:100%}
+}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:4px}
 </style>
 </head>
 <body>
 <header class="site"><div class="wrap">
-  <a class="brand" href="../"><span class="mark">TM</span>Trade Mirror</a>
-  <nav class="top"><a href="./">Plans</a><a href="../sessions/">Sessions</a></nav>
+  <a class="brand" href="../">Trade<span class="sl">/</span>Mirror</a>
+  <nav class="top"><a href="../sessions/">Sessions</a><a href="./">Plans</a></nav>
 </div></header>
 <main><div class="wrap">
-<div class="crumb"><a href="../">Home</a> / Plans</div><h1>Plan archive</h1><p class="lead">Every plan Intraday Hunter published the evening before, with how it turned out.</p><div class="list"><a href="2026-06-16/">
-          <div class="row"><b>16 Jun 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-06-15/">
-          <div class="row"><b>15 Jun 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--loss)">-₹1.59L</span>
-          </div></a><a href="2026-06-14/">
-          <div class="row"><b>14 Jun 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.48L</span>
-          </div></a><a href="2026-06-11/">
-          <div class="row"><b>11 Jun 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.67L</span>
-          </div></a><a href="2026-06-10/">
-          <div class="row"><b>10 Jun 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--win)">+₹80,382</span>
-          </div></a><a href="2026-06-09/">
-          <div class="row"><b>9 Jun 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.68L</span>
-          </div></a><a href="2026-06-08/">
-          <div class="row"><b>8 Jun 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.63L</span>
-          </div></a><a href="2026-06-07/">
-          <div class="row"><b>7 Jun 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.76L</span>
-          </div></a><a href="2026-06-04/">
-          <div class="row"><b>4 Jun 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.03L</span>
-          </div></a><a href="2026-06-03/">
-          <div class="row"><b>3 Jun 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.87L</span>
-          </div></a><a href="2026-06-02/">
-          <div class="row"><b>2 Jun 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹4.85L</span>
-          </div></a><a href="2026-06-01/">
-          <div class="row"><b>1 Jun 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.93L</span>
-          </div></a><a href="2026-05-31/">
-          <div class="row"><b>31 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.30L</span>
-          </div></a><a href="2026-05-28/">
-          <div class="row"><b>28 May 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹0</span>
-          </div></a><a href="2026-05-26/">
-          <div class="row"><b>26 May 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.55L</span>
-          </div></a><a href="2026-05-25/">
-          <div class="row"><b>25 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.92L</span>
-          </div></a><a href="2026-05-24/">
-          <div class="row"><b>24 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.57L</span>
-          </div></a><a href="2026-05-21/">
-          <div class="row"><b>21 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.58L</span>
-          </div></a><a href="2026-05-20/">
-          <div class="row"><b>20 May 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.84L</span>
-          </div></a><a href="2026-05-19/">
-          <div class="row"><b>19 May 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹3.48L</span>
-          </div></a><a href="2026-05-18/">
-          <div class="row"><b>18 May 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--loss)">+₹0</span>
-          </div></a><a href="2026-05-17/">
-          <div class="row"><b>17 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.27L</span>
-          </div></a><a href="2026-05-14/">
-          <div class="row"><b>14 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.49L</span>
-          </div></a><a href="2026-05-13/">
-          <div class="row"><b>13 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.64L</span>
-          </div></a><a href="2026-05-12/">
-          <div class="row"><b>12 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹0</span>
-          </div></a><a href="2026-05-11/">
-          <div class="row"><b>11 May 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹3.19L</span>
-          </div></a><a href="2026-05-10/">
-          <div class="row"><b>10 May 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.79L</span>
-          </div></a><a href="2026-05-07/">
-          <div class="row"><b>7 May 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.37L</span>
-          </div></a><a href="2026-05-06/">
-          <div class="row"><b>6 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.17L</span>
-          </div></a><a href="2026-05-05/">
-          <div class="row"><b>5 May 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.11L</span>
-          </div></a><a href="2026-05-04/">
-          <div class="row"><b>4 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹1.83L</span>
-          </div></a><a href="2026-05-03/">
-          <div class="row"><b>3 May 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹4.44L</span>
-          </div></a><a href="2026-04-29/">
-          <div class="row"><b>29 Apr 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹0</span>
-          </div></a><a href="2026-04-28/">
-          <div class="row"><b>28 Apr 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.80L</span>
-          </div></a><a href="2026-04-27/">
-          <div class="row"><b>27 Apr 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.50L</span>
-          </div></a><a href="2026-04-26/">
-          <div class="row"><b>26 Apr 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.69L</span>
-          </div></a><a href="2026-04-23/">
-          <div class="row"><b>23 Apr 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹3.27L</span>
-          </div></a><a href="2026-04-22/">
-          <div class="row"><b>22 Apr 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.50L</span>
-          </div></a><a href="2026-04-21/">
-          <div class="row"><b>21 Apr 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.77L</span>
-          </div></a><a href="2026-04-20/">
-          <div class="row"><b>20 Apr 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.22L</span>
-          </div></a><a href="2026-04-19/">
-          <div class="row"><b>19 Apr 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹1.73L</span>
-          </div></a><a href="2026-04-16/">
-          <div class="row"><b>16 Apr 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹3.28L</span>
-          </div></a><a href="2026-04-15/">
-          <div class="row"><b>15 Apr 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.22L</span>
-          </div></a><a href="2026-04-14/">
-          <div class="row"><b>14 Apr 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.43L</span>
-          </div></a><a href="2026-04-12/">
-          <div class="row"><b>12 Apr 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹4.35L</span>
-          </div></a><a href="2026-04-09/">
-          <div class="row"><b>9 Apr 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--loss)">+₹0</span>
-          </div></a><a href="2026-04-08/">
-          <div class="row"><b>8 Apr 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--win)">+₹1.33L</span>
-          </div></a><a href="2026-04-07/">
-          <div class="row"><b>7 Apr 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.54L</span>
-          </div></a><a href="2026-04-05/">
-          <div class="row"><b>5 Apr 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.49L</span>
-          </div></a><a href="2026-04-01/">
-          <div class="row"><b>1 Apr 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.62L</span>
-          </div></a><a href="2026-03-31/">
-          <div class="row"><b>31 Mar 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--loss)">-₹15,693</span>
-          </div></a><a href="2026-03-29/">
-          <div class="row"><b>29 Mar 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹0</span>
-          </div></a><a href="2026-03-26/">
-          <div class="row"><b>26 Mar 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.56L</span>
-          </div></a><a href="2026-03-24/">
-          <div class="row"><b>24 Mar 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.55L</span>
-          </div></a><a href="2026-03-23/">
-          <div class="row"><b>23 Mar 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.61L</span>
-          </div></a><a href="2026-03-22/">
-          <div class="row"><b>22 Mar 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹4L</span>
-          </div></a><a href="2026-03-19/">
-          <div class="row"><b>19 Mar 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹3.07L</span>
-          </div></a><a href="2026-03-18/">
-          <div class="row"><b>18 Mar 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹4.36L</span>
-          </div></a><a href="2026-03-17/">
-          <div class="row"><b>17 Mar 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹1.17L</span>
-          </div></a><a href="2026-03-16/">
-          <div class="row"><b>16 Mar 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.07L</span>
-          </div></a><a href="2026-03-15/">
-          <div class="row"><b>15 Mar 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.27L</span>
-          </div></a><a href="2026-02-15/">
-          <div class="row"><b>15 Feb 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.19L</span>
-          </div></a><a href="2026-02-12/">
-          <div class="row"><b>12 Feb 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹0</span>
-          </div></a><a href="2026-02-11/">
-          <div class="row"><b>11 Feb 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹38,477</span>
-          </div></a><a href="2026-02-10/">
-          <div class="row"><b>10 Feb 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.48L</span>
-          </div></a><a href="2026-02-09/">
-          <div class="row"><b>9 Feb 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹1.03L</span>
-          </div></a><a href="2026-02-08/">
-          <div class="row"><b>8 Feb 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹1.03L</span>
-          </div></a><a href="2026-02-05/">
-          <div class="row"><b>5 Feb 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.47L</span>
-          </div></a><a href="2026-02-04/">
-          <div class="row"><b>4 Feb 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.79L</span>
-          </div></a><a href="2026-02-03/">
-          <div class="row"><b>3 Feb 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--win)">+₹1.42L</span>
-          </div></a><a href="2026-02-02/">
-          <div class="row"><b>2 Feb 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹3.29L</span>
-          </div></a><a href="2026-02-01/">
-          <div class="row"><b>1 Feb 2026</b><span class="pill win">Matched</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.70L</span>
-          </div></a><a href="2026-01-31/">
-          <div class="row"><b>31 Jan 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--win)">+₹2.21L</span>
-          </div></a><a href="2026-01-29/">
-          <div class="row"><b>29 Jan 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.48L</span>
-          </div></a><a href="2026-01-28/">
-          <div class="row"><b>28 Jan 2026</b><span class="pill loss">Missed</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.48L</span>
-          </div></a><a href="2026-01-27/">
-          <div class="row"><b>27 Jan 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill neutral">Neutral</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.48L</span>
-          </div></a><a href="2026-01-26/">
-          <div class="row"><b>26 Jan 2026</b><span class="pill gold">Partial</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="num" style="font-weight:800;color:var(--loss)">-₹2.48L</span>
-          </div></a><a href="2026-01-22/">
-          <div class="row"><b>22 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-21/">
-          <div class="row"><b>21 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-20/">
-          <div class="row"><b>20 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-19/">
-          <div class="row"><b>19 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-18/">
-          <div class="row"><b>18 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-15/">
-          <div class="row"><b>15 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-13/">
-          <div class="row"><b>13 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-12/">
-          <div class="row"><b>12 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-11/">
-          <div class="row"><b>11 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-08/">
-          <div class="row"><b>8 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-07/">
-          <div class="row"><b>7 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-06/">
-          <div class="row"><b>6 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-05/">
-          <div class="row"><b>5 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-04/">
-          <div class="row"><b>4 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2026-01-01/">
-          <div class="row"><b>1 Jan 2026</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-31/">
-          <div class="row"><b>31 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-30/">
-          <div class="row"><b>30 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-29/">
-          <div class="row"><b>29 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-28/">
-          <div class="row"><b>28 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-25/">
-          <div class="row"><b>25 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-23/">
-          <div class="row"><b>23 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-22/">
-          <div class="row"><b>22 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-21/">
-          <div class="row"><b>21 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-18/">
-          <div class="row"><b>18 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bullish">Bullish</span><span class="small muted">no session</span>
-          </div></a><a href="2025-12-17/">
-          <div class="row"><b>17 Dec 2025</b><span class="pill slate">Unknown</span></div>
-          <div class="row" style="margin-top:4px">
-            <span class="pill bearish">Bearish</span><span class="small muted">no session</span>
-          </div></a></div>
+<div class="crumb"><a href="../">Home</a> / Plans</div><h1>Plan archive</h1><p class="lead">Every plan Intraday Hunter published the evening before, and how it turned out.</p><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=aBvETyWqKSQ" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/aBvETyWqKSQ/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-16/">
+            <div class="lside">
+              <div class="d">16 Jun 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=OKpfb0Nky2I" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/OKpfb0Nky2I/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-15/">
+            <div class="lside">
+              <div class="d">15 Jun 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹1.59L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=lN4qRl5VQgs" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/lN4qRl5VQgs/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-14/">
+            <div class="lside">
+              <div class="d">14 Jun 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.48L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=8EusuobtGiE" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/8EusuobtGiE/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-11/">
+            <div class="lside">
+              <div class="d">11 Jun 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.67L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=Azfgpc419J0" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Azfgpc419J0/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-10/">
+            <div class="lside">
+              <div class="d">10 Jun 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹80,382</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=KgA5ToQXr2Y" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/KgA5ToQXr2Y/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-09/">
+            <div class="lside">
+              <div class="d">9 Jun 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.68L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=gEP9RH8JPe8" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/gEP9RH8JPe8/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-08/">
+            <div class="lside">
+              <div class="d">8 Jun 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.63L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=7Ez4rgmpeuE" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/7Ez4rgmpeuE/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-07/">
+            <div class="lside">
+              <div class="d">7 Jun 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.76L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=wvTZgzL16w0" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/wvTZgzL16w0/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-04/">
+            <div class="lside">
+              <div class="d">4 Jun 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.03L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=YQbG-Gg5pW8" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/YQbG-Gg5pW8/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-03/">
+            <div class="lside">
+              <div class="d">3 Jun 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.87L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=67Zv0h3zwI4" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/67Zv0h3zwI4/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-02/">
+            <div class="lside">
+              <div class="d">2 Jun 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹4.85L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=mDuojoFxgvU" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/mDuojoFxgvU/mqdefault.jpg"></a>
+          <a class="body" href="2026-06-01/">
+            <div class="lside">
+              <div class="d">1 Jun 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.93L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=rWJtFdIfaqE" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/rWJtFdIfaqE/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-31/">
+            <div class="lside">
+              <div class="d">31 May 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.30L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=G8zrh4Aeuno" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/G8zrh4Aeuno/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-28/">
+            <div class="lside">
+              <div class="d">28 May 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹0</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=94KF-6XcZbM" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/94KF-6XcZbM/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-26/">
+            <div class="lside">
+              <div class="d">26 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.55L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=cT-CFFQWXCY" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/cT-CFFQWXCY/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-25/">
+            <div class="lside">
+              <div class="d">25 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.92L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=LDpvTvu-5pw" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/LDpvTvu-5pw/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-24/">
+            <div class="lside">
+              <div class="d">24 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.57L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=SjVkD8M2kCU" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/SjVkD8M2kCU/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-21/">
+            <div class="lside">
+              <div class="d">21 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.58L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=wHIeA8CHdbI" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/wHIeA8CHdbI/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-20/">
+            <div class="lside">
+              <div class="d">20 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.84L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=4heamnHIu0k" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/4heamnHIu0k/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-19/">
+            <div class="lside">
+              <div class="d">19 May 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹3.48L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=4sPZ5fOOTus" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/4sPZ5fOOTus/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-18/">
+            <div class="lside">
+              <div class="d">18 May 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">+₹0</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=8Q_uZY9ttPc" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/8Q_uZY9ttPc/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-17/">
+            <div class="lside">
+              <div class="d">17 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.27L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=0ZWoEjOqlKs" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/0ZWoEjOqlKs/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-14/">
+            <div class="lside">
+              <div class="d">14 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.49L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=QuHqOjfWHT0" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/QuHqOjfWHT0/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-13/">
+            <div class="lside">
+              <div class="d">13 May 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.64L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=ouMNl24OI80" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/ouMNl24OI80/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-12/">
+            <div class="lside">
+              <div class="d">12 May 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹0</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=dAvAVZp5_Qk" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/dAvAVZp5_Qk/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-11/">
+            <div class="lside">
+              <div class="d">11 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹3.19L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=310NaUwkhos" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/310NaUwkhos/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-10/">
+            <div class="lside">
+              <div class="d">10 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.79L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=hnYadOBcUec" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/hnYadOBcUec/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-07/">
+            <div class="lside">
+              <div class="d">7 May 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.37L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=VXz2kO5_Qns" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/VXz2kO5_Qns/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-06/">
+            <div class="lside">
+              <div class="d">6 May 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.17L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=XhtXQZe0iU4" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/XhtXQZe0iU4/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-05/">
+            <div class="lside">
+              <div class="d">5 May 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.11L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=84ae4zNAvUA" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/84ae4zNAvUA/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-04/">
+            <div class="lside">
+              <div class="d">4 May 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹1.83L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=dVtw2PwBc_I" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/dVtw2PwBc_I/mqdefault.jpg"></a>
+          <a class="body" href="2026-05-03/">
+            <div class="lside">
+              <div class="d">3 May 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹4.44L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=S2YHf04SqbM" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/S2YHf04SqbM/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-29/">
+            <div class="lside">
+              <div class="d">29 Apr 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹0</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=kTN3YWA04Fs" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/kTN3YWA04Fs/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-28/">
+            <div class="lside">
+              <div class="d">28 Apr 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.80L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=VIKjM0Hxzn0" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/VIKjM0Hxzn0/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-27/">
+            <div class="lside">
+              <div class="d">27 Apr 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.50L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=Ca8ILFACa8k" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Ca8ILFACa8k/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-26/">
+            <div class="lside">
+              <div class="d">26 Apr 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.69L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=zbWH77jyD-c" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/zbWH77jyD-c/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-23/">
+            <div class="lside">
+              <div class="d">23 Apr 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹3.27L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=WnLBNbf4O9M" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/WnLBNbf4O9M/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-22/">
+            <div class="lside">
+              <div class="d">22 Apr 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.50L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=GGWW8azo0hc" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/GGWW8azo0hc/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-21/">
+            <div class="lside">
+              <div class="d">21 Apr 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.77L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=m3jWBvmqoP4" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/m3jWBvmqoP4/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-20/">
+            <div class="lside">
+              <div class="d">20 Apr 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.22L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=ZUgNB8E_xv0" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/ZUgNB8E_xv0/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-19/">
+            <div class="lside">
+              <div class="d">19 Apr 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹1.73L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=goTJGf1euA0" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/goTJGf1euA0/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-16/">
+            <div class="lside">
+              <div class="d">16 Apr 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹3.28L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=rh-ya1QgVuI" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/rh-ya1QgVuI/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-15/">
+            <div class="lside">
+              <div class="d">15 Apr 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.22L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=dLPbqh5hh9M" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/dLPbqh5hh9M/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-14/">
+            <div class="lside">
+              <div class="d">14 Apr 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.43L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=uOThAfuZuhg" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/uOThAfuZuhg/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-12/">
+            <div class="lside">
+              <div class="d">12 Apr 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹4.35L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=QYJ3EF7VIjY" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/QYJ3EF7VIjY/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-09/">
+            <div class="lside">
+              <div class="d">9 Apr 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">+₹0</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=ebDbCMsoV0o" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/ebDbCMsoV0o/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-08/">
+            <div class="lside">
+              <div class="d">8 Apr 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹1.33L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=6b9ONxOgw7s" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/6b9ONxOgw7s/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-07/">
+            <div class="lside">
+              <div class="d">7 Apr 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.54L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=lXmBKdpcyn0" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/lXmBKdpcyn0/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-05/">
+            <div class="lside">
+              <div class="d">5 Apr 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.49L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=pD8ei_TtyqU" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/pD8ei_TtyqU/mqdefault.jpg"></a>
+          <a class="body" href="2026-04-01/">
+            <div class="lside">
+              <div class="d">1 Apr 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.62L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=Ogj8nDIPBos" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Ogj8nDIPBos/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-31/">
+            <div class="lside">
+              <div class="d">31 Mar 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹15,693</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=vg4EG2ge8Ew" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/vg4EG2ge8Ew/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-29/">
+            <div class="lside">
+              <div class="d">29 Mar 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹0</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=WZtg_BkH-0I" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/WZtg_BkH-0I/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-26/">
+            <div class="lside">
+              <div class="d">26 Mar 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.56L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=p5V9jmiG8QA" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/p5V9jmiG8QA/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-24/">
+            <div class="lside">
+              <div class="d">24 Mar 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.55L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=IRmqJOVMj4g" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/IRmqJOVMj4g/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-23/">
+            <div class="lside">
+              <div class="d">23 Mar 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.61L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=fx1xHReAmHc" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/fx1xHReAmHc/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-22/">
+            <div class="lside">
+              <div class="d">22 Mar 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹4L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=-i1PkXyIdrg" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/-i1PkXyIdrg/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-19/">
+            <div class="lside">
+              <div class="d">19 Mar 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹3.07L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=wcf47792mYE" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/wcf47792mYE/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-18/">
+            <div class="lside">
+              <div class="d">18 Mar 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹4.36L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=25Lz90-niBI" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/25Lz90-niBI/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-17/">
+            <div class="lside">
+              <div class="d">17 Mar 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹1.17L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=Tyeszb4Eqac" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Tyeszb4Eqac/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-16/">
+            <div class="lside">
+              <div class="d">16 Mar 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.07L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=_xh5cxUPHec" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/_xh5cxUPHec/mqdefault.jpg"></a>
+          <a class="body" href="2026-03-15/">
+            <div class="lside">
+              <div class="d">15 Mar 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.27L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=LYKC1AU5ceM" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/LYKC1AU5ceM/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-15/">
+            <div class="lside">
+              <div class="d">15 Feb 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.19L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=CsOBIZ0_gcA" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/CsOBIZ0_gcA/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-12/">
+            <div class="lside">
+              <div class="d">12 Feb 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹0</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=16rjR7ueMow" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/16rjR7ueMow/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-11/">
+            <div class="lside">
+              <div class="d">11 Feb 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹38,477</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=RN6i86yZH4Y" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/RN6i86yZH4Y/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-10/">
+            <div class="lside">
+              <div class="d">10 Feb 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.48L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=e9VOx1vbr78" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/e9VOx1vbr78/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-09/">
+            <div class="lside">
+              <div class="d">9 Feb 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹1.03L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=C8xnlNQUTBw" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/C8xnlNQUTBw/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-08/">
+            <div class="lside">
+              <div class="d">8 Feb 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹1.03L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=oBWwrAeNdZw" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/oBWwrAeNdZw/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-05/">
+            <div class="lside">
+              <div class="d">5 Feb 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.47L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=eGJz21fM4cg" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/eGJz21fM4cg/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-04/">
+            <div class="lside">
+              <div class="d">4 Feb 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.79L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=cTO6WStF2CE" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/cTO6WStF2CE/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-03/">
+            <div class="lside">
+              <div class="d">3 Feb 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹1.42L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=x0X_yKkSlS4" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/x0X_yKkSlS4/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-02/">
+            <div class="lside">
+              <div class="d">2 Feb 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹3.29L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=Rxf5XgW5PKM" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Rxf5XgW5PKM/mqdefault.jpg"></a>
+          <a class="body" href="2026-02-01/">
+            <div class="lside">
+              <div class="d">1 Feb 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Matched</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.70L</div><div class="tag">matched</div></div>
+          </a></div><div class="row-link win">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=ie7qYUy_b88" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/ie7qYUy_b88/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-31/">
+            <div class="lside">
+              <div class="d">31 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt win-fg">+₹2.21L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=g8YXdEq9B9o" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/g8YXdEq9B9o/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-29/">
+            <div class="lside">
+              <div class="d">29 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.48L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=oUsyB5CiSUs" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/oUsyB5CiSUs/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-28/">
+            <div class="lside">
+              <div class="d">28 Jan 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Missed</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.48L</div><div class="tag">missed</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=R1MiGGqonMU" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/R1MiGGqonMU/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-27/">
+            <div class="lside">
+              <div class="d">27 Jan 2026</div>
+              <div class="m"><span class="chip bias-neutral" style="border:0;padding:0;background:none">Neutral</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.48L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link loss">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=mGqxZr5UbUw" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/mGqxZr5UbUw/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-26/">
+            <div class="lside">
+              <div class="d">26 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Partial</div>
+            </div>
+            <div class="rside"><div class="amt loss-fg">-₹2.48L</div><div class="tag">partial</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=ZRfiA2vXAVs" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/ZRfiA2vXAVs/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-22/">
+            <div class="lside">
+              <div class="d">22 Jan 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=UKQ5KfNXL5I" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/UKQ5KfNXL5I/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-21/">
+            <div class="lside">
+              <div class="d">21 Jan 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=0brdSaSZfRw" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/0brdSaSZfRw/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-20/">
+            <div class="lside">
+              <div class="d">20 Jan 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=PJs-tsmfeD4" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/PJs-tsmfeD4/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-19/">
+            <div class="lside">
+              <div class="d">19 Jan 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=3OtslwcjOy4" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/3OtslwcjOy4/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-18/">
+            <div class="lside">
+              <div class="d">18 Jan 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=ZiRiqN4Qmto" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/ZiRiqN4Qmto/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-15/">
+            <div class="lside">
+              <div class="d">15 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=qDLSQ47-WS0" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/qDLSQ47-WS0/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-13/">
+            <div class="lside">
+              <div class="d">13 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=9t2pCiBeSVI" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/9t2pCiBeSVI/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-12/">
+            <div class="lside">
+              <div class="d">12 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=9YVP57GLOF4" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/9YVP57GLOF4/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-11/">
+            <div class="lside">
+              <div class="d">11 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=AjrTu4efSF4" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/AjrTu4efSF4/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-08/">
+            <div class="lside">
+              <div class="d">8 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=sL3aDZB3XuA" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/sL3aDZB3XuA/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-07/">
+            <div class="lside">
+              <div class="d">7 Jan 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=S6-8tMYGVaA" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/S6-8tMYGVaA/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-06/">
+            <div class="lside">
+              <div class="d">6 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=y2M7stjyCXo" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/y2M7stjyCXo/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-05/">
+            <div class="lside">
+              <div class="d">5 Jan 2026</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=Yh8AMdQr918" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Yh8AMdQr918/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-04/">
+            <div class="lside">
+              <div class="d">4 Jan 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=pRnOKbY9_io" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/pRnOKbY9_io/mqdefault.jpg"></a>
+          <a class="body" href="2026-01-01/">
+            <div class="lside">
+              <div class="d">1 Jan 2026</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=aOVu4x-ZKms" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/aOVu4x-ZKms/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-31/">
+            <div class="lside">
+              <div class="d">31 Dec 2025</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=i8-fqEOeDFk" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/i8-fqEOeDFk/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-30/">
+            <div class="lside">
+              <div class="d">30 Dec 2025</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=RPUxgph_NqA" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/RPUxgph_NqA/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-29/">
+            <div class="lside">
+              <div class="d">29 Dec 2025</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=PzggXXhSIVk" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/PzggXXhSIVk/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-28/">
+            <div class="lside">
+              <div class="d">28 Dec 2025</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=Kl1ur1305ys" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Kl1ur1305ys/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-25/">
+            <div class="lside">
+              <div class="d">25 Dec 2025</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=gE2Jkg2Z8_s" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/gE2Jkg2Z8_s/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-23/">
+            <div class="lside">
+              <div class="d">23 Dec 2025</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=4XSOs5jr0Ss" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/4XSOs5jr0Ss/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-22/">
+            <div class="lside">
+              <div class="d">22 Dec 2025</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=T7Jg9XdPTXs" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/T7Jg9XdPTXs/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-21/">
+            <div class="lside">
+              <div class="d">21 Dec 2025</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=YIbTeFGgnkk" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/YIbTeFGgnkk/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-18/">
+            <div class="lside">
+              <div class="d">18 Dec 2025</div>
+              <div class="m"><span class="chip bias-bullish" style="border:0;padding:0;background:none">Bullish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div><div class="row-link ">
+          <a class="thumb sm" href="https://www.youtube.com/watch?v=f6aHoJICrPI" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/f6aHoJICrPI/mqdefault.jpg"></a>
+          <a class="body" href="2025-12-17/">
+            <div class="lside">
+              <div class="d">17 Dec 2025</div>
+              <div class="m"><span class="chip bias-bearish" style="border:0;padding:0;background:none">Bearish</span> · Unknown</div>
+            </div>
+            <div class="rside"><div class="tag" style="font-size:11px">no session</div></div>
+          </a></div>
 </div></main>
 <footer class="site"><div class="wrap">
-  <p class="disc"><b>Independent project.</b> Trade Mirror is an independent tracker and is
-  not affiliated with, endorsed by, or connected to Intraday Hunter. All trades shown are extracted
-  from publicly available YouTube videos for record-keeping. If you are Intraday Hunter or his team,
-  please reach out at gargkrishna1282002@gmail.com.</p>
+  <p class="disc"><b>Independent project.</b> Trade Mirror is an independent tracker, not affiliated
+  with or endorsed by Intraday Hunter. Trades are extracted from public YouTube videos for record-keeping.
+  If you are Intraday Hunter or his team, reach out at gargkrishna1282002@gmail.com.</p>
   
-      <h3>Have a suggestion?</h3>
-      <p class="small muted" style="margin:4px 0 10px">Tell us what to add or fix. Your email is optional.</p>
+      <h3>Suggest a change</h3>
+      <p class="small muted" style="margin:5px 0 11px">Spot something wrong, or want a feature added? Send it over. Email optional.</p>
       <form class="suggest" action="https://formsubmit.co/gargkrishna1282002@gmail.com" method="POST">
         <input type="hidden" name="_subject" value="New Trade Mirror suggestion">
         <input type="hidden" name="_captcha" value="false">
         <input type="text" name="_honey" style="display:none">
         <input type="email" name="email" placeholder="Your email (optional)">
-        <textarea name="message" placeholder="Your suggestion..." required></textarea>
-        <button class="btn" type="submit">Send suggestion</button>
+        <textarea name="message" placeholder="What should change?" required></textarea>
+        <button class="btn" type="submit">Send</button>
       </form>
 </div></footer>
 </body>
