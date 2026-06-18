@@ -95,6 +95,23 @@ font-weight:700;padding:11px 16px;border-radius:12px;font-size:14px}
 display:flex;align-items:center;justify-content:space-between}
 .verdict.win{background:var(--winbg)}.verdict.loss{background:var(--lossbg)}
 hr.sep{border:0;border-top:1px solid var(--line);margin:24px 0}
+/* thumbnails + ledger card styling (matches the app) */
+.thumb{display:block;flex-shrink:0;width:112px;border-radius:8px;overflow:hidden;
+border:1px solid var(--line);background:var(--ink);aspect-ratio:16/9}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb.sm{width:88px}
+.ledger{display:flex;gap:13px;align-items:flex-start;border:1px solid var(--line);
+border-left:3px solid var(--slate);border-radius:14px;background:var(--card);
+padding:13px 15px;margin-bottom:9px;text-decoration:none}
+.ledger:hover{border-color:var(--gold)}
+.ledger.win{border-left-color:var(--win)}
+.ledger.loss{border-left-color:var(--loss)}
+.ledger .body{flex:1;min-width:0}
+.rail{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--slate);
+font-family:"IBM Plex Mono",monospace;margin-top:6px;max-width:320px}
+.rail .ln{position:relative;flex:1;height:1px;background:var(--line);min-width:34px}
+.rail .ln::before{content:"";position:absolute;left:-1px;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--win)}
+.rail .ln::after{content:"";position:absolute;right:-1px;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--loss)}
 footer.site{border-top:1px solid var(--line);background:var(--card);margin-top:30px;padding:24px 0 40px}
 footer .disc{font-size:13px;color:var(--slate);margin-bottom:16px}
 .suggest textarea,.suggest input{width:100%;border:1px solid var(--line);border-radius:10px;
@@ -116,12 +133,16 @@ padding:10px 12px;font:inherit;font-size:14px;background:var(--well);color:var(-
 <div class="crumb"><a href="../../">Home</a> / <a href="../">Sessions</a> / 29 May 2026</div>
     <h1>Intraday Hunter Trades — 29 May 2026</h1>
     <div class="hero win">
-      <div class="row">
-        <div><div class="small muted">Friday</div>
-        <div class="big win">+₹0</div>
-        <div class="small muted">— · 3 trades</div></div>
-        <span class="stamp win">Profit</span>
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <a class="thumb " href="https://www.youtube.com/watch?v=sqnhKMMkv-g" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/sqnhKMMkv-g/mqdefault.jpg"></a>
+        <div class="row" style="flex:1;min-width:0">
+          <div><div class="small muted">Friday</div>
+          <div class="big win">+₹0</div>
+          <div class="small muted">— · 3 trades</div></div>
+          <span class="stamp win">Profit</span>
+        </div>
       </div>
+      
       <p class="small" style="margin-top:12px;border-left:3px solid var(--gold);padding-left:10px">The trader identified a potential for a positive reversal due to the absence of buyer stop-losses after a holiday. Despite initial volatility and a sharp dip, the trader held their long positions and successfully booked profits once the market recovered.</p>
     </div>
     <h2>Trades (3)</h2>
