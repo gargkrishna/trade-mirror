@@ -14,41 +14,46 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Intraday Hunter Plan vs Actual — 10 Feb 2026 | Trade Mirror">
 <meta name="twitter:description" content="Planned bias: Bullish. Result: Loss -₹2.48L. Partial — Intraday Hunter&#x27;s 10 Feb 2026 plan vs actual.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#14110F;--paper:#FBF7F0;--card:#FFF;--win:#0B7A3B;--winbg:#E7F5EC;
---loss:#C42026;--lossbg:#FBE9E9;--gold:#B07A00;--goldbg:#FBF1D6;--slate:#6B6258;--line:#E9E2D6}
-html{-webkit-text-size-adjust:100%}
-body{background:var(--paper);color:var(--ink);font-family:Inter,system-ui,-apple-system,sans-serif;
-line-height:1.6;font-size:16px}
-.num{font-family:"Archivo",Inter,sans-serif;font-variant-numeric:tabular-nums}
+:root{--ink:#0A0E15;--paper:#0A0E15;--card:#101622;--well:#0C111B;
+--win:#33C98E;--winbg:rgba(51,201,142,0.10);
+--loss:#F0565C;--lossbg:rgba(240,86,92,0.10);
+--gold:#F0A63C;--goldbg:rgba(240,166,60,0.10);
+--slate:#8A96AB;--line:rgba(154,170,196,0.13);--hi:#E8EDF6}
+html{-webkit-text-size-adjust:100%;color-scheme:dark}
+body{background:radial-gradient(1100px 480px at 50% -180px,rgba(240,166,60,0.07),transparent 62%),#0A0E15;
+color:var(--hi);font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+line-height:1.6;font-size:16px;min-height:100vh}
+.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
 .wrap{max-width:760px;margin:0 auto;padding:0 18px}
 a{color:inherit}
-header.site{border-bottom:1px solid var(--line);background:var(--card)}
+header.site{border-bottom:1px solid var(--line);background:rgba(16,22,34,0.85);backdrop-filter:blur(8px)}
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:18px}
-.brand .mark{width:30px;height:30px;border-radius:7px;background:var(--ink);color:var(--paper);
-display:grid;place-items:center;font-weight:800;font-size:13px;font-family:"Archivo Black",sans-serif}
+.brand .mark{width:30px;height:30px;border-radius:7px;background:var(--gold);color:var(--ink);
+display:grid;place-items:center;font-weight:900;font-size:13px;font-family:"Archivo",sans-serif}
 nav.top a{text-decoration:none;color:var(--slate);font-weight:600;font-size:14px;margin-left:16px}
-nav.top a:hover{color:var(--ink)}
+nav.top a:hover{color:var(--hi)}
 .badge-v{font-size:12px;font-weight:700;color:var(--win);background:var(--winbg);
 padding:3px 9px;border-radius:999px}
 main{padding:26px 0 10px}
-h1{font-size:26px;line-height:1.25;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
-h2{font-size:19px;font-weight:800;margin:28px 0 12px}
+h1{font-size:26px;line-height:1.25;font-weight:800;letter-spacing:-.01em;margin-bottom:6px;font-family:"Archivo",sans-serif}
+h2{font-size:19px;font-weight:800;margin:28px 0 12px;font-family:"Archivo",sans-serif}
 h3{font-size:15px;font-weight:700}
 p.lead{color:var(--slate);margin-bottom:18px}
 .muted{color:var(--slate)}
 .small{font-size:13px}
 /* result stamp - the signature element */
 .stamp{display:inline-block;border:3px double currentColor;border-radius:8px;padding:3px 12px;
-font-family:"Archivo Black",sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+font-family:"Archivo",sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
 transform:rotate(-6deg);line-height:1}
-.stamp.win{color:var(--win)}.stamp.loss{color:var(--loss)}
+.stamp.win{color:var(--win);text-shadow:0 0 16px rgba(51,201,142,0.35)}
+.stamp.loss{color:var(--loss);text-shadow:0 0 16px rgba(240,86,92,0.35)}
 .hero{border:2px solid;border-radius:20px;padding:22px}
-.hero.win{border-color:rgba(11,122,59,.35);background:var(--winbg)}
-.hero.loss{border-color:rgba(196,32,38,.35);background:var(--lossbg)}
+.hero.win{border-color:rgba(51,201,142,.35);background:var(--winbg)}
+.hero.loss{border-color:rgba(240,86,92,.35);background:var(--lossbg)}
 .hero .big{font-family:"Archivo",sans-serif;font-weight:900;line-height:1;
 font-size:clamp(40px,13vw,66px);font-variant-numeric:tabular-nums}
 .hero .big.win{color:var(--win)}.hero .big.loss{color:var(--loss)}
@@ -57,7 +62,7 @@ font-size:clamp(40px,13vw,66px);font-variant-numeric:tabular-nums}
 .pill.win{background:var(--winbg);color:var(--win)}
 .pill.loss{background:var(--lossbg);color:var(--loss)}
 .pill.gold{background:var(--goldbg);color:var(--gold)}
-.pill.slate{background:#EFEBE3;color:var(--slate)}
+.pill.slate{background:var(--well);color:var(--slate)}
 .pill.long{background:var(--winbg);color:var(--win)}
 .pill.short{background:var(--lossbg);color:var(--loss)}
 .grid{display:grid;gap:12px}
@@ -67,12 +72,12 @@ font-size:clamp(40px,13vw,66px);font-variant-numeric:tabular-nums}
 .stat .v{font-family:"Archivo",sans-serif;font-weight:900;font-size:24px;font-variant-numeric:tabular-nums}
 .stat .l{font-size:12px;color:var(--slate);font-weight:600;margin-top:2px}
 .card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:16px;margin-bottom:12px}
-.card.win{border-color:rgba(11,122,59,.28)}
-.card.loss{border-color:rgba(196,32,38,.28)}
-.legs{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.card.win{border-color:rgba(51,201,142,.28)}
+.card.loss{border-color:rgba(240,86,92,.28)}
+.legs{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--well)}
 .legs+.legs{margin-top:8px}
 .kv{display:grid;grid-template-columns:auto auto;gap:4px 18px;font-size:13px;color:var(--slate)}
-.kv b{color:var(--ink);font-weight:700}
+.kv b{color:var(--hi);font-weight:700}
 .scn{display:grid;gap:8px;grid-template-columns:1fr}
 .scn .box{border:1px solid var(--line);border-radius:10px;padding:10px}
 .scn .box .h{font-size:12px;font-weight:700;color:var(--slate);margin-bottom:3px}
@@ -81,10 +86,10 @@ font-size:clamp(40px,13vw,66px);font-variant-numeric:tabular-nums}
 .lev.r{background:var(--lossbg);color:var(--loss)}.lev.s{background:var(--winbg);color:var(--win)}
 .list a{display:block;text-decoration:none;border:1px solid var(--line);border-radius:14px;
 background:var(--card);padding:13px 15px;margin-bottom:9px}
-.list a:hover{border-color:#cfc7b8}
-.btn{display:inline-block;text-decoration:none;background:var(--ink);color:var(--paper);
+.list a:hover{border-color:var(--gold)}
+.btn{display:inline-block;text-decoration:none;background:var(--gold);color:var(--ink);
 font-weight:700;padding:11px 16px;border-radius:12px;font-size:14px}
-.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.btn.ghost{background:transparent;color:var(--hi);border:2px solid var(--line)}
 .btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
 .verdict{border-radius:0 0 16px 16px;margin:14px -16px -16px;padding:12px 16px;
 display:flex;align-items:center;justify-content:space-between}
@@ -93,13 +98,13 @@ hr.sep{border:0;border-top:1px solid var(--line);margin:24px 0}
 footer.site{border-top:1px solid var(--line);background:var(--card);margin-top:30px;padding:24px 0 40px}
 footer .disc{font-size:13px;color:var(--slate);margin-bottom:16px}
 .suggest textarea,.suggest input{width:100%;border:1px solid var(--line);border-radius:10px;
-padding:10px 12px;font:inherit;font-size:14px;background:var(--paper);margin-bottom:8px}
+padding:10px 12px;font:inherit;font-size:14px;background:var(--well);color:var(--hi);margin-bottom:8px}
 .suggest textarea{min-height:84px;resize:vertical}
 .suggest button{cursor:pointer}
 .crumb{font-size:13px;color:var(--slate);margin-bottom:12px}
 .crumb a{text-decoration:none}
 @media(max-width:520px){.grid.s3{grid-template-columns:1fr 1fr}.hero{padding:18px}}
-:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 </style>
 </head>
 <body>
