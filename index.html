@@ -134,6 +134,10 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
 .suggest input,.suggest textarea{width:100%;background:var(--well);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;color:var(--hi);margin-bottom:8px}
 .suggest textarea{min-height:72px;resize:vertical}
 .suggest .btn{background:var(--amber);color:var(--ink);font-weight:600;border:0;border-radius:10px;padding:10px 18px;font:inherit;cursor:pointer}
+.suggest .btn:disabled{opacity:0.55;cursor:default}
+.suggest-status{margin-top:10px;font-size:13px;font-family:"IBM Plex Mono",monospace;padding:8px 12px;border-radius:8px}
+.suggest-status.ok{color:var(--win);background:rgba(51,201,142,0.1);border:1px solid rgba(51,201,142,0.35)}
+.suggest-status.err{color:var(--loss);background:rgba(240,86,92,0.1);border:1px solid rgba(240,86,92,0.35)}
 @media(max-width:640px){.board .cell{min-width:50%;flex:1 0 40%}.scard .top{flex-direction:column;align-items:stretch;gap:10px}.thumb{width:160px}.scard .mid{flex:none}.scard .net{margin-left:0;text-align:left}.scard .net .v{font-size:24px}.rail{max-width:none}.pcols{grid-template-columns:1fr}.pcol+.pcol{border-left:0;border-top:1px solid var(--line)}}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:4px}
 </style>
@@ -1272,14 +1276,42 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
   from the broker screen by OCR; figures that fail an automatic read check are marked "unverified" and excluded
   from totals. If you are Intraday Hunter or his team, reach out at gargkrishna1282002@gmail.com.</p>
   
-      <form class="suggest" action="https://formsubmit.co/gargkrishna1282002@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="New Trade Mirror suggestion">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="text" name="_honey" style="display:none">
+      <form class="suggest" id="suggestForm">
         <input type="email" name="email" placeholder="Your email (optional)">
         <textarea name="message" placeholder="Spot something wrong, or want a feature added?" required></textarea>
-        <button class="btn" type="submit">Send suggestion</button>
+        <button class="btn" type="submit" id="suggestBtn">Send suggestion</button>
+        <div id="suggestMsg" class="suggest-status" style="display:none"></div>
       </form>
+      <script>
+      (function(){
+        var form=document.getElementById('suggestForm'); if(!form) return;
+        var btn=document.getElementById('suggestBtn'), msg=document.getElementById('suggestMsg');
+        var sending=false;
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          if(sending) return;
+          var text=form.message.value.trim(); if(!text) return;
+          sending=true; btn.disabled=true; btn.textContent='Sending…';
+          fetch('https://formsubmit.co/ajax/gargkrishna1282002@gmail.com', {
+            method:'POST',
+            headers:{'Content-Type':'application/json','Accept':'application/json'},
+            body:JSON.stringify({_subject:'New Trade Mirror suggestion', _captcha:'false',
+              email:form.email.value||'anonymous', message:text})
+          })
+          .then(function(r){return r.json();})
+          .then(function(){
+            form.reset(); btn.style.display='none';
+            msg.style.display='block'; msg.className='suggest-status ok';
+            msg.textContent='Thanks — your suggestion was sent.';
+          })
+          .catch(function(){
+            sending=false; btn.disabled=false; btn.textContent='Send suggestion';
+            msg.style.display='block'; msg.className='suggest-status err';
+            msg.textContent='Could not send — please try again.';
+          });
+        });
+      })();
+      </script>
 </footer>
 </div>
 </body>
