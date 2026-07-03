@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Intraday Hunter — Trade Ledger | Trade Mirror</title>
-<meta name="description" content="Intraday Hunter&#x27;s intraday F&amp;O ledger — 929 sessions tracked, latest 30 shown with real ₹ P&amp;L and plan-vs-actual.">
+<meta name="description" content="Intraday Hunter&#x27;s intraday F&amp;O ledger — latest 30 sessions with real ₹ P&amp;L and plan-vs-actual.">
 <link rel="canonical" href="https://gargkrishna.github.io/trade-mirror/">
 <meta property="og:type" content="website"><meta property="og:title" content="Intraday Hunter — Trade Ledger | Trade Mirror">
-<meta property="og:description" content="Intraday Hunter&#x27;s intraday F&amp;O ledger — 929 sessions tracked, latest 30 shown with real ₹ P&amp;L and plan-vs-actual."><meta property="og:url" content="https://gargkrishna.github.io/trade-mirror/">
+<meta property="og:description" content="Intraday Hunter&#x27;s intraday F&amp;O ledger — latest 30 sessions with real ₹ P&amp;L and plan-vs-actual."><meta property="og:url" content="https://gargkrishna.github.io/trade-mirror/">
 <meta property="og:site_name" content="Trade Mirror">
 <meta name="twitter:card" content="summary"><meta name="twitter:title" content="Intraday Hunter — Trade Ledger | Trade Mirror">
-<meta name="twitter:description" content="Intraday Hunter&#x27;s intraday F&amp;O ledger — 929 sessions tracked, latest 30 shown with real ₹ P&amp;L and plan-vs-actual.">
+<meta name="twitter:description" content="Intraday Hunter&#x27;s intraday F&amp;O ledger — latest 30 sessions with real ₹ P&amp;L and plan-vs-actual.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -45,7 +45,8 @@ box-shadow:0 12px 30px rgba(0,0,0,0.30);display:flex;flex-wrap:wrap}
 .board .curvebox{flex-basis:40%;min-width:300px;background:var(--well);border-bottom:1px solid var(--line);position:relative;min-height:104px}
 .board .curvebox .cap{position:absolute;top:8px;right:12px;font-family:"IBM Plex Mono",monospace;font-size:11px}
 .dots{display:flex;flex-wrap:wrap;gap:4px;max-width:170px}
-.dots i{width:8px;height:8px;border-radius:50%;display:block}
+.dots i{width:8px;height:8px;border-radius:50%;display:block;cursor:default}
+.dots i:hover{outline:2px solid var(--line2);outline-offset:1px}
 .dots i.w{background:var(--win)} .dots i.l{background:var(--loss)} .dots i.n{background:rgba(154,170,196,0.4)}
 
 /* CSS-only tabs */
@@ -86,18 +87,20 @@ box-shadow:0 12px 30px rgba(0,0,0,0.30);display:flex;flex-wrap:wrap}
 .scard .net{text-align:right;flex-shrink:0;margin-left:auto}
 .scard .net .v{font-family:"Archivo",sans-serif;font-weight:900;font-size:25px;line-height:1}
 .scard .net .l{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--lo);margin-top:3px}
-.leg{padding:10px 15px;display:flex;align-items:center;gap:11px;flex-wrap:wrap}
-.leg+.leg{border-top:1px solid var(--line)}
-.leg:hover{background:rgba(12,17,27,0.5)}
-.leg .inst{font-family:"IBM Plex Mono",monospace;font-size:13px;min-width:150px}
-.dchip{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px;border:1px solid}
-.dchip.long{color:var(--win);border-color:rgba(51,201,142,0.4);background:rgba(51,201,142,0.1)}
-.dchip.short{color:var(--loss);border-color:rgba(240,86,92,0.4);background:rgba(240,86,92,0.1)}
-.leg .px{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--lo)}
-.leg .px b{color:var(--hi);font-weight:500}
-.leg .qty{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--lo)}
-.leg .sp{flex:1}
-.leg .amt{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;text-align:right}
+
+/* filter bar */
+.filterbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;padding:12px;
+background:var(--card);border:1px solid var(--line);border-radius:12px}
+.filterbar label{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--lo);display:flex;flex-direction:column;gap:4px}
+.filterbar input,.filterbar select{font:inherit;font-size:12px;font-family:"IBM Plex Mono",monospace;background:var(--well);
+border:1px solid var(--line);border-radius:8px;padding:6px 8px;color:var(--hi);min-width:108px}
+.filterbar input:focus,.filterbar select:focus{outline:2px solid var(--amber);outline-offset:1px}
+.filterbar .fspacer{flex:1}
+.filterbar .freset{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+color:var(--lo);background:transparent;border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer;align-self:flex-end}
+.filterbar .freset:hover{color:var(--hi);border-color:var(--line2)}
+.fempty{border:1px solid var(--line);border-radius:12px;padding:26px;text-align:center;color:var(--lo);font-size:13px;margin-bottom:13px}
+@media(max-width:640px){.filterbar{gap:10px}.filterbar label{flex:1 1 45%}.filterbar input,.filterbar select{width:100%}}
 
 /* plan card (app PlanCard) */
 .pcard{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:13px;background:var(--card)}
@@ -131,7 +134,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
 .suggest input,.suggest textarea{width:100%;background:var(--well);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;color:var(--hi);margin-bottom:8px}
 .suggest textarea{min-height:72px;resize:vertical}
 .suggest .btn{background:var(--amber);color:var(--ink);font-weight:600;border:0;border-radius:10px;padding:10px 18px;font:inherit;cursor:pointer}
-@media(max-width:640px){.board .cell{min-width:50%;flex:1 0 40%}.scard .top{flex-direction:column;align-items:stretch;gap:10px}.thumb{width:160px}.scard .mid{flex:none}.scard .net{margin-left:0;text-align:left}.scard .net .v{font-size:24px}.rail{max-width:none}.leg .inst{min-width:0;flex-basis:100%}.pcols{grid-template-columns:1fr}.pcol+.pcol{border-left:0;border-top:1px solid var(--line)}}
+@media(max-width:640px){.board .cell{min-width:50%;flex:1 0 40%}.scard .top{flex-direction:column;align-items:stretch;gap:10px}.thumb{width:160px}.scard .mid{flex:none}.scard .net{margin-left:0;text-align:left}.scard .net .v{font-size:24px}.rail{max-width:none}.pcols{grid-template-columns:1fr}.pcol+.pcol{border-left:0;border-top:1px solid var(--line)}}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:4px}
 </style>
 </head>
@@ -141,7 +144,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
 <header class="app">
   <div>
     <div class="brand">Trade<span class="sl">/</span>Mirror</div>
-    <div class="subline">Intraday Hunter · ledger rebuilt from his public recaps · 929 sessions total</div>
+    <div class="subline">Intraday Hunter · ledger rebuilt from his public recaps · last 30 sessions</div>
   </div>
   <div class="hbtns"><a class="hbtn" href="https://www.youtube.com/results?search_query=intraday+hunter" target="_blank" rel="nofollow noopener">Latest video ↗</a></div>
 </header>
@@ -150,10 +153,10 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
   <div class="cells">
     <div class="cell"><div class="l">Net P&amp;L · 30</div><div class="v win-fg glow-win">+₹46.58L</div></div>
     <div class="cell"><div class="l">Win rate · 30</div><div class="v">77.3<small>%</small></div></div>
-    <div class="cell"><div class="l">Sessions</div><div class="v">30<small>/929</small></div></div>
-    <div class="cell"><div class="l">Plans</div><div class="v">209</div></div>
+    <div class="cell"><div class="l">Sessions</div><div class="v">30</div></div>
+    <div class="cell"><div class="l">Plans</div><div class="v">30</div></div>
     <div class="cell"><div class="l">Top setup · 30</div><div class="v" style="font-size:14px">trendline break</div></div>
-    <div class="cell"><div class="l">Last 30</div><div class="dots"><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="l"></i><i class="w"></i><i class="w"></i><i class="l"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="l"></i><i class="w"></i><i class="w"></i><i class="l"></i><i class="w"></i><i class="l"></i><i class="w"></i><i class="w"></i><i class="l"></i><i class="l"></i><i class="w"></i><i class="w"></i><i class="w"></i></div></div>
+    <div class="cell"><div class="l">Last 30</div><div class="dots"><i class="w" title="21 May 2026 · Profit"></i><i class="w" title="22 May 2026 · Profit"></i><i class="w" title="25 May 2026 · Profit"></i><i class="w" title="26 May 2026 · Profit"></i><i class="l" title="27 May 2026 · Loss"></i><i class="w" title="29 May 2026 · Profit"></i><i class="w" title="1 Jun 2026 · Profit"></i><i class="l" title="2 Jun 2026 · Loss"></i><i class="w" title="3 Jun 2026 · Profit"></i><i class="w" title="4 Jun 2026 · Profit"></i><i class="w" title="5 Jun 2026 · Profit"></i><i class="w" title="8 Jun 2026 · Profit"></i><i class="w" title="9 Jun 2026 · Profit"></i><i class="w" title="10 Jun 2026 · Profit"></i><i class="w" title="11 Jun 2026 · Profit"></i><i class="w" title="12 Jun 2026 · Profit"></i><i class="w" title="15 Jun 2026 · Profit"></i><i class="l" title="16 Jun 2026 · Loss"></i><i class="w" title="17 Jun 2026 · Profit"></i><i class="w" title="18 Jun 2026 · Profit"></i><i class="l" title="19 Jun 2026 · Loss"></i><i class="w" title="22 Jun 2026 · Profit"></i><i class="l" title="23 Jun 2026 · Loss"></i><i class="w" title="24 Jun 2026 · Profit"></i><i class="w" title="25 Jun 2026 · Profit"></i><i class="l" title="29 Jun 2026 · Loss"></i><i class="l" title="30 Jun 2026 · Loss"></i><i class="w" title="1 Jul 2026 · Profit"></i><i class="w" title="2 Jul 2026 · Profit"></i><i class="w" title="3 Jul 2026 · Profit"></i></div></div>
   </div>
   <div class="curvebox"><svg viewBox="0 0 560 104" preserveAspectRatio="none" style="width:100%;height:104px" role="img" aria-label="Cumulative profit"><defs><linearGradient id="eq" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0A63C" stop-opacity="0.22"/><stop offset="100%" stop-color="#F0A63C" stop-opacity="0"/></linearGradient></defs><path d="M10.0,87.1 L28.6,80.2 L47.2,75.5 L65.9,70.3 L84.5,74.9 L103.1,74.9 L121.7,68.9 L140.3,74.2 L159.0,65.4 L177.6,59.0 L196.2,53.5 L214.8,48.5 L233.4,41.4 L252.1,36.6 L270.7,31.1 L289.3,26.3 L307.9,21.8 L326.6,26.2 L345.2,22.1 L363.8,18.1 L382.4,22.3 L401.0,21.0 L419.7,24.9 L438.3,20.6 L456.9,16.9 L475.5,21.5 L494.1,25.6 L512.8,20.1 L531.4,13.5 L550.0,10.0 L550.0,94 L10,94 Z" fill="url(#eq)"/><path d="M10.0,87.1 L28.6,80.2 L47.2,75.5 L65.9,70.3 L84.5,74.9 L103.1,74.9 L121.7,68.9 L140.3,74.2 L159.0,65.4 L177.6,59.0 L196.2,53.5 L214.8,48.5 L233.4,41.4 L252.1,36.6 L270.7,31.1 L289.3,26.3 L307.9,21.8 L326.6,26.2 L345.2,22.1 L363.8,18.1 L382.4,22.3 L401.0,21.0 L419.7,24.9 L438.3,20.6 L456.9,16.9 L475.5,21.5 L494.1,25.6 L512.8,20.1 L531.4,13.5 L550.0,10.0" fill="none" stroke="#F0A63C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="550.0" cy="10.0" r="3" fill="#F0A63C"/></svg><div class="cap win-fg">cum +₹46.58L</div></div>
 </section>
@@ -167,7 +170,17 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
 
 <div class="view-sessions">
   <div class="ledhead"><h2>Ledger</h2><span class="c">last 30 sessions · newest first · real ₹ P&amp;L, verified leg by leg</span></div>
-  <div class="scard win">
+  <div class="filterbar">
+      <label>From<input type="date" id="f-from"></label>
+      <label>To<input type="date" id="f-to"></label>
+      <label>Setup<select id="f-setup"><option value="">All setups</option><option value="SL hunting / Gap-down reversal">SL hunting / Gap-down reversal</option><option value="gap up / stop loss hunting">gap up / stop loss hunting</option><option value="gap-down trap">gap-down trap</option><option value="gap-up trap">gap-up trap</option><option value="news-based">news-based</option><option value="short covering / trend reversal">short covering / trend reversal</option><option value="support bounce">support bounce</option><option value="trap reversal">trap reversal</option><option value="trap trading">trap trading</option><option value="trendline break">trendline break</option></select></label>
+      <label>Result<select id="f-result"><option value="">All</option><option value="PROFIT">Profit</option><option value="LOSS">Loss</option></select></label>
+      <label>Type<select id="f-opt"><option value="">Call / Put</option><option value="CE">Call (CE)</option><option value="PE">Put (PE)</option></select></label>
+      <span class="fspacer"></span>
+      <button type="button" class="freset" id="f-reset">Reset</button>
+    </div>
+  <div id="f-empty" class="fempty" style="display:none">No sessions match these filters.</div>
+  <div class="scard win" data-date="2026-07-03" data-result="PROFIT" data-setups="news-based|support bounce" data-opt="PE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=BvkCsOgkigI" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/BvkCsOgkigI/mqdefault.jpg"></a>
         <div class="mid">
@@ -178,28 +191,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹1.93L</div>
           <div class="l">net session · +110.15 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 57900 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>—</b> → <b>699.15</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 58000 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>816.1</b> → <b>742.5</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹86,112</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 78000 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>457.3</b> → <b>425.65</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt win-fg">+₹28,485</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24300 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>87.25</b> → <b>82.35</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹6,688</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-07-02" data-result="PROFIT" data-setups="trendline break" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=WhfVxV0h5bo" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/WhfVxV0h5bo/mqdefault.jpg"></a>
         <div class="mid">
@@ -210,28 +202,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹3.67L</div>
           <div class="l">net session · +254.56 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 58300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>1093.0</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 58200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1060.03</b> → <b>1153.1</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.09L</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 77200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>180.58</b> → <b>309.05</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.16L</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24100 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>140.68</b> → <b>173.7</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹45,073</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-07-01" data-result="PROFIT" data-setups="support bounce" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=Jj9yec-QDvI" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/Jj9yec-QDvI/mqdefault.jpg"></a>
         <div class="mid">
@@ -242,28 +213,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹3.06L</div>
           <div class="l">net session · +199.27 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 57600 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>1269.65</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57700 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1131.6</b> → <b>1213.7</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹96,057</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 76700 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>338.18</b> → <b>426.55</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt win-fg">+₹79,533</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23900 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>203.2</b> → <b>232.0</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹39,312</span>
-        </div></div>
-    </div><div class="scard loss">
+    </div><div class="scard loss" data-date="2026-06-30" data-result="LOSS" data-setups="support bounce" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=SKgchmcArt0" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/SKgchmcArt0/mqdefault.jpg"></a>
         <div class="mid">
@@ -274,28 +224,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v loss-fg glow-loss">-₹2.27L</div>
           <div class="l">net session · -170.86 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 57900 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>126.45</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57800 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>229.9</b> → <b>166.65</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹74,002</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 76800 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>400.41</b> → <b>322.2</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹70,388</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23900 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>90.2</b> → <b>60.8</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹40,131</span>
-        </div></div>
-    </div><div class="scard loss">
+    </div><div class="scard loss" data-date="2026-06-29" data-result="LOSS" data-setups="support bounce" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=gMu0DU4HJ00" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/gMu0DU4HJ00/mqdefault.jpg"></a>
         <div class="mid">
@@ -306,28 +235,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v loss-fg glow-loss">-₹2.57L</div>
           <div class="l">net session · -490.78 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 58200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>209.85</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 58300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>168.45</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 77200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>904.75</b> → <b>426.25</b></span>
-          <span class="qty">×84</span>
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24100 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>92.33</b> → <b>80.05</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹16,762</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-25" data-result="PROFIT" data-setups="trendline break" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=1e14YWvOtzs" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/1e14YWvOtzs/mqdefault.jpg"></a>
         <div class="mid">
@@ -338,28 +246,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.04L</div>
           <div class="l">net session · +139.04 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 58400 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>314.85</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 58500 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>265.0</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 77400 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>97.2</b> → <b>211.65</b></span>
-          <span class="qty">×1000</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.14L</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24150 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>101.81</b> → <b>126.4</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹33,566</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-24" data-result="PROFIT" data-setups="support bounce" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=J64qDUp2M88" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/J64qDUp2M88/mqdefault.jpg"></a>
         <div class="mid">
@@ -370,28 +257,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.38L</div>
           <div class="l">net session · +39.25 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 57200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>645.6</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>581.25</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 76300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>350.0</b> → <b>384.4</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt win-fg">+₹28,896</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23850 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>170.15</b> → <b>175.0</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹6,620</span>
-        </div></div>
-    </div><div class="scard loss">
+    </div><div class="scard loss" data-date="2026-06-23" data-result="LOSS" data-setups="trap reversal" data-opt="PE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=LmO-Y1XzqgY" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/LmO-Y1XzqgY/mqdefault.jpg"></a>
         <div class="mid">
@@ -402,28 +268,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v loss-fg glow-loss">-₹2.14L</div>
           <div class="l">net session · -76.43 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 57900 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>—</b> → <b>347.15</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57800 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>—</b> → <b>305.1</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 77000 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>133.02</b> → <b>209.45</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹64,201</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24100 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>—</b> → <b>19.3</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-22" data-result="PROFIT" data-setups="gap-up trap" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=nKpGGQ_IYvs" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/nKpGGQ_IYvs/mqdefault.jpg"></a>
         <div class="mid">
@@ -434,28 +279,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹69,527</div>
           <div class="l">net session · +47.73 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 57900 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>528.85</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57800 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>586.67</b> → <b>588.65</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹2,317</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 77100 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>480.9</b> → <b>516.35</b></span>
-          <span class="qty">×1000</span>
-          <span class="sp"></span><span class="amt win-fg">+₹35,450</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24100 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>94.8</b> → <b>105.1</b></span>
-          <span class="qty">×1300</span>
-          <span class="sp"></span><span class="amt win-fg">+₹13,391</span>
-        </div></div>
-    </div><div class="scard loss">
+    </div><div class="scard loss" data-date="2026-06-19" data-result="LOSS" data-setups="gap-down trap" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=O_PHs9q1QqA" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/O_PHs9q1QqA/mqdefault.jpg"></a>
         <div class="mid">
@@ -466,28 +290,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v loss-fg glow-loss">-₹2.33L</div>
           <div class="l">net session · -35.65 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 57700 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>553.6</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57800 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>502.8</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 76800 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>517.25</b> → <b>492.15</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹22,590</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23950 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>143.55</b> → <b>133.0</b></span>
-          <span class="qty">×1300</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹13,715</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-18" data-result="PROFIT" data-setups="trendline break" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=G9HR80PLK8E" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/G9HR80PLK8E/mqdefault.jpg"></a>
         <div class="mid">
@@ -498,28 +301,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.26L</div>
           <div class="l">net session · +139.79 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">SENSEX 77100 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>275.75</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57600 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>663.08</b> → <b>722.0</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹68,936</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57700 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>600.98</b> → <b>664.6</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt win-fg">+₹57,260</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24100 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>126.9</b> → <b>144.15</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹23,547</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-17" data-result="PROFIT" data-setups="support bounce" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=a3jih441RZo" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/a3jih441RZo/mqdefault.jpg"></a>
         <div class="mid">
@@ -530,28 +312,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.24L</div>
           <div class="l">net session · +213.47 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 57200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>723.13</b> → <b>748.2</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹33,603</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>670.55</b> → <b>695.25</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹33,696</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 76800 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>331.9</b> → <b>460.1</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.09L</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24000 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>159.45</b> → <b>194.95</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹48,458</span>
-        </div></div>
-    </div><div class="scard loss">
+    </div><div class="scard loss" data-date="2026-06-16" data-result="LOSS" data-setups="trendline break" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=XHIlEHikp6k" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/XHIlEHikp6k/mqdefault.jpg"></a>
         <div class="mid">
@@ -562,28 +323,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v loss-fg glow-loss">-₹2.42L</div>
           <div class="l">net session · -146.20 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 57300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>702.7</b> → <b>629.75</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹83,772</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57400 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>581.85</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 76500 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>417.9</b> → <b>365.45</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹47,205</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23900 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>65.3</b> → <b>44.5</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹28,392</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-15" data-result="PROFIT" data-setups="support bounce" data-opt="PE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=o0a5gq5i_Mo" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/o0a5gq5i_Mo/mqdefault.jpg"></a>
         <div class="mid">
@@ -594,28 +334,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.48L</div>
           <div class="l">net session · +165.42 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">SENSEX 76700 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>517.2</b> → <b>541.25</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt win-fg">+₹32,844</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57500 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>773.48</b> → <b>842.6</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.02L</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 57400 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>724.65</b> → <b>791.5</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.01L</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23950 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>106.2</b> → <b>111.6</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹12,080</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-12" data-result="PROFIT" data-setups="news-based" data-opt="PE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=z3Hutez964M" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/z3Hutez964M/mqdefault.jpg"></a>
         <div class="mid">
@@ -626,28 +345,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.67L</div>
           <div class="l">net session · +234.07 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">SENSEX 74800 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>540.4</b> → <b>630.85</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt win-fg">+₹74,004</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 55800 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>768.85</b> → <b>833.5</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹86,698</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 55700 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>728.15</b> → <b>787.95</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹80,788</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23300 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>83.53</b> → <b>102.7</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹25,553</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-11" data-result="PROFIT" data-setups="SL hunting / Gap-down reversal" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=CqgTVEkJ4wY" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/CqgTVEkJ4wY/mqdefault.jpg"></a>
         <div class="mid">
@@ -658,28 +356,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹3.03L</div>
           <div class="l">net session · +83.88 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 54900 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>1050.35</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 55000 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>992.15</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 73600 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>151.42</b> → <b>216.4</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt win-fg">+₹54,583</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23100 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>161.3</b> → <b>180.2</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹25,799</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-10" data-result="PROFIT" data-setups="trendline break" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=0PUcIYQOits" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/0PUcIYQOits/mqdefault.jpg"></a>
         <div class="mid">
@@ -690,28 +367,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.68L</div>
           <div class="l">net session · +180.03 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 55500 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>925.35</b> → <b>976.9</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹76,168</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 55400 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>965.85</b> → <b>1025.35</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹92,079</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 74300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>336.2</b> → <b>376.15</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt win-fg">+₹60,606</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>194.72</b> → <b>223.75</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹39,627</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-09" data-result="PROFIT" data-setups="gap up / stop loss hunting" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=wUfqG4ssPvE" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/wUfqG4ssPvE/mqdefault.jpg"></a>
         <div class="mid">
@@ -722,28 +378,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹3.95L</div>
           <div class="l">net session · +351.12 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">SENSEX 73900 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>466.05</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 54500 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1104.53</b> → <b>1240.3</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.80L</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 54600 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>975.9</b> → <b>1186.15</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.77L</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>75.85</b> → <b>80.95</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹6,962</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-08" data-result="PROFIT" data-setups="trap trading" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=UOWNNA-I-Fo" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/UOWNNA-I-Fo/mqdefault.jpg"></a>
         <div class="mid">
@@ -754,28 +389,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.76L</div>
           <div class="l">net session · +222.25 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 54500 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1097.13</b> → <b>1163.1</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹83,796</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 73500 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>649.86</b> → <b>706.9</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt win-fg">+₹59,758</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 54400 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1142.51</b> → <b>1219.4</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹94,700</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23100 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>153.95</b> → <b>176.3</b></span>
-          <span class="qty">×1300</span>
-          <span class="sp"></span><span class="amt win-fg">+₹37,830</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-05" data-result="PROFIT" data-setups="trendline break" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=oGoNShfgk-E" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/oGoNShfgk-E/mqdefault.jpg"></a>
         <div class="mid">
@@ -786,28 +400,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹3.03L</div>
           <div class="l">net session · +182.70 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">SENSEX 74600 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>707.37</b> → <b>677.0</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 54500 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1175.5</b> → <b>1252.1</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.57L</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 54600 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1127.57</b> → <b>1192.0</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.45L</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23500 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>162.3</b> → <b>151.0</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-04" data-result="PROFIT" data-setups="trendline break" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=jRXPOL0c8Os" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/jRXPOL0c8Os/mqdefault.jpg"></a>
         <div class="mid">
@@ -818,28 +411,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹3.59L</div>
           <div class="l">net session · +266.71 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 54200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1161.22</b> → <b>1310.95</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.30L</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 74100 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>395.2</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 54300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1161.22</b> → <b>1251.4</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.21L</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>239.85</b> → <b>266.65</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹36,582</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-03" data-result="PROFIT" data-setups="trendline break" data-opt="PE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=OagvC4M5Jqc" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/OagvC4M5Jqc/mqdefault.jpg"></a>
         <div class="mid">
@@ -850,28 +422,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹4.85L</div>
           <div class="l">net session · +552.40 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 53400 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>954.41</b> → <b>1110.0</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.42L</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 74200 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>346.85</b> → <b>549.0</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.58L</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 53300 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>908.97</b> → <b>1061.2</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.40L</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23350 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>191.17</b> → <b>233.6</b></span>
-          <span class="qty">×1300</span>
-          <span class="sp"></span><span class="amt win-fg">+₹45,019</span>
-        </div></div>
-    </div><div class="scard loss">
+    </div><div class="scard loss" data-date="2026-06-02" data-result="LOSS" data-setups="trendline break" data-opt="PE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=FRFhc3SpLlI" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/FRFhc3SpLlI/mqdefault.jpg"></a>
         <div class="mid">
@@ -882,28 +433,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v loss-fg glow-loss">-₹2.93L</div>
           <div class="l">net session · -239.63 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 53100 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>885.95</b> → <b>814.9</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹91,962</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 74000 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>397.42</b> → <b>333.3</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹64,503</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 53200 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>929.1</b> → <b>853.25</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹99,216</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23300 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>15.24</b> → <b>43.85</b></span>
-          <span class="qty">×1300</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹37,193</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-06-01" data-result="PROFIT" data-setups="trendline break" data-opt="PE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=h2qlG5yqOVA" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/h2qlG5yqOVA/mqdefault.jpg"></a>
         <div class="mid">
@@ -914,28 +444,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹3.30L</div>
           <div class="l">net session · +101.76 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 54300 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>948.86</b> → <b>988.8</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.27L</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 54400 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>983.68</b> → <b>1032.65</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.40L</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 75300 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>572.0</b> → <b>583.2</b></span>
-          <span class="qty">×860</span>
-          <span class="sp"></span><span class="amt win-fg">+₹63,168</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23650 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>109.55</b> → <b>111.2</b></span>
-          <span class="qty">×1430</span>
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-05-29" data-result="PROFIT" data-setups="support bounce" data-opt="">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=sqnhKMMkv-g" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/sqnhKMMkv-g/mqdefault.jpg"></a>
         <div class="mid">
@@ -946,23 +455,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹0</div>
           <div class="l">net session · —</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>—</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">—</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>—</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt win-fg">—</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>—</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">—</span>
-        </div></div>
-    </div><div class="scard loss">
+    </div><div class="scard loss" data-date="2026-05-27" data-result="LOSS" data-setups="support bounce" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=97viK3V-C8c" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/97viK3V-C8c/mqdefault.jpg"></a>
         <div class="mid">
@@ -973,28 +466,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v loss-fg glow-loss">-₹2.55L</div>
           <div class="l">net session · -247.06 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 55300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1201.66</b> → <b>1141.15</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹72,200</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 55200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>1244.2</b> → <b>1186.55</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹60,020</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 76000 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>226.4</b> → <b>126.8</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹82,824</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23950 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>172.35</b> → <b>143.05</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt loss-fg">-₹39,994</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-05-26" data-result="PROFIT" data-setups="trendline break" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=T9A5aV5UdL8" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/T9A5aV5UdL8/mqdefault.jpg"></a>
         <div class="mid">
@@ -1005,28 +477,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.92L</div>
           <div class="l">net session · +203.73 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 55300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>147.45</b> → <b>209.35</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.07L</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 55200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>205.97</b> → <b>271.0</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.16L</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 76200 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>401.7</b> → <b>464.55</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt win-fg">+₹51,975</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24000 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>53.15</b> → <b>67.1</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹16,585</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-05-25" data-result="PROFIT" data-setups="trendline break" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=vj2_KDZIWvQ" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/vj2_KDZIWvQ/mqdefault.jpg"></a>
         <div class="mid">
@@ -1037,28 +488,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹2.57L</div>
           <div class="l">net session · +233.83 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 55000 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>272.05</b> → <b>349.25</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹89,096</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 54900 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>317.02</b> → <b>410.5</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.08L</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 76300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>423.1</b> → <b>484.95</b></span>
-          <span class="qty">×900</span>
-          <span class="sp"></span><span class="amt win-fg">+₹56,610</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 24000 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>97.4</b> → <b>98.7</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹2,935</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-05-22" data-result="PROFIT" data-setups="short covering / trend reversal" data-opt="CE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=NwhSYgVAmUY" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/NwhSYgVAmUY/mqdefault.jpg"></a>
         <div class="mid">
@@ -1069,28 +499,7 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹3.83L</div>
           <div class="l">net session · +248.48 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 53700 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>—</b> → <b>625.5</b></span>
-          
-          <span class="sp"></span><span class="amt muted">unverified</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 53800 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>451.9</b> → <b>562.0</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.29L</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 75300 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>641.42</b> → <b>755.95</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt win-fg">+₹96,205</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23700 CE</span><span class="dchip long">Long</span>
-          <span class="px"><b>164.3</b> → <b>188.15</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹32,555</span>
-        </div></div>
-    </div><div class="scard win">
+    </div><div class="scard win" data-date="2026-05-21" data-result="PROFIT" data-setups="trendline break" data-opt="PE">
       <div class="top">
         <a class="thumb" href="https://www.youtube.com/watch?v=_02ReHs_MZg" target="_blank" rel="nofollow noopener" title="Open the video"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/_02ReHs_MZg/mqdefault.jpg"></a>
         <div class="mid">
@@ -1101,27 +510,6 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
         <div class="net"><div class="v win-fg glow-win">+₹3.84L</div>
           <div class="l">net session · +472.80 pts</div></div>
       </div>
-      <div class="legs"><div class="leg">
-          <span class="inst">BANKNIFTY 53700 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>419.5</b> → <b>524.0</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹88,394</span>
-        </div><div class="leg">
-          <span class="inst">BANKNIFTY 53800 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>460.2</b> → <b>573.95</b></span>
-          <span class="qty">×1170</span>
-          <span class="sp"></span><span class="amt win-fg">+₹99,040</span>
-        </div><div class="leg">
-          <span class="inst">SENSEX 75500 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>161.68</b> → <b>361.0</b></span>
-          <span class="qty">×840</span>
-          <span class="sp"></span><span class="amt win-fg">+₹1.21L</span>
-        </div><div class="leg">
-          <span class="inst">NIFTY 23800 PE</span><span class="dchip short">Short</span>
-          <span class="px"><b>328.48</b> → <b>273.25</b></span>
-          <span class="qty">×1365</span>
-          <span class="sp"></span><span class="amt win-fg">+₹75,390</span>
-        </div></div>
     </div>
 </div>
 
@@ -1849,6 +1237,34 @@ footer.app{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 10px;
       </div>
     </div>
 </div>
+<script>
+(function(){
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.scard'));
+  var from = document.getElementById('f-from'), to = document.getElementById('f-to'),
+      setup = document.getElementById('f-setup'), result = document.getElementById('f-result'),
+      opt = document.getElementById('f-opt'), reset = document.getElementById('f-reset'),
+      empty = document.getElementById('f-empty');
+  if (!cards.length || !setup) return;
+  function apply(){
+    var f = from.value, t = to.value, su = setup.value, re = result.value, op = opt.value, shown = 0;
+    cards.forEach(function(c){
+      var d = c.getAttribute('data-date'), ok = true;
+      if (f && d < f) ok = false;
+      if (t && d > t) ok = false;
+      if (su && (c.getAttribute('data-setups')||'').split('|').indexOf(su) === -1) ok = false;
+      if (re && c.getAttribute('data-result') !== re) ok = false;
+      if (op && (c.getAttribute('data-opt')||'').split(' ').indexOf(op) === -1) ok = false;
+      c.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    });
+    if (empty) empty.style.display = shown ? 'none' : 'block';
+  }
+  [from, to, setup, result, opt].forEach(function(el){ el.addEventListener('change', apply); });
+  reset.addEventListener('click', function(){
+    from.value=''; to.value=''; setup.value=''; result.value=''; opt.value=''; apply();
+  });
+})();
+</script>
 
 <footer class="app">
   <p class="disc"><b>Independent project.</b> Trade Mirror is an independent tracker, not affiliated with or
